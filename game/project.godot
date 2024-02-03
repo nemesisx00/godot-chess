@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="Chess"
-config/features=PackedStringArray("4.2", "Mobile")
+run/main_scene="res://Game.tscn"
+config/features=PackedStringArray("4.2", "C#", "Mobile")
 config/icon="res://icon.svg"
 
 [dotnet]
