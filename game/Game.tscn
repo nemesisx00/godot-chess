@@ -1,3 +1,18 @@
-[gd_scene format=3 uid="uid://cr2j6w7eq5dkw"]
+[gd_scene load_steps=3 format=3 uid="uid://cr2j6w7eq5dkw"]
 
-[node name="Node3D" type="Node3D"]
+[ext_resource type="Script" path="res://scripts/Game.cs" id="1_icnb5"]
+[ext_resource type="PackedScene" uid="uid://ioton7c0qsk3" path="res://nodes/Chessboard.tscn" id="2_rhmi3"]
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_icnb5")
+
+[node name="Chessboard" parent="." instance=ExtResource("2_rhmi3")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.433013, 0.25, -0.5, 0.75, 0.433013, 0, -0.5, 0.866025, 0, 0, 0)
+
+[node name="CameraMount" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraMount"]
+transform = Transform3D(1, 0, 0, 0, 0.794701, 0.607001, 0, -0.607001, 0.794701, 0, 2.33983, 3.05851)
