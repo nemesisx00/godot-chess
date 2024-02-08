@@ -44,6 +44,7 @@ points = PackedVector3Array(-0.0160504, 0.00501467, -1.36159e-06, -0.0157004, 0.
 collision_layer = 2
 script = ExtResource("2_lf8xp")
 OverrideMaterial = ExtResource("2_dkiis")
+DiagonalMovement = true
 
 [node name="piece_bishop_white_01" type="MeshInstance3D" parent="."]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)

@@ -44,6 +44,7 @@ points = PackedVector3Array(-2.06754e-07, 0.00258697, 0.0184226, -0.00476713, 0.
 collision_layer = 2
 script = ExtResource("2_fswrl")
 OverrideMaterial = ExtResource("2_iika1")
+Type = 5
 
 [node name="piece_rook_white_01" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_f2h5p")

@@ -44,6 +44,7 @@ points = PackedVector3Array(-0.0243849, 0.0440764, -1.59442e-06, -0.024225, 0.04
 collision_layer = 2
 script = ExtResource("2_jxe25")
 OverrideMaterial = ExtResource("2_tmoab")
+Type = 2
 
 [node name="piece_knight_white_01" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)

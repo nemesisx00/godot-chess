@@ -44,6 +44,8 @@ points = PackedVector3Array(-0.020382, 0.0115886, -2.9467e-06, -0.0199351, 0.011
 collision_layer = 2
 script = ExtResource("2_akt02")
 OverrideMaterial = ExtResource("2_to6e4")
+DiagonalMovement = true
+Type = 4
 
 [node name="piece_queen_white" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_m77ji")
