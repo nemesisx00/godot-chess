@@ -19,6 +19,12 @@ config/icon="res://icon.svg"
 
 project/assembly_name="Chess"
 
+[layer_names]
+
+3d_physics/layer_1="Board"
+3d_physics/layer_2="Pieces"
+3d_physics/layer_3="Cells"
+
 [rendering]
 
 renderer/rendering_method="mobile"
