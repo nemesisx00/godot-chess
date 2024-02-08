@@ -35,7 +35,7 @@ public partial class Game : Node3D
 	
 	private void handleCellClicked(BoardCell cell)
 	{
-		if(selectedPiece is not null)
+		if(selectedPiece is not null && PieceMovementLogic.IsDestinationValid(selectedPiece, cell))
 		{
 			Chessboard.MovePiece(selectedPiece, cell);
 			selectedPiece = null;
@@ -59,9 +59,7 @@ public partial class Game : Node3D
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhiteBishop1";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.C, Rank.One, piece, true);
@@ -69,9 +67,7 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhiteBishop2";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.F, Rank.One, piece, true);
@@ -79,15 +75,11 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackBishop1";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.C, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackBishop2";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.F, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -97,17 +89,13 @@ public partial class Game : Node3D
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhiteKing";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.E, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackKing";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.E, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -117,7 +105,6 @@ public partial class Game : Node3D
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhiteKnight1";
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
@@ -126,7 +113,6 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhiteKnight2";
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
@@ -135,13 +121,11 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackKnight1";
 			board.AddChild(piece);
 			board.MovePiece(File.B, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackKnight2";
 			board.AddChild(piece);
 			board.MovePiece(File.G, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -151,129 +135,97 @@ public partial class Game : Node3D
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhitePawn1";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.A, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhitePawn2";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.B, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhitePawn3";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.C, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhitePawn4";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.D, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhitePawn5";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.E, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhitePawn6";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.F, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhitePawn7";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.G, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhitePawn8";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.H, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackPawn1";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.A, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackPawn2";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.B, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackPawn3";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.C, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackPawn4";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.D, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackPawn5";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.E, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackPawn6";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.F, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackPawn7";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.G, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackPawn8";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.H, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -283,17 +235,13 @@ public partial class Game : Node3D
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhiteQueen";
 			piece.OverrideMaterial = materialWhite;
-			piece.DiagonalMovement = true;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
 			board.MovePiece(File.D, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackQueen";
-			piece.DiagonalMovement = true;
 			board.AddChild(piece);
 			board.MovePiece(File.D, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -303,7 +251,6 @@ public partial class Game : Node3D
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhiteRook1";
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
@@ -311,7 +258,6 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "WhiteRook2";
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
 			board.AddChild(piece);
@@ -319,13 +265,11 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackRook1";
 			board.AddChild(piece);
 			board.MovePiece(File.A, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
-			piece.Name = "BlackRook2";
 			board.AddChild(piece);
 			board.MovePiece(File.H, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
