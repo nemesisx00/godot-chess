@@ -1,11 +1,11 @@
 [gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://dbnttm1r6dh2o"]
 
-[ext_resource type="Texture2D" uid="uid://cnw2kn5sv1k1w" path="res://assets/chess/textures/chess_set_board_diff_4k.png" id="1_wii6r"]
-[ext_resource type="Texture2D" uid="uid://bafnj2p0708bk" path="res://assets/chess/textures/chess_set_board_nor_gl_4k.png" id="2_g50md"]
-[ext_resource type="Texture2D" uid="uid://b2tbmnm7240or" path="res://assets/chess/textures/chess_set_board_rough_4k.png" id="3_h3xqe"]
+[ext_resource type="Texture2D" uid="uid://cnw2kn5sv1k1w" path="res://assets/chess/textures/chess_set_board_diff_4k.png" id="1_yw5eo"]
+[ext_resource type="Texture2D" uid="uid://bafnj2p0708bk" path="res://assets/chess/textures/chess_set_board_nor_gl_4k.png" id="2_2j5xj"]
+[ext_resource type="Texture2D" uid="uid://b2tbmnm7240or" path="res://assets/chess/textures/chess_set_board_rough_4k.png" id="3_70cpx"]
 
 [resource]
-albedo_texture = ExtResource("1_wii6r")
-roughness_texture = ExtResource("3_h3xqe")
+albedo_texture = ExtResource("1_yw5eo")
+roughness_texture = ExtResource("3_70cpx")
 normal_enabled = true
-normal_texture = ExtResource("2_g50md")
+normal_texture = ExtResource("2_2j5xj")
