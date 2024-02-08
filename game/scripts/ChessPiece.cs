@@ -4,6 +4,8 @@ namespace Chess;
 
 public partial class ChessPiece : CharacterBody3D
 {
+	private static readonly NodePath GlobalPositionPath = "global_position";
+	
 	[Signal]
 	public delegate void ClickedEventHandler(ChessPiece piece);
 	
@@ -13,9 +15,12 @@ public partial class ChessPiece : CharacterBody3D
 	[Export(PropertyHint.Range, ".1,1,.1")]
 	private float moveDuration = .2f;
 	
-	private static readonly NodePath GlobalPositionPath = "global_position";
-	
+	[Export]
 	public bool DiagonalMovement { get; set; }
+	
+	[Export]
+	public Piece Type { get; set; }
+	
 	public File File { get; set; }
 	public Rank Rank { get; set; }
 	public Teams Team { get; set; }
@@ -84,7 +89,12 @@ public partial class ChessPiece : CharacterBody3D
 			MoveAndSlide();
 	}
 	
-	public override void _Ready() => ReloadTextures();
+	public override void _Ready()
+	{
+		Name = $"{Team}{Type}";
+		
+		ReloadTextures();
+	}
 	
 	public void ReloadTextures()
 	{
