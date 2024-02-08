@@ -12,7 +12,7 @@ public enum File
 	H,
 }
 
-public enum Pieces
+public enum Piece
 {
 	Bishop,
 	King,
