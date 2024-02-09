@@ -14,11 +14,13 @@ public partial class BoardCell : Area3D
 	[Export]
 	public Rank Rank { get; set; }
 	
-	private bool active;
+	private bool listeningForClicks;
 	
 	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
 	{
-		if(evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
+		if(listeningForClicks && evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
 			EmitSignal(SignalName.Clicked, this);
 	}
+	
+	public void ListenForClicks(bool active) => listeningForClicks = active;
 }

@@ -8,10 +8,14 @@ public partial class Chessboard : Node3D
 	[Signal]
 	public delegate void CellClickedEventHandler(BoardCell cell);
 	
+	[Signal]
+	public delegate void ListenOnCellsEventHandler(bool active);
+	
+	[Signal]
+	public delegate void ListenOnPiecesEventHandler(bool active);
+	
 	[Export]
 	public Material OverrideMaterial { get; set; }
-	
-	public bool CellSelection { get; set; }
 	
 	private Node3D piece;
 	
@@ -38,15 +42,28 @@ public partial class Chessboard : Node3D
 				foreach(var cell in file.GetChildren().Cast<BoardCell>())
 				{
 					cell.Clicked += handleCellClicked;
+					ListenOnCells += cell.ListenForClicks;
 				}
 			}
 		}
 	}
 	
-	private void handleCellClicked(BoardCell cell)
+	public void AddPiece(ChessPiece piece)
 	{
-		if(CellSelection)
-			EmitSignal(SignalName.CellClicked, cell);
+		AddChild(piece);
+		ListenOnPieces += piece.ListenForClicks;
+	}
+	
+	public void EnableCellSelection()
+	{
+		EmitSignal(SignalName.ListenOnCells, true);
+		EmitSignal(SignalName.ListenOnPieces, false);
+	}
+	
+	public void EnablePieceSelection()
+	{
+		EmitSignal(SignalName.ListenOnCells, false);
+		EmitSignal(SignalName.ListenOnPieces, true);
 	}
 	
 	public void ReloadTextures()
@@ -65,4 +82,6 @@ public partial class Chessboard : Node3D
 		
 		MovePiece(piece, cell, teleport);
 	}
+	
+	private void handleCellClicked(BoardCell cell) => EmitSignal(SignalName.CellClicked, cell);
 }

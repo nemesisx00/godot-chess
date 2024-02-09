@@ -2,6 +2,11 @@ using Godot;
 
 namespace Chess;
 
+public static class Actions
+{
+	public static readonly StringName DeselectPiece = "DeselectPiece";
+}
+
 public static class ChessMaterials
 {
 	public const string Black = $"{ResourcePaths.Chess}material-piece-black-4k.tres";

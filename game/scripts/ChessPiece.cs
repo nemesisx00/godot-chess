@@ -28,46 +28,23 @@ public partial class ChessPiece : CharacterBody3D
 	public Vector3 Destination
 	{
 		get => destination;
+		
 		set
 		{
 			destination = value;
-			
-			if(!Vector3.Zero.IsEqualApprox(destination))
-			{
-				tween?.Kill();
-				tween = CreateTween()
-					.BindNode(this)
-					.SetEase(Tween.EaseType.InOut)
-					.SetLoops(1)
-					.SetParallel(DiagonalMovement)
-					.SetTrans(Tween.TransitionType.Linear);
-				
-				tween.Finished += handleTweenFinished;
-				
-				if(!Mathf.IsEqualApprox(GlobalPosition.X, destination.X))
-				{
-					var one = destination;
-					one.X = GlobalPosition.X;
-					var two = destination;
-					
-					tween.TweenProperty(this, GlobalPositionPath, one, moveDuration);
-					tween.TweenProperty(this, GlobalPositionPath, two, moveDuration);
-				}
-				else
-					tween.TweenProperty(this, GlobalPositionPath, destination, moveDuration);
-			}
+			doMovementTween();
 		}
 	}
 	
 	private Vector3 destination;
 	
 	private bool isFalling = true;
+	private bool listeningForClicks = true;
 	private Tween tween;
-	private bool mouseActive;
 	
 	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
 	{
-		if(evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
+		if(listeningForClicks && evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
 			EmitSignal(SignalName.Clicked, this);
 	}
 	
@@ -105,7 +82,33 @@ public partial class ChessPiece : CharacterBody3D
 		}
 	}
 	
+	public void ListenForClicks(bool active) => listeningForClicks = active;
 	public void StartFalling() => isFalling = true;
+	
+	private void doMovementTween()
+	{
+		if(!Vector3.Zero.IsEqualApprox(Destination))
+		{
+			tween?.Kill();
+			tween = CreateTween()
+				.BindNode(this)
+				.SetEase(Tween.EaseType.InOut)
+				.SetLoops(1)
+				.SetParallel(DiagonalMovement)
+				.SetTrans(Tween.TransitionType.Linear);
+			
+			tween.Finished += handleTweenFinished;
+			
+			if(!Mathf.IsEqualApprox(GlobalPosition.X, Destination.X))
+			{
+				var one = Destination;
+				one.X = GlobalPosition.X;
+				tween.TweenProperty(this, GlobalPositionPath, one, moveDuration);
+			}
+			
+			tween.TweenProperty(this, GlobalPositionPath, Destination, moveDuration);
+		}
+	}
 	
 	private void handleTweenFinished()
 	{
