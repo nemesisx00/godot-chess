@@ -17,7 +17,14 @@ public static class PieceMovementLogic
 			.ToList()
 			.ForEach(possibles.Add);
 		
-		possibles = limitByRaycast(piece, possibles);
+		if(piece.Type == Piece.Knight)
+		{
+			possibles.Where(c => c.GetChildren().Where(child => child is ChessPiece cp && cp.Team == piece.Team).Any())
+				.ToList()
+				.ForEach(c => possibles.Remove(c));
+		}
+		else
+			possibles = limitByRaycast(piece, possibles);
 		possibles.Remove(currentCell);
 		
 		return possibles;
