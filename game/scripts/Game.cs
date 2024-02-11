@@ -39,7 +39,7 @@ public partial class Game : Node3D
 	
 	private void handleCellClicked(BoardCell cell)
 	{
-		if(selectedPiece is not null && PieceMovementLogic.IsDestinationValid(selectedPiece, cell))
+		if(selectedPiece is not null && PieceMovementLogic.IsDestinationValid(selectedPiece, cell, board.Cells))
 		{
 			Chessboard.MovePiece(selectedPiece, cell);
 			selectedPiece = null;
@@ -67,7 +67,6 @@ public partial class Game : Node3D
 			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.C, Rank.One, piece, true);
-			piece.RotateObjectLocal(Vector3.Up, Mathf.Tau / 2);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
@@ -75,7 +74,6 @@ public partial class Game : Node3D
 			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.F, Rank.One, piece, true);
-			piece.RotateObjectLocal(Vector3.Up, Mathf.Tau / 2);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
@@ -113,7 +111,6 @@ public partial class Game : Node3D
 			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.B, Rank.One, piece, true);
-			piece.RotateObjectLocal(Vector3.Up, Mathf.Tau / 2);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
@@ -121,7 +118,6 @@ public partial class Game : Node3D
 			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.G, Rank.One, piece, true);
-			piece.RotateObjectLocal(Vector3.Up, Mathf.Tau / 2);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -18,6 +19,7 @@ public partial class Chessboard : Node3D
 	public Material OverrideMaterial { get; set; }
 	
 	private Node3D piece;
+	public List<BoardCell> Cells { get; private set; } = [];
 	
 	public static void MovePiece(ChessPiece piece, BoardCell cell, bool teleport = false)
 	{
@@ -26,8 +28,7 @@ public partial class Chessboard : Node3D
 		else
 			piece.Destination = cell.GlobalTransform.Origin;
 		
-		piece.File = cell.File;
-		piece.Rank = cell.Rank;
+		piece.Reparent(cell);
 	}
 	
 	public override void _Ready()
@@ -43,6 +44,8 @@ public partial class Chessboard : Node3D
 				{
 					cell.Clicked += handleCellClicked;
 					ListenOnCells += cell.ListenForClicks;
+					
+					Cells.Add(cell);
 				}
 			}
 		}

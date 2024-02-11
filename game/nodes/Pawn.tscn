@@ -42,6 +42,7 @@ points = PackedVector3Array(-3.24938e-06, 0.00170845, 0.0144836, -0.00444914, 0.
 
 [node name="Pawn" type="CharacterBody3D"]
 collision_layer = 2
+collision_mask = 3
 script = ExtResource("2_oby8r")
 OverrideMaterial = ExtResource("2_j1m8u")
 DiagonalMovement = true
@@ -53,3 +54,47 @@ skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("ConvexPolygonShape3D_dv1cm")
+
+[node name="Rays" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+
+[node name="East" type="RayCast3D" parent="Rays"]
+enabled = false
+target_position = Vector3(1, 0, 0)
+collision_mask = 2
+
+[node name="North" type="RayCast3D" parent="Rays"]
+enabled = false
+target_position = Vector3(0, 0, -1)
+collision_mask = 2
+
+[node name="NorthEast" type="RayCast3D" parent="Rays"]
+enabled = false
+target_position = Vector3(1, 0, -1)
+collision_mask = 2
+
+[node name="NorthWest" type="RayCast3D" parent="Rays"]
+enabled = false
+target_position = Vector3(-1, 0, -1)
+collision_mask = 2
+
+[node name="South" type="RayCast3D" parent="Rays"]
+enabled = false
+target_position = Vector3(0, 0, 1)
+collision_mask = 2
+
+[node name="SouthEast" type="RayCast3D" parent="Rays"]
+enabled = false
+target_position = Vector3(1, 0, 1)
+collision_mask = 2
+
+[node name="SouthWest" type="RayCast3D" parent="Rays"]
+enabled = false
+target_position = Vector3(-1, 0, 1)
+collision_mask = 2
+
+[node name="West" type="RayCast3D" parent="Rays"]
+enabled = false
+target_position = Vector3(-1, 0, 0)
+collision_mask = 2

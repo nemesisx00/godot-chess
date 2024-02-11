@@ -1,67 +1,154 @@
+using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 
 namespace Chess;
 
 public static class PieceMovementLogic
 {
-	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination)
+	public static List<BoardCell> GetValidCells(ChessPiece piece, List<BoardCell> cells)
+	{
+		List<BoardCell> possibles = [];
+		
+		var currentCell = piece.GetParent<BoardCell>();
+		cells.Where(cell => ValidateMovement(piece, cell))
+			.ToList()
+			.ForEach(possibles.Add);
+		
+		possibles = limitByRaycast(piece, possibles);
+		
+		return possibles;
+	}
+	
+	private static List<BoardCell> limitByRaycast(ChessPiece piece, List<BoardCell> possibles)
+	{
+		var result = possibles;
+		piece.Rays.ForEach(ray => {
+			ray.ForceRaycastUpdate();
+			
+			var collider = ray.GetCollider();
+			if(collider is ChessPiece cp)
+			{
+				var blockingCell = cp.GetParent<BoardCell>();
+				Func<BoardCell, bool> whereClause = cell => false;
+				switch(ray.Name)
+				{
+					case DirectionNames.East:
+						whereClause = cell => cell.Rank == blockingCell.Rank && cell.File >= blockingCell.File;
+						break;
+					
+					case DirectionNames.North:
+						whereClause = cell => cell.File == blockingCell.File && cell.Rank >= blockingCell.Rank;
+						break;
+					
+					case DirectionNames.NorthEast:
+						whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
+							&& cell.File >= blockingCell.File
+							&& cell.Rank >= blockingCell.Rank;
+						break;
+					
+					case DirectionNames.NorthWest:
+						whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
+							&& cell.File <= blockingCell.File
+							&& cell.Rank >= blockingCell.Rank;
+						break;
+					
+					case DirectionNames.South:
+						whereClause = cell => cell.File == blockingCell.File && cell.Rank <= blockingCell.Rank;
+						break;
+					
+					case DirectionNames.SouthEast:
+						whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
+							&& cell.File >= blockingCell.File
+							&& cell.Rank <= blockingCell.Rank;
+						break;
+					
+					case DirectionNames.SouthWest:
+						whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
+							&& cell.File <= blockingCell.File
+							&& cell.Rank <= blockingCell.Rank;
+						break;
+					
+					case DirectionNames.West:
+						whereClause = cell => cell.Rank == blockingCell.Rank && cell.File <= blockingCell.File;
+						break;
+				}
+				
+				result.Where(whereClause)
+					.ToList()
+					.ForEach(cell => result.Remove(cell));
+			}
+		});
+		
+		return result;
+	}
+	
+	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination, List<BoardCell> cells)
+	{
+		var validCells = GetValidCells(piece, cells);
+		return validCells.Contains(destination);
+	}
+	
+	public static bool ValidateMovement(ChessPiece piece, BoardCell destination)
 	{
 		return piece.Type switch
 		{
-			Piece.Bishop => bishop(piece, destination),
-			Piece.King => king(piece, destination),
-			Piece.Knight => knight(piece, destination),
-			Piece.Pawn => pawn(piece, destination),
-			Piece.Queen => queen(piece, destination),
-			Piece.Rook => rook(piece, destination),
+			Piece.Bishop => bishop(piece.GetParent<BoardCell>(), destination),
+			Piece.King => king(piece.GetParent<BoardCell>(), destination),
+			Piece.Knight => knight(piece.GetParent<BoardCell>(), destination),
+			Piece.Pawn => pawn(piece.GetParent<BoardCell>(), destination, piece.Team),
+			Piece.Queen => queen(piece.GetParent<BoardCell>(), destination),
+			Piece.Rook => rook(piece.GetParent<BoardCell>(), destination),
 			_ => false
 		};
 	}
 	
-	private static bool bishop(ChessPiece piece, BoardCell destination)
+	private static bool bishop(BoardCell currentCell, BoardCell destination)
 	{
-		var fileDiff = Math.Abs((int)piece.File - (int)destination.File);
-		var rankDiff = Math.Abs((int)piece.Rank - (int)destination.Rank);
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
 		return fileDiff != 0 && fileDiff == rankDiff;
 	}
 	
-	private static bool king(ChessPiece piece, BoardCell destination)
+	private static bool king(BoardCell currentCell, BoardCell destination)
 	{
-		var fileDiff = Math.Abs((int)piece.File - (int)destination.File);
-		var rankDiff = Math.Abs((int)piece.Rank - (int)destination.Rank);
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
 		return fileDiff <= 1 && rankDiff <= 1;
 	}
 	
-	private static bool knight(ChessPiece piece, BoardCell destination)
+	private static bool knight(BoardCell currentCell, BoardCell destination)
 	{
-		var fileDiff = Math.Abs((int)piece.File - (int)destination.File);
-		var rankDiff = Math.Abs((int)piece.Rank - (int)destination.Rank);
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
 		return fileDiff == 1 && rankDiff == 2
 			|| fileDiff == 2 && rankDiff == 1;
 	}
 	
-	private static bool pawn(ChessPiece piece, BoardCell destination)
+	private static bool pawn(BoardCell currentCell, BoardCell destination, Teams team)
 	{
-		var fileDiff = Math.Abs((int)piece.File - (int)destination.File);
-		var rankDiff = (int)piece.Rank - (int)destination.Rank;
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = (int)currentCell.Rank - (int)destination.Rank;
 		
 		return fileDiff == 0 && (
-			piece.Team == Teams.White && (rankDiff == -1 || piece.Rank == Rank.Two && destination.Rank == Rank.Four)
-			|| piece.Team == Teams.Black && (rankDiff == 1 || (piece.Rank == Rank.Seven && destination.Rank == Rank.Five))
+			team == Teams.White && (rankDiff == -1 || currentCell.Rank == Rank.Two && destination.Rank == Rank.Four)
+			|| team == Teams.Black && (rankDiff == 1 || (currentCell.Rank == Rank.Seven && destination.Rank == Rank.Five))
 		);
 	}
 	
-	private static bool queen(ChessPiece piece, BoardCell destination)
+	private static bool queen(BoardCell currentCell, BoardCell destination)
 	{
-		var fileDiff = Math.Abs((int)piece.File - (int)destination.File);
-		var rankDiff = Math.Abs((int)piece.Rank - (int)destination.Rank);
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
 		return fileDiff == 0 || rankDiff == 0 || fileDiff == rankDiff;
 	}
 	
-	private static bool rook(ChessPiece piece, BoardCell destination)
+	private static bool rook(BoardCell currentCell, BoardCell destination)
 	{
-		var fileDiff = Math.Abs((int)piece.File - (int)destination.File);
-		var rankDiff = Math.Abs((int)piece.Rank - (int)destination.Rank);
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
 		return fileDiff == 0 || rankDiff == 0;
 	}
 }

@@ -1,9 +1,16 @@
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace Chess;
 
 public partial class ChessPiece : CharacterBody3D
 {
+	private static class NodePaths
+	{
+		public static readonly NodePath Rays = "%Rays";
+	}
+	
 	private static readonly NodePath GlobalPositionPath = "global_position";
 	
 	[Signal]
@@ -21,8 +28,6 @@ public partial class ChessPiece : CharacterBody3D
 	[Export]
 	public Piece Type { get; set; }
 	
-	public File File { get; set; }
-	public Rank Rank { get; set; }
 	public Teams Team { get; set; }
 	
 	public Vector3 Destination
@@ -35,6 +40,8 @@ public partial class ChessPiece : CharacterBody3D
 			doMovementTween();
 		}
 	}
+	
+	public List<RayCast3D> Rays { get; private set; } = [];
 	
 	private Vector3 destination;
 	
@@ -69,6 +76,19 @@ public partial class ChessPiece : CharacterBody3D
 	public override void _Ready()
 	{
 		Name = $"{Team}{Type}";
+		
+		GetNodeOrNull(NodePaths.Rays)?
+			.GetChildren()
+			.Cast<RayCast3D>()
+			.ToList()
+			.ForEach(Rays.Add);
+		
+		if(Team == Teams.White)
+		{
+			var angle = Mathf.Tau / 2;
+			GetChild<MeshInstance3D>(0).RotateObjectLocal(Vector3.Up, angle);
+			GetChild<CollisionShape3D>(1).RotateObjectLocal(Vector3.Up, angle);
+		}
 		
 		ReloadTextures();
 	}
