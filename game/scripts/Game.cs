@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 
 namespace Chess;
@@ -24,6 +25,9 @@ public partial class Game : Node3D
 		{
 			selectedPiece?.ToggleSelected(false);
 			selectedPiece = null;
+			board.Cells.Where(c => c.Indicator.Visible)
+				.ToList()
+				.ForEach(c => c.ToggleIndicator(false));
 			board.EnablePieceSelection();
 		}
 	}
@@ -45,6 +49,9 @@ public partial class Game : Node3D
 			Chessboard.MovePiece(selectedPiece, cell);
 			selectedPiece.ToggleSelected(false);
 			selectedPiece = null;
+			board.Cells.Where(c => c.Indicator.Visible)
+				.ToList()
+				.ForEach(c => c.ToggleIndicator(false));
 			board.EnablePieceSelection();
 		}
 	}
@@ -55,6 +62,9 @@ public partial class Game : Node3D
 		selectedPiece = piece;
 		selectedPiece.ToggleSelected(true);
 		board.EnableCellSelection();
+		
+		PieceMovementLogic.GetValidCells(piece, board.Cells)
+			.ForEach(c => c.ToggleIndicator(true));
 	}
 	
 	private void generatePieces()

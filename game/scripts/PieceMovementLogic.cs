@@ -18,6 +18,7 @@ public static class PieceMovementLogic
 			.ForEach(possibles.Add);
 		
 		possibles = limitByRaycast(piece, possibles);
+		possibles.Remove(currentCell);
 		
 		return possibles;
 	}
@@ -32,6 +33,7 @@ public static class PieceMovementLogic
 			if(collider is ChessPiece cp)
 			{
 				var blockingCell = cp.GetParent<BoardCell>();
+				var collisionIsValidCell = result.Contains(blockingCell);
 				Func<BoardCell, bool> whereClause = cell => false;
 				switch(ray.Name)
 				{
@@ -79,6 +81,9 @@ public static class PieceMovementLogic
 				result.Where(whereClause)
 					.ToList()
 					.ForEach(cell => result.Remove(cell));
+				
+				if(cp.Team != piece.Team && collisionIsValidCell)
+					result.Add(blockingCell);
 			}
 		});
 		

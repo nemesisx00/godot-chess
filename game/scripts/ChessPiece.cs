@@ -111,10 +111,7 @@ public partial class ChessPiece : CharacterBody3D
 	
 	public void ToggleSelected(bool? force = null)
 	{
-		var doShow = !selectionIndicator.Visible;
-		if(force is not null)
-			doShow = (bool)force;
-		
+		var doShow = force ?? !selectionIndicator.Visible;
 		if(doShow)
 			selectionIndicator.Show();
 		else

@@ -81,7 +81,7 @@ public partial class Chessboard : Node3D
 	public void MovePiece(File file, Rank rank, ChessPiece piece, bool teleport = false)
 	{
 		var cell = GetNode<Node3D>(file.ToString())
-			.GetNode<BoardCell>($"{(int)rank + 1}");
+			.GetNode<BoardCell>($"{file}{(int)rank + 1}");
 		
 		MovePiece(piece, cell, teleport);
 	}

@@ -5,6 +5,11 @@ namespace Chess;
 [GlobalClass]
 public partial class BoardCell : Area3D
 {
+	private static class NodePaths
+	{
+		public static readonly NodePath Indicator = "%Indicator";
+	}
+	
 	[Signal]
 	public delegate void ClickedEventHandler(BoardCell cell);
 	
@@ -14,6 +19,9 @@ public partial class BoardCell : Area3D
 	[Export]
 	public Rank Rank { get; set; }
 	
+	
+	public MeshInstance3D Indicator { get; private set; }
+	
 	private bool listeningForClicks;
 	
 	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
@@ -22,5 +30,19 @@ public partial class BoardCell : Area3D
 			EmitSignal(SignalName.Clicked, this);
 	}
 	
+	public override void _Ready()
+	{
+		Indicator = GetNode<MeshInstance3D>(NodePaths.Indicator);
+	}
+	
 	public void ListenForClicks(bool active) => listeningForClicks = active;
+	
+	public void ToggleIndicator(bool? force = null)
+	{
+		var doShow = force ?? !Indicator.Visible;
+		if(doShow)
+			Indicator.Show();
+		else
+			Indicator.Hide();
+	}
 }
