@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ChessPiece.cs" id="2_0phdb"]
 [ext_resource type="Material" uid="uid://b41rpcakvu2o8" path="res://assets/chess/material-piece-black-4k.tres" id="2_6iqrd"]
+[ext_resource type="Material" uid="uid://crjabbkfhbftt" path="res://assets/PieceIndicator.tres" id="3_rrr1c"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_navef"]
 
@@ -42,9 +43,6 @@ points = PackedVector3Array(-0.020864, 0.00213887, -3.17022e-06, -0.0203658, 0.0
 
 [sub_resource type="PrismMesh" id="PrismMesh_pmvlf"]
 size = Vector3(0.02, 0.02, 0.01)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yapgy"]
-albedo_color = Color(0, 0.945098, 0.760784, 1)
 
 [node name="King" type="CharacterBody3D"]
 collision_layer = 2
@@ -111,4 +109,4 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0.125, 0)
 visible = false
 mesh = SubResource("PrismMesh_pmvlf")
-surface_material_override/0 = SubResource("StandardMaterial3D_yapgy")
+surface_material_override/0 = ExtResource("3_rrr1c")
