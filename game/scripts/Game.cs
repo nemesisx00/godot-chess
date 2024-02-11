@@ -22,6 +22,7 @@ public partial class Game : Node3D
 	{
 		if(Input.IsActionJustPressed(Actions.DeselectPiece))
 		{
+			selectedPiece?.ToggleSelected(false);
 			selectedPiece = null;
 			board.EnablePieceSelection();
 		}
@@ -42,6 +43,7 @@ public partial class Game : Node3D
 		if(selectedPiece is not null && PieceMovementLogic.IsDestinationValid(selectedPiece, cell, board.Cells))
 		{
 			Chessboard.MovePiece(selectedPiece, cell);
+			selectedPiece.ToggleSelected(false);
 			selectedPiece = null;
 			board.EnablePieceSelection();
 		}
@@ -49,7 +51,9 @@ public partial class Game : Node3D
 	
 	private void handlePieceClicked(ChessPiece piece)
 	{
+		selectedPiece?.ToggleSelected(false);
 		selectedPiece = piece;
+		selectedPiece.ToggleSelected(true);
 		board.EnableCellSelection();
 	}
 	

@@ -9,6 +9,7 @@ public partial class ChessPiece : CharacterBody3D
 	private static class NodePaths
 	{
 		public static readonly NodePath Rays = "%Rays";
+		public static readonly NodePath SelectionIndicator = "%SelectionIndicator";
 	}
 	
 	private static readonly NodePath GlobalPositionPath = "global_position";
@@ -48,6 +49,7 @@ public partial class ChessPiece : CharacterBody3D
 	private bool isFalling = true;
 	private bool listeningForClicks = true;
 	private Tween tween;
+	private MeshInstance3D selectionIndicator;
 	
 	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
 	{
@@ -77,12 +79,6 @@ public partial class ChessPiece : CharacterBody3D
 	{
 		Name = $"{Team}{Type}";
 		
-		GetNodeOrNull(NodePaths.Rays)?
-			.GetChildren()
-			.Cast<RayCast3D>()
-			.ToList()
-			.ForEach(Rays.Add);
-		
 		if(Team == Teams.White)
 		{
 			var angle = Mathf.Tau / 2;
@@ -91,6 +87,14 @@ public partial class ChessPiece : CharacterBody3D
 		}
 		
 		ReloadTextures();
+		
+		selectionIndicator = GetNode<MeshInstance3D>(NodePaths.SelectionIndicator);
+		
+		GetNodeOrNull(NodePaths.Rays)?
+			.GetChildren()
+			.Cast<RayCast3D>()
+			.ToList()
+			.ForEach(Rays.Add);
 	}
 	
 	public void ReloadTextures()
@@ -104,6 +108,18 @@ public partial class ChessPiece : CharacterBody3D
 	
 	public void ListenForClicks(bool active) => listeningForClicks = active;
 	public void StartFalling() => isFalling = true;
+	
+	public void ToggleSelected(bool? force = null)
+	{
+		var doShow = !selectionIndicator.Visible;
+		if(force is not null)
+			doShow = (bool)force;
+		
+		if(doShow)
+			selectionIndicator.Show();
+		else
+			selectionIndicator.Hide();
+	}
 	
 	private void doMovementTween()
 	{
