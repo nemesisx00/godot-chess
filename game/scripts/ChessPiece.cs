@@ -122,6 +122,9 @@ public partial class ChessPiece : CharacterBody3D
 	{
 		if(!Vector3.Zero.IsEqualApprox(Destination))
 		{
+			var current = GetParent<BoardCell>();
+			var time = current.GlobalPosition.DistanceTo(Destination) * moveDuration;
+			
 			tween?.Kill();
 			tween = CreateTween()
 				.BindNode(this)
@@ -136,10 +139,10 @@ public partial class ChessPiece : CharacterBody3D
 			{
 				var one = Destination;
 				one.X = GlobalPosition.X;
-				tween.TweenProperty(this, GlobalPositionPath, one, moveDuration);
+				tween.TweenProperty(this, GlobalPositionPath, one, time);
 			}
 			
-			tween.TweenProperty(this, GlobalPositionPath, Destination, moveDuration);
+			tween.TweenProperty(this, GlobalPositionPath, Destination, time);
 		}
 	}
 	
