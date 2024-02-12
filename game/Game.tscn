@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cr2j6w7eq5dkw"]
+[gd_scene load_steps=9 format=3 uid="uid://cr2j6w7eq5dkw"]
 
 [ext_resource type="Script" path="res://scripts/Game.cs" id="1_icnb5"]
 [ext_resource type="PackedScene" uid="uid://ioton7c0qsk3" path="res://nodes/Chessboard.tscn" id="2_rhmi3"]
@@ -6,11 +6,23 @@
 [ext_resource type="PackedScene" uid="uid://b8j0nr6nswtdn" path="res://nodes/Graveyard.tscn" id="4_a0fyx"]
 [ext_resource type="Material" uid="uid://dlf5ual5m5cx3" path="res://assets/chess/material-piece-white-4k.tres" id="5_t3ifu"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_g0yjd"]
+
+[sub_resource type="Sky" id="Sky_jqvlb"]
+sky_material = SubResource("ProceduralSkyMaterial_g0yjd")
+
+[sub_resource type="Environment" id="Environment_v2avy"]
+background_mode = 2
+sky = SubResource("Sky_jqvlb")
+
 [node name="Game" type="Node3D"]
 script = ExtResource("1_icnb5")
 
 [node name="Chessboard" parent="." instance=ExtResource("2_rhmi3")]
 transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_v2avy")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, 0.433013, 0.25, -0.5, 0.75, 0.433013, 0, -0.5, 0.866025, 0, 0, 0)
