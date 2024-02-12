@@ -7,8 +7,10 @@ public partial class Game : Node3D
 {
 	private static class NodePaths
 	{
+		public static readonly NodePath BlackGraveyard = new("BlackGraveyard");
 		public static readonly NodePath Board = new("Chessboard");
 		public static readonly NodePath CameraMount = new("CameraMount");
+		public static readonly NodePath WhiteGraveyard = new("WhiteGraveyard");
 	}
 	
 	[Export(PropertyHint.Range, "0.1,2,0.05")]
@@ -18,6 +20,9 @@ public partial class Game : Node3D
 	private Node3D cameraMount;
 	
 	private ChessPiece selectedPiece = null;
+	
+	private Graveyard blackGraveyard;
+	private Graveyard whiteGraveyard;
 	
 	public override void _Process(double delta)
 	{
@@ -34,19 +39,30 @@ public partial class Game : Node3D
 	
 	public override void _Ready()
 	{
+		blackGraveyard = GetNode<Graveyard>(NodePaths.BlackGraveyard);
 		board = GetNode<Chessboard>(NodePaths.Board);
 		cameraMount = GetNode<Node3D>(NodePaths.CameraMount);
+		whiteGraveyard = GetNode<Graveyard>(NodePaths.WhiteGraveyard);
 		
+		board.Capture += handleCapture;
 		board.CellClicked += handleCellClicked;
 		
 		generatePieces();
+	}
+	
+	private void handleCapture(ChessPiece attacker, ChessPiece defender)
+	{
+		if(defender.Team == Teams.Black)
+			whiteGraveyard.BuryPiece(defender);
+		else
+			blackGraveyard.BuryPiece(defender);
 	}
 	
 	private void handleCellClicked(BoardCell cell)
 	{
 		if(selectedPiece is not null && PieceMovementLogic.IsDestinationValid(selectedPiece, cell, board.Cells))
 		{
-			Chessboard.MovePiece(selectedPiece, cell);
+			board.MovePiece(selectedPiece, cell);
 			selectedPiece.ToggleSelected(false);
 			selectedPiece = null;
 			board.Cells.Where(c => c.Indicator.Visible)
