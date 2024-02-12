@@ -19,8 +19,13 @@ public partial class BoardCell : Area3D
 	[Export]
 	public Rank Rank { get; set; }
 	
-	
 	public MeshInstance3D Indicator { get; private set; }
+	
+	[Export]
+	private Material indicatorMaterial;
+	
+	[Export]
+	private Material indicatorHighlight;
 	
 	private bool listeningForClicks;
 	
@@ -30,9 +35,20 @@ public partial class BoardCell : Area3D
 			EmitSignal(SignalName.Clicked, this);
 	}
 	
+	public override void _MouseEnter()
+	{
+		Indicator.MaterialOverride = indicatorHighlight;
+	}
+	
+	public override void _MouseExit()
+	{
+		Indicator.MaterialOverride = indicatorMaterial;
+	}
+	
 	public override void _Ready()
 	{
 		Indicator = GetNode<MeshInstance3D>(NodePaths.Indicator);
+		Indicator.MaterialOverride = indicatorMaterial;
 	}
 	
 	public void ListenForClicks(bool active) => listeningForClicks = active;
