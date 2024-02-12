@@ -80,59 +80,62 @@ public static class PieceMovementLogic
 			var collider = ray.GetCollider();
 			if(collider is ChessPiece cp)
 			{
-				var blockingCell = cp.GetParent<BoardCell>();
-				var collisionIsValidCell = result.Contains(blockingCell);
-				
-				Func<BoardCell, bool> whereClause = cell => false;
-				switch(ray.Name)
+				var blockingCell = cp.GetParentOrNull<BoardCell>();
+				if(blockingCell is not null)
 				{
-					case DirectionNames.East:
-						whereClause = cell => cell.Rank == blockingCell.Rank && cell.File >= blockingCell.File;
-						break;
+					var collisionIsValidCell = result.Contains(blockingCell);
 					
-					case DirectionNames.North:
-						whereClause = cell => cell.File == blockingCell.File && cell.Rank >= blockingCell.Rank;
-						break;
+					Func<BoardCell, bool> whereClause = cell => false;
+					switch(ray.Name)
+					{
+						case DirectionNames.East:
+							whereClause = cell => cell.Rank == blockingCell.Rank && cell.File >= blockingCell.File;
+							break;
+						
+						case DirectionNames.North:
+							whereClause = cell => cell.File == blockingCell.File && cell.Rank >= blockingCell.Rank;
+							break;
+						
+						case DirectionNames.NorthEast:
+							whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
+								&& cell.File >= blockingCell.File
+								&& cell.Rank >= blockingCell.Rank;
+							break;
+						
+						case DirectionNames.NorthWest:
+							whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
+								&& cell.File <= blockingCell.File
+								&& cell.Rank >= blockingCell.Rank;
+							break;
+						
+						case DirectionNames.South:
+							whereClause = cell => cell.File == blockingCell.File && cell.Rank <= blockingCell.Rank;
+							break;
+						
+						case DirectionNames.SouthEast:
+							whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
+								&& cell.File >= blockingCell.File
+								&& cell.Rank <= blockingCell.Rank;
+							break;
+						
+						case DirectionNames.SouthWest:
+							whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
+								&& cell.File <= blockingCell.File
+								&& cell.Rank <= blockingCell.Rank;
+							break;
+						
+						case DirectionNames.West:
+							whereClause = cell => cell.Rank == blockingCell.Rank && cell.File <= blockingCell.File;
+							break;
+					}
 					
-					case DirectionNames.NorthEast:
-						whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
-							&& cell.File >= blockingCell.File
-							&& cell.Rank >= blockingCell.Rank;
-						break;
+					result.Where(whereClause)
+						.ToList()
+						.ForEach(cell => result.Remove(cell));
 					
-					case DirectionNames.NorthWest:
-						whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
-							&& cell.File <= blockingCell.File
-							&& cell.Rank >= blockingCell.Rank;
-						break;
-					
-					case DirectionNames.South:
-						whereClause = cell => cell.File == blockingCell.File && cell.Rank <= blockingCell.Rank;
-						break;
-					
-					case DirectionNames.SouthEast:
-						whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
-							&& cell.File >= blockingCell.File
-							&& cell.Rank <= blockingCell.Rank;
-						break;
-					
-					case DirectionNames.SouthWest:
-						whereClause = cell => Math.Abs(cell.File - blockingCell.File) == Math.Abs(cell.Rank - blockingCell.Rank)
-							&& cell.File <= blockingCell.File
-							&& cell.Rank <= blockingCell.Rank;
-						break;
-					
-					case DirectionNames.West:
-						whereClause = cell => cell.Rank == blockingCell.Rank && cell.File <= blockingCell.File;
-						break;
+					if(collisionIsValidCell && cp.Team != piece.Team)
+						result.Add(blockingCell);
 				}
-				
-				result.Where(whereClause)
-					.ToList()
-					.ForEach(cell => result.Remove(cell));
-				
-				if(collisionIsValidCell && cp.Team != piece.Team)
-					result.Add(blockingCell);
 			}
 		});
 		
