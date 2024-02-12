@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8j0nr6nswtdn"]
+
+[ext_resource type="Material" uid="uid://b41rpcakvu2o8" path="res://assets/chess/material-piece-black-4k.tres" id="1_00byu"]
+[ext_resource type="Script" path="res://scripts/Graveyard.cs" id="1_asjj2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ubndw"]
+size = Vector3(1, 0.1, 4)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h7qja"]
+data = PackedVector3Array(-0.5, 0.05, 2, 0.5, 0.05, 2, -0.5, -0.05, 2, 0.5, 0.05, 2, 0.5, -0.05, 2, -0.5, -0.05, 2, 0.5, 0.05, -2, -0.5, 0.05, -2, 0.5, -0.05, -2, -0.5, 0.05, -2, -0.5, -0.05, -2, 0.5, -0.05, -2, 0.5, 0.05, 2, 0.5, 0.05, -2, 0.5, -0.05, 2, 0.5, 0.05, -2, 0.5, -0.05, -2, 0.5, -0.05, 2, -0.5, 0.05, -2, -0.5, 0.05, 2, -0.5, -0.05, -2, -0.5, 0.05, 2, -0.5, -0.05, 2, -0.5, -0.05, -2, 0.5, 0.05, 2, -0.5, 0.05, 2, 0.5, 0.05, -2, -0.5, 0.05, 2, -0.5, 0.05, -2, 0.5, 0.05, -2, -0.5, -0.05, 2, 0.5, -0.05, 2, -0.5, -0.05, -2, 0.5, -0.05, 2, 0.5, -0.05, -2, -0.5, -0.05, -2)
+
+[node name="Graveyard" type="Node3D"]
+script = ExtResource("1_asjj2")
+OverrideMaterial = ExtResource("1_00byu")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ubndw")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Mesh"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mesh/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_h7qja")
