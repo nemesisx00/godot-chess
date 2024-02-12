@@ -7,6 +7,9 @@ namespace Chess;
 public partial class Chessboard : Node3D
 {
 	[Signal]
+	public delegate void CaptureEventHandler(ChessPiece attacker, ChessPiece defender);
+	
+	[Signal]
 	public delegate void CellClickedEventHandler(BoardCell cell);
 	
 	[Signal]
@@ -20,16 +23,6 @@ public partial class Chessboard : Node3D
 	
 	private Node3D piece;
 	public List<BoardCell> Cells { get; private set; } = [];
-	
-	public static void MovePiece(ChessPiece piece, BoardCell cell, bool teleport = false)
-	{
-		if(teleport)
-			Utility.SetGlobalOrigin(piece, cell.GlobalTransform.Origin);
-		else
-			piece.Destination = cell.GlobalTransform.Origin;
-		
-		piece.Reparent(cell);
-	}
 	
 	public override void _Ready()
 	{
@@ -76,6 +69,24 @@ public partial class Chessboard : Node3D
 			var mesh = GetChild<MeshInstance3D>(0);
 			mesh.MaterialOverride = OverrideMaterial;
 		}
+	}
+	
+	public void MovePiece(ChessPiece piece, BoardCell cell, bool teleport = false)
+	{
+		if(teleport)
+			Utility.SetGlobalOrigin(piece, cell.GlobalTransform.Origin);
+		else
+			piece.Destination = cell.GlobalTransform.Origin;
+		
+		var captured = cell.GetChildren()
+			.Where(child => child is ChessPiece)
+			.Cast<ChessPiece>()
+			.FirstOrDefault();
+		
+		piece.Reparent(cell);
+		
+		if(captured is not null)
+			EmitSignal(SignalName.Capture, piece, captured);
 	}
 	
 	public void MovePiece(File file, Rank rank, ChessPiece piece, bool teleport = false)
