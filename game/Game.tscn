@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://cr2j6w7eq5dkw"]
+[gd_scene load_steps=6 format=3 uid="uid://cr2j6w7eq5dkw"]
 
 [ext_resource type="Script" path="res://scripts/Game.cs" id="1_icnb5"]
 [ext_resource type="PackedScene" uid="uid://ioton7c0qsk3" path="res://nodes/Chessboard.tscn" id="2_rhmi3"]
 [ext_resource type="Script" path="res://scripts/CameraController.cs" id="3_io3t7"]
+[ext_resource type="PackedScene" uid="uid://b8j0nr6nswtdn" path="res://nodes/Graveyard.tscn" id="4_a0fyx"]
+[ext_resource type="Material" uid="uid://dlf5ual5m5cx3" path="res://assets/chess/material-piece-white-4k.tres" id="5_t3ifu"]
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_icnb5")
@@ -19,3 +21,13 @@ VerticalLimit = Vector2(-55, 25)
 
 [node name="Camera3D" type="Camera3D" parent="CameraMount"]
 transform = Transform3D(1, 0, 0, 0, 0.794701, 0.607001, 0, -0.607001, 0.794701, 0, 2.33983, 3.05851)
+
+[node name="WhiteGraveyard" parent="." instance=ExtResource("4_a0fyx")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+Team = 1
+OverrideMaterial = ExtResource("5_t3ifu")
+
+[node name="BlackGraveyard" parent="." instance=ExtResource("4_a0fyx")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
