@@ -1,8 +1,6 @@
-using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace Chess;
 
@@ -25,9 +23,52 @@ public static class PieceMovementLogic
 		}
 		else
 			possibles = limitByRaycast(piece, possibles);
+		
 		possibles.Remove(currentCell);
 		
 		return possibles;
+	}
+	
+	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination, List<BoardCell> cells)
+	{
+		var validCells = GetValidCells(piece, cells);
+		return validCells.Contains(destination);
+	}
+	
+	public static bool ValidateMovement(ChessPiece piece, BoardCell destination)
+	{
+		return piece.Type switch
+		{
+			Piece.Bishop => bishop(piece.GetParent<BoardCell>(), destination),
+			Piece.King => king(piece.GetParent<BoardCell>(), destination),
+			Piece.Knight => knight(piece.GetParent<BoardCell>(), destination),
+			Piece.Pawn => pawn(piece.GetParent<BoardCell>(), destination, piece.Team),
+			Piece.Queen => queen(piece.GetParent<BoardCell>(), destination),
+			Piece.Rook => rook(piece.GetParent<BoardCell>(), destination),
+			_ => false
+		};
+	}
+	
+	private static bool bishop(BoardCell currentCell, BoardCell destination)
+	{
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
+		return fileDiff != 0 && fileDiff == rankDiff;
+	}
+	
+	private static bool king(BoardCell currentCell, BoardCell destination)
+	{
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
+		return fileDiff <= 1 && rankDiff <= 1;
+	}
+	
+	private static bool knight(BoardCell currentCell, BoardCell destination)
+	{
+		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
+		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
+		return fileDiff == 1 && rankDiff == 2
+			|| fileDiff == 2 && rankDiff == 1;
 	}
 	
 	private static List<BoardCell> limitByRaycast(ChessPiece piece, List<BoardCell> possibles)
@@ -41,6 +82,7 @@ public static class PieceMovementLogic
 			{
 				var blockingCell = cp.GetParent<BoardCell>();
 				var collisionIsValidCell = result.Contains(blockingCell);
+				
 				Func<BoardCell, bool> whereClause = cell => false;
 				switch(ray.Name)
 				{
@@ -89,54 +131,12 @@ public static class PieceMovementLogic
 					.ToList()
 					.ForEach(cell => result.Remove(cell));
 				
-				if(cp.Team != piece.Team && collisionIsValidCell)
+				if(collisionIsValidCell && cp.Team != piece.Team)
 					result.Add(blockingCell);
 			}
 		});
 		
 		return result;
-	}
-	
-	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination, List<BoardCell> cells)
-	{
-		var validCells = GetValidCells(piece, cells);
-		return validCells.Contains(destination);
-	}
-	
-	public static bool ValidateMovement(ChessPiece piece, BoardCell destination)
-	{
-		return piece.Type switch
-		{
-			Piece.Bishop => bishop(piece.GetParent<BoardCell>(), destination),
-			Piece.King => king(piece.GetParent<BoardCell>(), destination),
-			Piece.Knight => knight(piece.GetParent<BoardCell>(), destination),
-			Piece.Pawn => pawn(piece.GetParent<BoardCell>(), destination, piece.Team),
-			Piece.Queen => queen(piece.GetParent<BoardCell>(), destination),
-			Piece.Rook => rook(piece.GetParent<BoardCell>(), destination),
-			_ => false
-		};
-	}
-	
-	private static bool bishop(BoardCell currentCell, BoardCell destination)
-	{
-		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
-		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
-		return fileDiff != 0 && fileDiff == rankDiff;
-	}
-	
-	private static bool king(BoardCell currentCell, BoardCell destination)
-	{
-		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
-		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
-		return fileDiff <= 1 && rankDiff <= 1;
-	}
-	
-	private static bool knight(BoardCell currentCell, BoardCell destination)
-	{
-		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
-		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
-		return fileDiff == 1 && rankDiff == 2
-			|| fileDiff == 2 && rankDiff == 1;
 	}
 	
 	private static bool pawn(BoardCell currentCell, BoardCell destination, Teams team)
