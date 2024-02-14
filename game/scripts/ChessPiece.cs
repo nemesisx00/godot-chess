@@ -106,7 +106,12 @@ public partial class ChessPiece : CharacterBody3D
 		}
 	}
 	
-	public void ListenForClicks(bool active) => listeningForClicks = active;
+	public void ListenForClicks(bool active, Teams team)
+	{
+		if(team == Team)
+			listeningForClicks = active;
+	}
+	
 	public void StartFalling() => isFalling = true;
 	
 	public void ToggleSelected(bool? force = null)

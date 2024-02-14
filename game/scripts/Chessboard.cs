@@ -16,7 +16,7 @@ public partial class Chessboard : Node3D
 	public delegate void ListenOnCellsEventHandler(bool active);
 	
 	[Signal]
-	public delegate void ListenOnPiecesEventHandler(bool active);
+	public delegate void ListenOnPiecesEventHandler(bool active, Teams team);
 	
 	[Export]
 	public Material OverrideMaterial { get; set; }
@@ -50,16 +50,22 @@ public partial class Chessboard : Node3D
 		ListenOnPieces += piece.ListenForClicks;
 	}
 	
-	public void EnableCellSelection()
+	public void EnableCellSelection(Teams team)
 	{
 		EmitSignal(SignalName.ListenOnCells, true);
-		EmitSignal(SignalName.ListenOnPieces, false);
+		EmitSignal(SignalName.ListenOnPieces, false, (int)team);
 	}
 	
-	public void EnablePieceSelection()
+	public void EnablePieceSelection(Teams team)
 	{
 		EmitSignal(SignalName.ListenOnCells, false);
-		EmitSignal(SignalName.ListenOnPieces, true);
+		EmitSignal(SignalName.ListenOnPieces, true, (int)team);
+	}
+	
+	public void DisableAllPieceSelection()
+	{
+		EmitSignal(SignalName.ListenOnPieces, false, (int)Teams.Black);
+		EmitSignal(SignalName.ListenOnPieces, false, (int)Teams.White);
 	}
 	
 	public void ReloadTextures()

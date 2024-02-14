@@ -21,6 +21,7 @@ public partial class Game : Node3D
 	
 	private ChessPiece selectedPiece = null;
 	
+	private GameState gameState;
 	private Graveyard blackGraveyard;
 	private Graveyard whiteGraveyard;
 	
@@ -33,7 +34,7 @@ public partial class Game : Node3D
 			board.Cells.Where(c => c.Indicator.Visible)
 				.ToList()
 				.ForEach(c => c.ToggleIndicator(false));
-			board.EnablePieceSelection();
+			board.EnablePieceSelection(gameState.CurrentPlayer);
 		}
 	}
 	
@@ -42,12 +43,22 @@ public partial class Game : Node3D
 		blackGraveyard = GetNode<Graveyard>(NodePaths.BlackGraveyard);
 		board = GetNode<Chessboard>(NodePaths.Board);
 		cameraMount = GetNode<Node3D>(NodePaths.CameraMount);
+		gameState = GetNode<GameState>(GameState.NodePath);
 		whiteGraveyard = GetNode<Graveyard>(NodePaths.WhiteGraveyard);
 		
 		board.Capture += handleCapture;
 		board.CellClicked += handleCellClicked;
+		gameState.StartNextTurn += handleStartNextTurn;
 		
 		generatePieces();
+		
+		handleStartNextTurn(gameState.CurrentPlayer);
+	}
+	
+	private void handleStartNextTurn(Teams activePlayer)
+	{
+		board.DisableAllPieceSelection();
+		board.EnablePieceSelection(activePlayer);
 	}
 	
 	private void handleCapture(ChessPiece attacker, ChessPiece defender)
@@ -68,7 +79,8 @@ public partial class Game : Node3D
 			board.Cells.Where(c => c.Indicator.Visible)
 				.ToList()
 				.ForEach(c => c.ToggleIndicator(false));
-			board.EnablePieceSelection();
+			gameState.EndTurn();
+			//board.EnablePieceSelection(gameState.CurrentPlayer);
 		}
 	}
 	
@@ -77,7 +89,7 @@ public partial class Game : Node3D
 		selectedPiece?.ToggleSelected(false);
 		selectedPiece = piece;
 		selectedPiece.ToggleSelected(true);
-		board.EnableCellSelection();
+		board.EnableCellSelection(gameState.CurrentPlayer);
 		
 		PieceMovementLogic.GetValidCells(piece, board.Cells)
 			.ForEach(c => c.ToggleIndicator(true));
