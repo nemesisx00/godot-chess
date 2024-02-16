@@ -21,8 +21,9 @@ public partial class Chessboard : Node3D
 	[Export]
 	public Material OverrideMaterial { get; set; }
 	
-	private Node3D piece;
 	public List<BoardCell> Cells { get; private set; } = [];
+	public List<ChessPiece> Pieces { get; private set; } = [];
+	private Node3D piece;
 	
 	public override void _Ready()
 	{
@@ -47,7 +48,9 @@ public partial class Chessboard : Node3D
 	public void AddPiece(ChessPiece piece)
 	{
 		AddChild(piece);
+		Pieces.Add(piece);
 		ListenOnPieces += piece.ListenForClicks;
+		piece.MovementFinished += handleMovementFinished;
 	}
 	
 	public void EnableCellSelection(Teams team)
@@ -60,6 +63,17 @@ public partial class Chessboard : Node3D
 	{
 		EmitSignal(SignalName.ListenOnCells, false);
 		EmitSignal(SignalName.ListenOnPieces, true, (int)team);
+	}
+	
+	public void DetectCheck()
+	{
+		Cells.Where(c => c.InCheck)
+			.ToList()
+			.ForEach(c => c.InCheck = false);
+		
+		Pieces.Where(p => p.Type == Piece.King)
+			.ToList()
+			.ForEach(k => k.GetParent<BoardCell>().InCheck = CheckLogic.IsInCheck(k, this));
 	}
 	
 	public void DisableAllPieceSelection()
@@ -104,4 +118,5 @@ public partial class Chessboard : Node3D
 	}
 	
 	private void handleCellClicked(BoardCell cell) => EmitSignal(SignalName.CellClicked, cell);
+	private void handleMovementFinished(ChessPiece piece) => DetectCheck();
 }
