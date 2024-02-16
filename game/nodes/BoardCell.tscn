@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dsdndcusyjbbn"]
+[gd_scene load_steps=7 format=3 uid="uid://dsdndcusyjbbn"]
 
 [ext_resource type="Script" path="res://scripts/BoardCell.cs" id="1_w2jcl"]
 [ext_resource type="Material" uid="uid://cl5r6ek4ray6p" path="res://assets/BoardCellIndicator.tres" id="2_a47jh"]
 [ext_resource type="Material" uid="uid://m15516qfwk51" path="res://assets/BoardCellIndicatorHighlight.tres" id="3_uqagl"]
+[ext_resource type="Material" uid="uid://clj2vaqwdoowf" path="res://assets/BoardCellCheckIndicator.tres" id="4_bebae"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_msfmk"]
 size = Vector3(0.045, 0.005, 0.045)
@@ -16,6 +17,7 @@ collision_mask = 4
 script = ExtResource("1_w2jcl")
 indicatorMaterial = ExtResource("2_a47jh")
 indicatorHighlight = ExtResource("3_uqagl")
+checkMaterial = ExtResource("4_bebae")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_msfmk")
