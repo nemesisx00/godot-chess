@@ -17,6 +17,12 @@ public static class DirectionNames
 	public const string SouthEast = "SouthEast";
 	public const string SouthWest = "SouthWest";
 	public const string West = "West";
+	
+	public static bool IsCardinal(string name)
+		=> East.Equals(name)
+			|| North.Equals(name)
+			|| South.Equals(name)
+			|| West.Equals(name);
 }
 
 public static class ChessMaterials
