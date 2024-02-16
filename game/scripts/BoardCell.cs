@@ -30,8 +30,10 @@ public partial class BoardCell : Area3D
 			if(Indicator.MaterialOverride != indicatorHighlight)
 				Indicator.MaterialOverride = inCheck ? checkMaterial : indicatorMaterial;
 			
-			if(inCheck && !Indicator.Visible)
+			if(inCheck)
 				Indicator.Show();
+			else
+				Indicator.Hide();
 		}
 	}
 	
