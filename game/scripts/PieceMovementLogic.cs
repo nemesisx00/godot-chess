@@ -6,32 +6,36 @@ namespace Chess;
 
 public static class PieceMovementLogic
 {
-	public static List<BoardCell> GetValidCells(ChessPiece piece, List<BoardCell> cells)
+	public static List<BoardCell> GetValidCells(ChessPiece piece, Chessboard board)
 	{
 		List<BoardCell> possibles = [];
 		
-		var currentCell = piece.GetParent<BoardCell>();
-		cells.Where(cell => ValidateMovement(piece, cell))
-			.ToList()
-			.ForEach(possibles.Add);
-		
-		if(piece.Type == Piece.Knight)
+		//TODO: Make this more nuanced, allowing movement as long as the destination continues protecting the king.
+		if(!CheckLogic.PredictCheck(board, piece))
 		{
-			possibles.Where(c => c.GetChildren().Where(child => child is ChessPiece cp && cp.Team == piece.Team).Any())
+			var currentCell = piece.GetParent<BoardCell>();
+			board.Cells.Where(cell => ValidateMovement(piece, cell))
 				.ToList()
-				.ForEach(c => possibles.Remove(c));
+				.ForEach(possibles.Add);
+			
+			if(piece.Type == Piece.Knight)
+			{
+				possibles.Where(c => c.GetChildren().Where(child => child is ChessPiece cp && cp.Team == piece.Team).Any())
+					.ToList()
+					.ForEach(c => possibles.Remove(c));
+			}
+			else
+				possibles = limitByRaycast(piece, possibles);
+			
+			possibles.Remove(currentCell);
 		}
-		else
-			possibles = limitByRaycast(piece, possibles);
-		
-		possibles.Remove(currentCell);
 		
 		return possibles;
 	}
 	
-	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination, List<BoardCell> cells)
+	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination, Chessboard board)
 	{
-		var validCells = GetValidCells(piece, cells);
+		var validCells = GetValidCells(piece, board);
 		return validCells.Contains(destination);
 	}
 	

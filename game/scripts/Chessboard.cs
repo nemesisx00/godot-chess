@@ -18,6 +18,9 @@ public partial class Chessboard : Node3D
 	[Signal]
 	public delegate void ListenOnPiecesEventHandler(bool active, Teams team);
 	
+	[Signal]
+	public delegate void PieceHasMovedEventHandler();
+	
 	[Export]
 	public Material OverrideMaterial { get; set; }
 	
@@ -118,5 +121,10 @@ public partial class Chessboard : Node3D
 	}
 	
 	private void handleCellClicked(BoardCell cell) => EmitSignal(SignalName.CellClicked, cell);
-	private void handleMovementFinished(ChessPiece piece) => DetectCheck();
+	
+	private void handleMovementFinished(ChessPiece piece)
+	{
+		DetectCheck();
+		EmitSignal(SignalName.PieceHasMoved);
+	}
 }

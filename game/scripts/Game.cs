@@ -31,7 +31,7 @@ public partial class Game : Node3D
 		{
 			selectedPiece?.ToggleSelected(false);
 			selectedPiece = null;
-			board.Cells.Where(c => c.Indicator.Visible)
+			board.Cells.Where(c => c.Indicator.Visible && !c.InCheck)
 				.ToList()
 				.ForEach(c => c.ToggleIndicator(false));
 			board.EnablePieceSelection(gameState.CurrentPlayer);
@@ -48,6 +48,7 @@ public partial class Game : Node3D
 		
 		board.Capture += handleCapture;
 		board.CellClicked += handleCellClicked;
+		board.PieceHasMoved += handlePieceHasMoved;
 		gameState.StartNextTurn += handleStartNextTurn;
 		
 		generatePieces();
@@ -71,17 +72,8 @@ public partial class Game : Node3D
 	
 	private void handleCellClicked(BoardCell cell)
 	{
-		if(selectedPiece is not null && PieceMovementLogic.IsDestinationValid(selectedPiece, cell, board.Cells))
-		{
+		if(selectedPiece is not null && PieceMovementLogic.IsDestinationValid(selectedPiece, cell, board))
 			board.MovePiece(selectedPiece, cell);
-			selectedPiece.ToggleSelected(false);
-			selectedPiece = null;
-			board.Cells.Where(c => c.Indicator.Visible)
-				.ToList()
-				.ForEach(c => c.ToggleIndicator(false));
-			gameState.EndTurn();
-			//board.EnablePieceSelection(gameState.CurrentPlayer);
-		}
 	}
 	
 	private void handlePieceClicked(ChessPiece piece)
@@ -91,8 +83,18 @@ public partial class Game : Node3D
 		selectedPiece.ToggleSelected(true);
 		board.EnableCellSelection(gameState.CurrentPlayer);
 		
-		PieceMovementLogic.GetValidCells(piece, board.Cells)
+		PieceMovementLogic.GetValidCells(piece, board)
 			.ForEach(c => c.ToggleIndicator(true));
+	}
+	
+	private void handlePieceHasMoved()
+	{
+		selectedPiece.ToggleSelected(false);
+		selectedPiece = null;
+		board.Cells.Where(c => c.Indicator.Visible && !c.InCheck)
+			.ToList()
+			.ForEach(c => c.ToggleIndicator(false));
+		gameState.EndTurn();
 	}
 	
 	private void generatePieces()
