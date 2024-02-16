@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace Chess;
@@ -23,6 +24,43 @@ public static class DirectionNames
 			|| North.Equals(name)
 			|| South.Equals(name)
 			|| West.Equals(name);
+	
+	public static string ByDifference(int fileDiff, int rankDiff)
+	{
+		var direction = string.Empty;
+		if(fileDiff == 0)
+		{
+			if(rankDiff > 0)
+				direction = South;
+			else
+				direction = North;
+		}
+		else if(rankDiff == 0)
+		{
+			if(fileDiff > 0)
+				direction = West;
+			else
+				direction = East;
+		}
+		else if(Math.Abs(fileDiff) == Math.Abs(rankDiff))
+		{
+			if(fileDiff > 0)
+			{
+				if(rankDiff > 0)
+					direction = SouthWest;
+				else
+					direction = NorthWest;
+			}
+			else
+			{
+				if(rankDiff > 0)
+					direction = SouthEast;
+				else
+					direction = NorthEast;
+			}
+		}
+		return direction;
+	}
 }
 
 public static class ChessMaterials
