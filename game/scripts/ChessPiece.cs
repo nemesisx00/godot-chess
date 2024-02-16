@@ -17,6 +17,9 @@ public partial class ChessPiece : CharacterBody3D
 	[Signal]
 	public delegate void ClickedEventHandler(ChessPiece piece);
 	
+	[Signal]
+	public delegate void MovementFinishedEventHandler(ChessPiece piece);
+	
 	[Export]
 	public Material OverrideMaterial { get; set; }
 	
@@ -148,6 +151,8 @@ public partial class ChessPiece : CharacterBody3D
 			}
 			
 			tween.TweenProperty(this, GlobalPositionPath, Destination, time);
+			
+			tween.Finished += () => EmitSignal(SignalName.MovementFinished, this);
 		}
 	}
 	
