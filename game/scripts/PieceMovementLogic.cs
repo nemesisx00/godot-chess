@@ -20,7 +20,7 @@ public static class PieceMovementLogic
 			
 			if(piece.Type == Piece.Knight)
 			{
-				possibles.Where(c => c.GetChildren().Where(child => child is ChessPiece cp && cp.Team == piece.Team).Any())
+				possibles.Where(c => c.GetChildren().Where(child => child is ChessPiece cp).Any())
 					.ToList()
 					.ForEach(c => possibles.Remove(c));
 			}
@@ -28,6 +28,7 @@ public static class PieceMovementLogic
 				possibles = limitByRaycast(piece, possibles);
 			
 			possibles.Remove(currentCell);
+			possibles.AddRange(CaptureLogic.DetectCapturableCells(piece, board));
 		}
 		
 		return possibles;
@@ -87,8 +88,6 @@ public static class PieceMovementLogic
 				var blockingCell = cp.GetParentOrNull<BoardCell>();
 				if(blockingCell is not null)
 				{
-					var collisionIsValidCell = result.Contains(blockingCell);
-					
 					Func<BoardCell, bool> whereClause = cell => false;
 					switch(ray.Name)
 					{
@@ -136,9 +135,6 @@ public static class PieceMovementLogic
 					result.Where(whereClause)
 						.ToList()
 						.ForEach(cell => result.Remove(cell));
-					
-					if(collisionIsValidCell && cp.Team != piece.Team)
-						result.Add(blockingCell);
 				}
 			}
 		});
