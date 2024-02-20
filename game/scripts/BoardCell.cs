@@ -10,6 +10,9 @@ public partial class BoardCell : Area3D
 		public static readonly NodePath Indicator = "%Indicator";
 	}
 	
+	public static BoardVector operator -(BoardCell a, BoardCell b)
+		=> new(a.File - b.File, a.Rank - b.Rank);
+	
 	[Signal]
 	public delegate void ClickedEventHandler(BoardCell cell);
 	
