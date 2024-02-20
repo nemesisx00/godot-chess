@@ -21,9 +21,6 @@ public static class CheckLogic
 				break;
 			
 			ray.ForceRaycastUpdate();
-			
-			var cardinal = DirectionNames.IsCardinal(ray.Name);
-			
 			var collider = ray.GetCollider();
 			if(collider is ChessPiece cp)
 			{
@@ -31,14 +28,18 @@ public static class CheckLogic
 				{
 					var colliderCell = cp.GetParentOrNull<BoardCell>();
 					if(colliderCell is not null)
-						check = canPieceCauseCheck(cp, cardinal, Math.Abs(kingCell.File - colliderCell.File), kingCell.Rank - colliderCell.Rank);
+						check = canPieceCauseCheck(
+							cp,
+							DirectionNames.IsCardinal(ray.Name),
+							kingCell - colliderCell
+						);
 				}
 			}
 		}
 		
 		if(!check)
 		{
-			foreach(var knight in board.Pieces.Where(p => p.Team != king.Team && p.Type == Piece.Knight))
+			foreach(var knight in board.Pieces.Where(p => p.Team != king.Team && p.Type == Piece.Knight && p.GetParent() is BoardCell))
 			{
 				if(check)
 					break;
@@ -69,29 +70,37 @@ public static class CheckLogic
 		var check = false;
 		
 		//Sanity check
-		if(king != mover && king.Team == mover.Team)
+		if(mover.Type != Piece.King && king.Team == mover.Team)
 		{
 			var kingCell = king.GetParent<BoardCell>();
-			var moverCell = mover.GetParent<BoardCell>();
 			
-			var fileDiff = kingCell.File - moverCell.File;
-			var rankDiff = kingCell.Rank - moverCell.Rank;
-			
-			string direction = DirectionNames.ByDifference(fileDiff, rankDiff);
-			if(!String.IsNullOrEmpty(direction))
+			if(mover.GetParent() is BoardCell moverCell)
 			{
-				var ray = king.Rays.Where(r => r.Name.Equals(direction)).FirstOrDefault();
-				if(ray is not null)
+				var diff = kingCell - moverCell;
+				string direction = DirectionNames.ByDifference(diff);
+				
+				if(!string.IsNullOrEmpty(direction))
 				{
-					var cardinal = DirectionNames.IsCardinal(direction);
-					
-					ray.AddException(mover);
-					ray.ForceRaycastUpdate();
-					ray.RemoveException(mover);
-					
-					var collider = ray.GetCollider();
-					if(collider is ChessPiece cp && cp.Team != king.Team)
-						check = canPieceCauseCheck(cp, cardinal, fileDiff, rankDiff);
+					var ray = king.Rays.Where(r => r.Name.Equals(direction)).FirstOrDefault();
+					if(ray is not null)
+					{
+						var cardinal = DirectionNames.IsCardinal(direction);
+						
+						ray.AddException(mover);
+						ray.ForceRaycastUpdate();
+						ray.RemoveException(mover);
+						
+						var collider = ray.GetCollider();
+						if(collider is ChessPiece cp && cp.Team != king.Team)
+						{
+							var pieceCell = cp.GetParent<BoardCell>();
+							var diff2 = kingCell - pieceCell;
+							
+							//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
+							if(diff2 < diff)
+								check = canPieceCauseCheck(cp, cardinal, diff);
+						}
+					}
 				}
 			}
 		}
@@ -104,20 +113,20 @@ public static class CheckLogic
 	Evaluate if a given piece, based on its allowed means of movement, could cause check.
 	</summary>
 	*/
-	private static bool canPieceCauseCheck(ChessPiece piece, bool cardinal, int fileDiff, int rankDiff)
+	private static bool canPieceCauseCheck(ChessPiece piece, bool cardinal, BoardVector diff)
 	{
-		var check = false;
-		if(cardinal)
+		bool check;
+		if (cardinal)
 			check = piece.Type == Piece.Queen || piece.Type == Piece.Rook;
 		else
 		{
 			check = piece.Type == Piece.Bishop || piece.Type == Piece.Queen;
 			if(!check)
 			{
-				check = piece.Type == Piece.Pawn && fileDiff == 1
+				check = piece.Type == Piece.Pawn && diff.File == 1
 					&& (
-						(piece.Team == Teams.White && rankDiff == 1)
-						|| (piece.Team == Teams.Black && rankDiff == -1)
+						(piece.Team == Teams.White && diff.Rank == 1)
+						|| (piece.Team == Teams.Black && diff.Rank == -1)
 					);
 			}
 		}
