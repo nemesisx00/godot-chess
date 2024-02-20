@@ -25,6 +25,9 @@ public static class DirectionNames
 			|| South.Equals(name)
 			|| West.Equals(name);
 	
+	public static string ByDifference(BoardVector diff)
+		=> ByDifference(diff.File, diff.Rank);
+	
 	public static string ByDifference(int fileDiff, int rankDiff)
 	{
 		var direction = string.Empty;
