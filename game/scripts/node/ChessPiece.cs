@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace Chess;
+namespace Chess.Nodes;
 
 public partial class ChessPiece : CharacterBody3D
 {
@@ -18,7 +18,7 @@ public partial class ChessPiece : CharacterBody3D
 	public delegate void ClickedEventHandler(ChessPiece piece);
 	
 	[Signal]
-	public delegate void MovementFinishedEventHandler(ChessPiece piece);
+	public delegate void MovementFinishedEventHandler(BoardCell from, BoardCell to, ChessPiece piece);
 	
 	[Export]
 	public Material OverrideMaterial { get; set; }
@@ -34,7 +34,7 @@ public partial class ChessPiece : CharacterBody3D
 	
 	public Teams Team { get; set; }
 	
-	public Vector3 Destination
+	public BoardCell Destination
 	{
 		get => destination;
 		
@@ -47,7 +47,7 @@ public partial class ChessPiece : CharacterBody3D
 	
 	public List<RayCast3D> Rays { get; private set; } = [];
 	
-	private Vector3 destination;
+	private BoardCell destination;
 	
 	private bool isFalling = true;
 	private bool listeningForClicks = true;
@@ -128,10 +128,11 @@ public partial class ChessPiece : CharacterBody3D
 	
 	private void doMovementTween()
 	{
-		if(!Vector3.Zero.IsEqualApprox(Destination))
+		var dest = Destination?.GlobalTransform.Origin ?? Vector3.Zero;
+		if(!Vector3.Zero.IsEqualApprox(dest))
 		{
 			var current = GetParent<BoardCell>();
-			var time = current.GlobalPosition.DistanceTo(Destination) * moveDuration;
+			var time = current.GlobalPosition.DistanceTo(dest) * moveDuration;
 			
 			tween?.Kill();
 			tween = CreateTween()
@@ -141,24 +142,23 @@ public partial class ChessPiece : CharacterBody3D
 				.SetParallel(DiagonalMovement)
 				.SetTrans(Tween.TransitionType.Linear);
 			
-			tween.Finished += handleTweenFinished;
-			
-			if(!Mathf.IsEqualApprox(GlobalPosition.X, Destination.X))
+			if(!Mathf.IsEqualApprox(GlobalPosition.X, dest.X))
 			{
-				var one = Destination;
+				var one = dest;
 				one.X = GlobalPosition.X;
 				tween.TweenProperty(this, GlobalPositionPath, one, time);
 			}
 			
-			tween.TweenProperty(this, GlobalPositionPath, Destination, time);
+			tween.TweenProperty(this, GlobalPositionPath, dest, time);
 			
-			tween.Finished += () => EmitSignal(SignalName.MovementFinished, this);
+			tween.Finished += () => EmitSignal(SignalName.MovementFinished, current, Destination, this);
+			tween.Finished += handleTweenFinished;
 		}
 	}
 	
 	private void handleTweenFinished()
 	{
-		Destination = Vector3.Zero;
+		Destination = null;
 		isFalling = true;
 	}
 }

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Chess;
+namespace Chess.Nodes;
 
 [GlobalClass]
 public partial class BoardCell : Area3D
@@ -68,6 +68,8 @@ public partial class BoardCell : Area3D
 	}
 	
 	public void ListenForClicks(bool active) => listeningForClicks = active;
+	
+	public BoardVector ToVector() => new((int)File, (int)Rank);
 	
 	public void ToggleIndicator(bool? force = null)
 	{

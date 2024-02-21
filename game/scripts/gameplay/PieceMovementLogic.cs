@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chess.Nodes;
 
-namespace Chess;
+namespace Chess.Gameplay;
 
 public static class PieceMovementLogic
 {

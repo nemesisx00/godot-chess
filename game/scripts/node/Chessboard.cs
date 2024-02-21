@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Chess.Gameplay;
+using Chess.Autoload;
 
-namespace Chess;
+namespace Chess.Nodes;
 
 public partial class Chessboard : Node3D
 {
@@ -26,10 +28,14 @@ public partial class Chessboard : Node3D
 	
 	public List<BoardCell> Cells { get; private set; } = [];
 	public List<ChessPiece> Pieces { get; private set; } = [];
+	
+	private MoveLog moveLog;
 	private Node3D piece;
 	
 	public override void _Ready()
 	{
+		moveLog = GetNode<MoveLog>(MoveLog.NodePath);
+		
 		ReloadTextures();
 		
 		var children = GetChildren();
@@ -99,7 +105,7 @@ public partial class Chessboard : Node3D
 		if(teleport)
 			Utility.SetGlobalOrigin(piece, cell.GlobalTransform.Origin);
 		else
-			piece.Destination = cell.GlobalTransform.Origin;
+			piece.Destination = cell;
 		
 		var captured = cell.GetChildren()
 			.Where(child => child is ChessPiece)
@@ -122,8 +128,13 @@ public partial class Chessboard : Node3D
 	
 	private void handleCellClicked(BoardCell cell) => EmitSignal(SignalName.CellClicked, cell);
 	
-	private void handleMovementFinished(ChessPiece piece)
+	private void handleMovementFinished(BoardCell from, BoardCell to, ChessPiece piece)
 	{
+		MoveLogEntry entry = new(from.ToVector(), to.ToVector(), piece.Type, piece.Team);
+		//TODO: Evaluate if disambiguation is necessary and set entry.File and entry.Rank to true as needed
+		//TODO: Detect if a capture occurred and set entry.Capture to true as needed
+		moveLog.AddEntry(entry);
+		
 		DetectCheck();
 		EmitSignal(SignalName.PieceHasMoved);
 	}

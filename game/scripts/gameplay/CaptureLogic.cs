@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Godot;
+using Chess.Nodes;
 
-namespace Chess;
+namespace Chess.Gameplay;
 
 public static class CaptureLogic
 {

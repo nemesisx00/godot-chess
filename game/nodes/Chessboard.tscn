@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://ioton7c0qsk3"]
 
-[ext_resource type="Script" path="res://scripts/Chessboard.cs" id="2_01dys"]
+[ext_resource type="Script" path="res://scripts/node/Chessboard.cs" id="2_01dys"]
 [ext_resource type="Material" uid="uid://dbnttm1r6dh2o" path="res://assets/chess/material-board-4k.tres" id="3_ydsp2"]
 [ext_resource type="PackedScene" uid="uid://dsdndcusyjbbn" path="res://nodes/BoardCell.tscn" id="4_ljmdp"]
 

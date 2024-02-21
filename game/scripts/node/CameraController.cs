@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Chess;
+namespace Chess.Nodes;
 
 [GlobalClass]
 public partial class CameraController : Node3D

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Chess;
+namespace Chess.Autoload;
 
 public partial class GameState : Node
 {
@@ -10,11 +10,6 @@ public partial class GameState : Node
 	public static readonly NodePath NodePath = new("/root/GameState");
 	
 	public Teams CurrentPlayer { get; set; } = Teams.White;
-	
-	public override void _Ready()
-	{
-		
-	}
 	
 	public void EndTurn()
 	{

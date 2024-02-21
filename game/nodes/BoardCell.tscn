@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dsdndcusyjbbn"]
 
-[ext_resource type="Script" path="res://scripts/BoardCell.cs" id="1_w2jcl"]
+[ext_resource type="Script" path="res://scripts/node/BoardCell.cs" id="1_w2jcl"]
 [ext_resource type="Material" uid="uid://cl5r6ek4ray6p" path="res://assets/BoardCellIndicator.tres" id="2_a47jh"]
 [ext_resource type="Material" uid="uid://m15516qfwk51" path="res://assets/BoardCellIndicatorHighlight.tres" id="3_uqagl"]
 [ext_resource type="Material" uid="uid://clj2vaqwdoowf" path="res://assets/BoardCellCheckIndicator.tres" id="4_bebae"]

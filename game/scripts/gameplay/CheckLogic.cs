@@ -1,7 +1,7 @@
-using System;
 using System.Linq;
+using Chess.Nodes;
 
-namespace Chess;
+namespace Chess.Gameplay;
 
 public static class CheckLogic
 {
@@ -93,12 +93,15 @@ public static class CheckLogic
 						var collider = ray.GetCollider();
 						if(collider is ChessPiece cp && cp.Team != king.Team)
 						{
-							var pieceCell = cp.GetParent<BoardCell>();
-							var diff2 = kingCell - pieceCell;
-							
-							//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
-							if(diff2 < diff)
-								check = canPieceCauseCheck(cp, cardinal, diff);
+							var pieceCell = cp.GetParentOrNull<BoardCell>();
+							if(pieceCell is not null)
+							{
+								var diff2 = kingCell - pieceCell;
+								
+								//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
+								if(diff2 < diff)
+									check = canPieceCauseCheck(cp, cardinal, diff);
+							}
 						}
 					}
 				}

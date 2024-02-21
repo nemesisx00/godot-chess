@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-namespace Chess;
+namespace Chess.Nodes;
 
 public partial class Graveyard : Node3D
 {

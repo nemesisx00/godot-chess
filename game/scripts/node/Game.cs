@@ -1,7 +1,9 @@
 using System.Linq;
 using Godot;
+using Chess.Autoload;
+using Chess.Gameplay;
 
-namespace Chess;
+namespace Chess.Nodes;
 
 public partial class Game : Node3D
 {
