@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://b8j0nr6nswtdn"]
 
 [ext_resource type="Material" uid="uid://b41rpcakvu2o8" path="res://assets/chess/material-piece-black-4k.tres" id="1_00byu"]
-[ext_resource type="Script" path="res://scripts/node/Graveyard.cs" id="1_asjj2"]
+[ext_resource type="Script" path="res://scripts/nodes/Graveyard.cs" id="1_asjj2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ubndw"]
 size = Vector3(1, 0.1, 4)

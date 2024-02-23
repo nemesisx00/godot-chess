@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bgiac7y5jucy1"]
 
 [ext_resource type="Material" uid="uid://b41rpcakvu2o8" path="res://assets/chess/material-piece-black-4k.tres" id="2_dkiis"]
-[ext_resource type="Script" path="res://scripts/node/ChessPiece.cs" id="2_lf8xp"]
+[ext_resource type="Script" path="res://scripts/nodes/ChessPiece.cs" id="2_lf8xp"]
 [ext_resource type="Material" uid="uid://crjabbkfhbftt" path="res://assets/PieceIndicator.tres" id="3_p5nk4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yjwn2"]
