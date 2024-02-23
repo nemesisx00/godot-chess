@@ -124,6 +124,7 @@ public partial class Chessboard : Node3D
 					.Where(node => node is ChessPiece cp)
 					.Cast<ChessPiece>()
 					.FirstOrDefault();
+				
 				var rookDest = Cells.Where(cell => cell.Rank == start.Rank && cell.File == (start.File + fileMod))
 					.FirstOrDefault();
 				
