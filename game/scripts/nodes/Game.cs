@@ -12,6 +12,7 @@ public partial class Game : Node3D
 		public static readonly NodePath BlackGraveyard = new("BlackGraveyard");
 		public static readonly NodePath Board = new("Chessboard");
 		public static readonly NodePath CameraMount = new("CameraMount");
+		public static readonly NodePath MainMenu = new("%MainMenu");
 		public static readonly NodePath WhiteGraveyard = new("WhiteGraveyard");
 	}
 	
@@ -27,17 +28,17 @@ public partial class Game : Node3D
 	private Graveyard blackGraveyard;
 	private Graveyard whiteGraveyard;
 	
-	public override void _Process(double delta)
+	private MainMenu mainMenu;
+	
+	public override void _UnhandledInput(InputEvent evt)
 	{
-		if(Input.IsActionJustPressed(Actions.DeselectPiece))
+		if(evt.IsActionPressed(Actions.DeselectPiece, false, true))
 		{
-			selectedPiece?.ToggleSelected(false);
-			selectedPiece = null;
-			board.Cells.Where(c => c.Indicator.Visible && !c.InCheck)
-				.ToList()
-				.ForEach(c => c.ToggleIndicator(false));
+			deselectSelectedPiece();
 			board.EnablePieceSelection(gameState.CurrentPlayer);
 		}
+		else if(evt.IsActionPressed(Actions.ToggleMenu, false, true))
+			toggleMainMenu();
 	}
 	
 	public override void _Ready()
@@ -46,22 +47,28 @@ public partial class Game : Node3D
 		board = GetNode<Chessboard>(NodePaths.Board);
 		cameraMount = GetNode<Node3D>(NodePaths.CameraMount);
 		gameState = GetNode<GameState>(GameState.NodePath);
+		mainMenu = GetNode<MainMenu>(NodePaths.MainMenu);
 		whiteGraveyard = GetNode<Graveyard>(NodePaths.WhiteGraveyard);
 		
 		board.Capture += handleCapture;
 		board.CellClicked += handleCellClicked;
 		board.PieceHasMoved += handlePieceHasMoved;
 		gameState.StartNextTurn += handleStartNextTurn;
+		mainMenu.StartNewGame += handleStartNewGame;
 		
 		generatePieces();
 		
 		handleStartNextTurn(gameState.CurrentPlayer);
+		toggleMainMenu();
 	}
 	
-	private void handleStartNextTurn(Teams activePlayer)
+	private void deselectSelectedPiece()
 	{
-		board.DisableAllPieceSelection();
-		board.EnablePieceSelection(activePlayer);
+		selectedPiece?.ToggleSelected(false);
+		selectedPiece = null;
+		board.Cells.Where(c => c.Indicator.Visible && !c.InCheck)
+			.ToList()
+			.ForEach(c => c.ToggleIndicator(false));
 	}
 	
 	private void handleCapture(ChessPiece attacker, ChessPiece defender)
@@ -80,7 +87,7 @@ public partial class Game : Node3D
 	
 	private void handlePieceClicked(ChessPiece piece)
 	{
-		selectedPiece?.ToggleSelected(false);
+		deselectSelectedPiece();
 		selectedPiece = piece;
 		selectedPiece.ToggleSelected(true);
 		board.EnableCellSelection(gameState.CurrentPlayer);
@@ -91,12 +98,20 @@ public partial class Game : Node3D
 	
 	private void handlePieceHasMoved()
 	{
-		selectedPiece.ToggleSelected(false);
-		selectedPiece = null;
-		board.Cells.Where(c => c.Indicator.Visible && !c.InCheck)
-			.ToList()
-			.ForEach(c => c.ToggleIndicator(false));
+		deselectSelectedPiece();
 		gameState.EndTurn();
+	}
+	
+	private void handleStartNewGame()
+	{
+		toggleMainMenu();
+		board.ResetPieces();
+	}
+	
+	private void handleStartNextTurn(Teams activePlayer)
+	{
+		board.DisableAllPieceSelection();
+		board.EnablePieceSelection(activePlayer);
 	}
 	
 	private void generatePieces()
@@ -118,6 +133,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.F, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -128,6 +144,7 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.F, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -162,6 +179,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.G, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -172,6 +190,7 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.G, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -190,6 +209,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.B, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -197,6 +217,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 3;
 			board.AddPiece(piece);
 			board.MovePiece(File.C, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -204,6 +225,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 4;
 			board.AddPiece(piece);
 			board.MovePiece(File.D, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -211,6 +233,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 5;
 			board.AddPiece(piece);
 			board.MovePiece(File.E, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -218,6 +241,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 6;
 			board.AddPiece(piece);
 			board.MovePiece(File.F, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -225,6 +249,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 7;
 			board.AddPiece(piece);
 			board.MovePiece(File.G, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -232,6 +257,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 8;
 			board.AddPiece(piece);
 			board.MovePiece(File.H, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -242,36 +268,43 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.B, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 3;
 			board.AddPiece(piece);
 			board.MovePiece(File.C, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 4;
 			board.AddPiece(piece);
 			board.MovePiece(File.D, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 5;
 			board.AddPiece(piece);
 			board.MovePiece(File.E, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 6;
 			board.AddPiece(piece);
 			board.MovePiece(File.F, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 7;
 			board.AddPiece(piece);
 			board.MovePiece(File.G, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 8;
 			board.AddPiece(piece);
 			board.MovePiece(File.H, Rank.Seven, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -306,6 +339,7 @@ public partial class Game : Node3D
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
 			piece.Team = Teams.White;
+			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.H, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -316,9 +350,29 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
+			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.H, Rank.Eight, piece, true);
 			piece.Clicked += handlePieceClicked;
+		}
+	}
+	
+	private void toggleMainMenu()
+	{
+		if(mainMenu.Visible)
+		{
+			mainMenu.Hide();
+			
+			if(selectedPiece is null)
+				board.EnablePieceSelection(gameState.CurrentPlayer);
+			else
+				board.EnableCellSelection(gameState.CurrentPlayer);
+		}
+		else
+		{
+			mainMenu.Show();
+			board.DisableAllCellSelection();
+			board.DisableAllPieceSelection();
 		}
 	}
 }
