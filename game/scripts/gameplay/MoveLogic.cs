@@ -34,7 +34,7 @@ public static class MoveLogic
 			var (castleWest, castleEast) = canCastle(piece);
 			if(castleWest)
 			{
-				var dest = board.Cells.Where(cell => cell.Rank == currentCell.Rank && cell.File == (File)((int)currentCell.File - 2))
+				var dest = board.Cells.Where(cell => cell.Rank == currentCell.Rank && cell.File == (currentCell.File - 2))
 					.FirstOrDefault();
 				if(dest is not null)
 					possibles.Add(dest);
@@ -42,7 +42,7 @@ public static class MoveLogic
 			
 			if(castleEast)
 			{
-				var dest = board.Cells.Where(cell => cell.Rank == currentCell.Rank && cell.File == (File)((int)currentCell.File + 2))
+				var dest = board.Cells.Where(cell => cell.Rank == currentCell.Rank && cell.File == (currentCell.File + 2))
 					.FirstOrDefault();
 				if(dest is not null)
 					possibles.Add(dest);
