@@ -44,7 +44,7 @@ public static class CheckLogic
 				if(check)
 					break;
 				
-				check = PieceMovementLogic.GetValidCells(knight, board).Contains(kingCell);
+				check = MoveLogic.GetValidCells(knight, board).Contains(kingCell);
 			}
 		}
 		

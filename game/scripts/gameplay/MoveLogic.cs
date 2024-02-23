@@ -5,7 +5,7 @@ using Chess.Nodes;
 
 namespace Chess.Gameplay;
 
-public static class PieceMovementLogic
+public static class MoveLogic
 {
 	public static List<BoardCell> GetValidCells(ChessPiece piece, Chessboard board)
 	{

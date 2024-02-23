@@ -41,7 +41,7 @@ public static class CaptureLogic
 	{
 		var currentCell = piece.GetParent<BoardCell>();
 		List<BoardCell> capturables = [];
-		board.Cells.Where(cell => PieceMovementLogic.ValidateMovement(piece, cell))
+		board.Cells.Where(cell => MoveLogic.ValidateMovement(piece, cell))
 			.Where(c => c.GetChildren().Where(child => child is ChessPiece cp && cp.Team != piece.Team && cp.Type != Piece.King).Any())
 			.ToList()
 			.ForEach(capturables.Add);

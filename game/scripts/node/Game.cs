@@ -74,7 +74,7 @@ public partial class Game : Node3D
 	
 	private void handleCellClicked(BoardCell cell)
 	{
-		if(selectedPiece is not null && PieceMovementLogic.IsDestinationValid(selectedPiece, cell, board))
+		if(selectedPiece is not null && MoveLogic.IsDestinationValid(selectedPiece, cell, board))
 			board.MovePiece(selectedPiece, cell);
 	}
 	
@@ -85,7 +85,7 @@ public partial class Game : Node3D
 		selectedPiece.ToggleSelected(true);
 		board.EnableCellSelection(gameState.CurrentPlayer);
 		
-		PieceMovementLogic.GetValidCells(piece, board)
+		MoveLogic.GetValidCells(piece, board)
 			.ForEach(c => c.ToggleIndicator(true));
 	}
 	
