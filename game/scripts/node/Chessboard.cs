@@ -3,6 +3,7 @@ using System.Linq;
 using Godot;
 using Chess.Gameplay;
 using Chess.Autoload;
+using System;
 
 namespace Chess.Nodes;
 
@@ -105,7 +106,32 @@ public partial class Chessboard : Node3D
 		if(teleport)
 			Utility.SetGlobalOrigin(piece, cell.GlobalTransform.Origin);
 		else
+		{
 			piece.Destination = cell;
+			
+			//Castling
+			if(piece.Type == Piece.King
+				&& piece.GetParentOrNull<BoardCell>() is BoardCell start
+				&& (start - cell) is BoardVector diff
+				&& Math.Abs(diff.File) == 2)
+			{
+				var rookFile = diff.File > 0 ? File.A : File.H;
+				var fileMod = diff.File > 0 ? -1 : 1;
+				
+				var rook = Cells.Where(cell => cell.Rank == start.Rank && cell.File == rookFile)
+					.First()
+					.GetChildren()
+					.Where(node => node is ChessPiece cp)
+					.Cast<ChessPiece>()
+					.FirstOrDefault();
+				var rookDest = Cells.Where(cell => cell.Rank == start.Rank && cell.File == (start.File + fileMod))
+					.FirstOrDefault();
+				
+				//TODO: Set up a means of moving pieces without creating a new log, as both pieces are a part of the same move when castling.
+				if(rook is not null && rookDest is not null)
+					MovePiece(rook, rookDest);
+			}
+		}
 		
 		var captured = cell.GetChildren()
 			.Where(child => child is ChessPiece)
@@ -113,6 +139,9 @@ public partial class Chessboard : Node3D
 			.FirstOrDefault();
 		
 		piece.Reparent(cell);
+		
+		if(!teleport)
+			piece.HasMoved = true;
 		
 		if(captured is not null)
 			EmitSignal(SignalName.Capture, piece, captured);

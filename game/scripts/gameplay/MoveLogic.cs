@@ -30,6 +30,23 @@ public static class MoveLogic
 			
 			possibles.Remove(currentCell);
 			possibles.AddRange(CaptureLogic.DetectCapturableCells(piece, board));
+			
+			var (castleWest, castleEast) = canCastle(piece);
+			if(castleWest)
+			{
+				var dest = board.Cells.Where(cell => cell.Rank == currentCell.Rank && cell.File == (File)((int)currentCell.File - 2))
+					.FirstOrDefault();
+				if(dest is not null)
+					possibles.Add(dest);
+			}
+			
+			if(castleEast)
+			{
+				var dest = board.Cells.Where(cell => cell.Rank == currentCell.Rank && cell.File == (File)((int)currentCell.File + 2))
+					.FirstOrDefault();
+				if(dest is not null)
+					possibles.Add(dest);
+			}
 		}
 		
 		return possibles;
@@ -60,6 +77,32 @@ public static class MoveLogic
 		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
 		var rankDiff = Math.Abs((int)currentCell.Rank - (int)destination.Rank);
 		return fileDiff != 0 && fileDiff == rankDiff;
+	}
+	
+	private static (bool, bool) canCastle(ChessPiece piece)
+	{
+		var east = false;
+		var west = false;
+		
+		if(piece.Type == Piece.King && !piece.HasMoved)
+		{
+			piece.Rays
+				.Where(r => r.Name == DirectionNames.East || r.Name == DirectionNames.West)
+				.ToList()
+				.ForEach(ray => {
+					ray.ForceRaycastUpdate();
+					var collider = ray.GetCollider();
+					if(collider is ChessPiece cp && cp.Type == Piece.Rook && cp.Team == piece.Team && !cp.HasMoved)
+					{
+						if(ray.Name.Equals(DirectionNames.East))
+							east = true;
+						else
+							west = true;
+					}
+				});
+		}
+		
+		return (west, east);
 	}
 	
 	private static bool king(BoardCell currentCell, BoardCell destination)

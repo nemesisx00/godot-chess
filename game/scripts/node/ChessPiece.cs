@@ -33,6 +33,7 @@ public partial class ChessPiece : CharacterBody3D
 	public Piece Type { get; set; }
 	
 	public Teams Team { get; set; }
+	public bool HasMoved { get; set; }
 	
 	public BoardCell Destination
 	{

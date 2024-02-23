@@ -91,12 +91,15 @@ public partial class Game : Node3D
 	
 	private void handlePieceHasMoved()
 	{
-		selectedPiece.ToggleSelected(false);
-		selectedPiece = null;
-		board.Cells.Where(c => c.Indicator.Visible && !c.InCheck)
-			.ToList()
-			.ForEach(c => c.ToggleIndicator(false));
-		gameState.EndTurn();
+		if(selectedPiece is not null)
+		{
+			selectedPiece.ToggleSelected(false);
+			selectedPiece = null;
+			board.Cells.Where(c => c.Indicator.Visible && !c.InCheck)
+				.ToList()
+				.ForEach(c => c.ToggleIndicator(false));
+			gameState.EndTurn();
+		}
 	}
 	
 	private void generatePieces()
