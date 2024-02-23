@@ -34,6 +34,7 @@ public partial class ChessPiece : CharacterBody3D
 	
 	public Teams Team { get; set; }
 	public bool HasMoved { get; set; }
+	public int PieceNumber { get; set; } = 1;
 	
 	public BoardCell Destination
 	{
@@ -82,6 +83,9 @@ public partial class ChessPiece : CharacterBody3D
 	public override void _Ready()
 	{
 		Name = $"{Team}{Type}";
+		
+		if(PieceNumber > 1)
+			Name = $"{Name}{PieceNumber}";
 		
 		if(Team == Teams.White)
 		{
@@ -132,7 +136,7 @@ public partial class ChessPiece : CharacterBody3D
 		var dest = Destination?.GlobalTransform.Origin ?? Vector3.Zero;
 		if(!Vector3.Zero.IsEqualApprox(dest))
 		{
-			var current = GetParent<BoardCell>();
+			var current = GetParent<Node3D>();
 			var time = current.GlobalPosition.DistanceTo(dest) * moveDuration;
 			
 			tween?.Kill();
@@ -152,7 +156,11 @@ public partial class ChessPiece : CharacterBody3D
 			
 			tween.TweenProperty(this, GlobalPositionPath, dest, time);
 			
-			tween.Finished += () => EmitSignal(SignalName.MovementFinished, current, Destination, this);
+			BoardCell from = null;
+			if(current is BoardCell bc)
+				from = bc;
+			
+			tween.Finished += () => EmitSignal(SignalName.MovementFinished, from, Destination, this);
 			tween.Finished += handleTweenFinished;
 		}
 	}
