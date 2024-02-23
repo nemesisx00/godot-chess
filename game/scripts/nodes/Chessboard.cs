@@ -86,6 +86,8 @@ public partial class Chessboard : Node3D
 			.ForEach(k => k.GetParent<BoardCell>().InCheck = CheckLogic.IsInCheck(k, this));
 	}
 	
+	public void DisableAllCellSelection() => EmitSignal(SignalName.ListenOnCells, false);
+	
 	public void DisableAllPieceSelection()
 	{
 		EmitSignal(SignalName.ListenOnPieces, false, (int)Teams.Black);
@@ -112,7 +114,7 @@ public partial class Chessboard : Node3D
 		}
 		
 		var captured = cell.GetChildren()
-			.Where(child => child is ChessPiece)
+			.Where(child => child is ChessPiece && child != piece)
 			.Cast<ChessPiece>()
 			.FirstOrDefault();
 		
@@ -131,6 +133,49 @@ public partial class Chessboard : Node3D
 			.GetNode<BoardCell>($"{file}{(int)rank + 1}");
 		
 		MovePiece(piece, cell, teleport);
+	}
+	
+	public void ResetPieces()
+	{
+		MovePiece(File.C, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Bishop && p.PieceNumber == 1).First());
+		MovePiece(File.F, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Bishop && p.PieceNumber == 2).First());
+		MovePiece(File.C, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Bishop && p.PieceNumber == 1).First());
+		MovePiece(File.F, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Bishop && p.PieceNumber == 2).First());
+		
+		MovePiece(File.E, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.King).First());
+		MovePiece(File.E, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.King).First());
+		
+		MovePiece(File.B, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Knight && p.PieceNumber == 1).First());
+		MovePiece(File.G, Rank.One,  Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Knight && p.PieceNumber == 2).First());
+		MovePiece(File.B, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Knight && p.PieceNumber == 1).First());
+		MovePiece(File.G, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Knight && p.PieceNumber == 2).First());
+		
+		MovePiece(File.A, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 1).First());
+		MovePiece(File.B, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 2).First());
+		MovePiece(File.C, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 3).First());
+		MovePiece(File.D, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 4).First());
+		MovePiece(File.E, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 5).First());
+		MovePiece(File.F, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 6).First());
+		MovePiece(File.G, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 7).First());
+		MovePiece(File.H, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 8).First());
+			
+		MovePiece(File.A, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 1).First());
+		MovePiece(File.B, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 2).First());
+		MovePiece(File.C, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 3).First());
+		MovePiece(File.D, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 4).First());
+		MovePiece(File.E, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 5).First());
+		MovePiece(File.F, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 6).First());
+		MovePiece(File.G, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 7).First());
+		MovePiece(File.H, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 8).First());
+		
+		MovePiece(File.D, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Queen).First());
+		MovePiece(File.D, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Queen).First());
+		
+		MovePiece(File.A, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Rook && p.PieceNumber == 1).First());
+		MovePiece(File.H, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Rook && p.PieceNumber == 2).First());
+		
+		MovePiece(File.A, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Rook && p.PieceNumber == 1).First());
+		MovePiece(File.H, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Rook && p.PieceNumber == 2).First());
 	}
 	
 	private void tryCastling(ChessPiece piece, BoardCell cell)
@@ -170,7 +215,8 @@ public partial class Chessboard : Node3D
 		}
 		else
 		{
-			MoveLogEntry entry = new(from.ToVector(), to.ToVector(), piece.Type, piece.Team);
+			//Workaround because from may be null if a piece is moved from a graveyard back onto the board (i.e. when starting a new game)
+			MoveLogEntry entry = new(from?.ToVector() ?? default, to.ToVector(), piece.Type, piece.Team);
 			//TODO: Evaluate if disambiguation is necessary and set entry.File and entry.Rank to true as needed
 			//TODO: Detect if a capture occurred and set entry.Capture to true as needed
 			moveLog.AddEntry(entry);
