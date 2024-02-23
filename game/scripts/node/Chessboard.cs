@@ -108,30 +108,7 @@ public partial class Chessboard : Node3D
 		else
 		{
 			piece.Destination = cell;
-			
-			//Castling
-			if(piece.Type == Piece.King
-				&& piece.GetParentOrNull<BoardCell>() is BoardCell start
-				&& (start - cell) is BoardVector diff
-				&& Math.Abs(diff.File) == 2)
-			{
-				var rookFile = diff.File > 0 ? File.A : File.H;
-				var fileMod = diff.File > 0 ? -1 : 1;
-				
-				var rook = Cells.Where(cell => cell.Rank == start.Rank && cell.File == rookFile)
-					.First()
-					.GetChildren()
-					.Where(node => node is ChessPiece cp && cp.Type == Piece.Rook && cp.Team == piece.Team)
-					.Cast<ChessPiece>()
-					.FirstOrDefault();
-				
-				var rookDest = Cells.Where(cell => cell.Rank == start.Rank && cell.File == (start.File + fileMod))
-					.FirstOrDefault();
-				
-				//TODO: Set up a means of moving pieces without creating a new log, as both pieces are a part of the same move when castling.
-				if(rook is not null && rookDest is not null)
-					MovePiece(rook, rookDest);
-			}
+			tryCastling(piece, cell);
 		}
 		
 		var captured = cell.GetChildren()
@@ -154,6 +131,32 @@ public partial class Chessboard : Node3D
 			.GetNode<BoardCell>($"{file}{(int)rank + 1}");
 		
 		MovePiece(piece, cell, teleport);
+	}
+	
+	private void tryCastling(ChessPiece piece, BoardCell cell)
+	{
+		if(piece.Type == Piece.King
+			&& piece.GetParentOrNull<BoardCell>() is BoardCell start
+			&& (start - cell) is BoardVector diff
+			&& Math.Abs(diff.File) == 2)
+		{
+			var rookFile = diff.File > 0 ? File.A : File.H;
+			var fileMod = diff.File > 0 ? -1 : 1;
+			
+			var rook = Cells.Where(cell => cell.Rank == start.Rank && cell.File == rookFile)
+				.First()
+				.GetChildren()
+				.Where(node => node is ChessPiece cp && cp.Type == Piece.Rook && cp.Team == piece.Team)
+				.Cast<ChessPiece>()
+				.FirstOrDefault();
+			
+			var rookDest = Cells.Where(cell => cell.Rank == start.Rank && cell.File == (start.File + fileMod))
+				.FirstOrDefault();
+			
+			//TODO: Set up a means of moving pieces without creating a new log, as both pieces are a part of the same move when castling.
+			if(rook is not null && rookDest is not null)
+				MovePiece(rook, rookDest);
+		}
 	}
 	
 	private void handleCellClicked(BoardCell cell) => EmitSignal(SignalName.CellClicked, cell);
