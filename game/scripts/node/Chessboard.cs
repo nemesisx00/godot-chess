@@ -153,7 +153,6 @@ public partial class Chessboard : Node3D
 			var rookDest = Cells.Where(cell => cell.Rank == start.Rank && cell.File == (start.File + fileMod))
 				.FirstOrDefault();
 			
-			//TODO: Set up a means of moving pieces without creating a new log, as both pieces are a part of the same move when castling.
 			if(rook is not null && rookDest is not null)
 				MovePiece(rook, rookDest);
 		}
@@ -163,12 +162,21 @@ public partial class Chessboard : Node3D
 	
 	private void handleMovementFinished(BoardCell from, BoardCell to, ChessPiece piece)
 	{
-		MoveLogEntry entry = new(from.ToVector(), to.ToVector(), piece.Type, piece.Team);
-		//TODO: Evaluate if disambiguation is necessary and set entry.File and entry.Rank to true as needed
-		//TODO: Detect if a capture occurred and set entry.Capture to true as needed
-		moveLog.AddEntry(entry);
+		//Is this piece the rook who was moved immediately after the king moved as a part of castling?
+		if(piece.Type == Piece.Rook && moveLog.MostRecentEntry.Piece == Piece.King && moveLog.MostRecentEntry.Team == piece.Team
+			&& Math.Abs(moveLog.MostRecentEntry.From.File - moveLog.MostRecentEntry.To.File) == 2)
+		{
+			moveLog.MostRecentEntry.Castle = true;
+		}
+		else
+		{
+			MoveLogEntry entry = new(from.ToVector(), to.ToVector(), piece.Type, piece.Team);
+			//TODO: Evaluate if disambiguation is necessary and set entry.File and entry.Rank to true as needed
+			//TODO: Detect if a capture occurred and set entry.Capture to true as needed
+			moveLog.AddEntry(entry);
+			EmitSignal(SignalName.PieceHasMoved);
+		}
 		
 		DetectCheck();
-		EmitSignal(SignalName.PieceHasMoved);
 	}
 }
