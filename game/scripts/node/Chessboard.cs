@@ -121,7 +121,7 @@ public partial class Chessboard : Node3D
 				var rook = Cells.Where(cell => cell.Rank == start.Rank && cell.File == rookFile)
 					.First()
 					.GetChildren()
-					.Where(node => node is ChessPiece cp)
+					.Where(node => node is ChessPiece cp && cp.Type == Piece.Rook && cp.Team == piece.Team)
 					.Cast<ChessPiece>()
 					.FirstOrDefault();
 				
