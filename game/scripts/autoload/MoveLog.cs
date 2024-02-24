@@ -23,4 +23,6 @@ public partial class MoveLog : Node
 		Entries.Add(entry);
 		EmitSignal(SignalName.MoveLogged);
 	}
+	
+	public void Clear() => Entries.Clear();
 }
