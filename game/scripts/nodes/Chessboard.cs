@@ -105,25 +105,26 @@ public partial class Chessboard : Node3D
 	
 	public void MovePiece(ChessPiece piece, BoardCell cell, bool teleport = false)
 	{
-		if(teleport)
-			Utility.SetGlobalOrigin(piece, cell.GlobalTransform.Origin);
-		else
-		{
-			piece.Destination = cell;
-			tryCastling(piece, cell);
-		}
-		
 		var captured = cell.GetChildren()
 			.Where(child => child is ChessPiece && child != piece)
 			.Cast<ChessPiece>()
 			.FirstOrDefault();
+		var hasCaptured = captured is not null;
+		
+		if(teleport)
+			Utility.SetGlobalOrigin(piece, cell.GlobalTransform.Origin);
+		else
+		{
+			piece.SetDestination(cell, hasCaptured);
+			tryCastling(piece, cell);
+		}
 		
 		piece.Reparent(cell);
 		
 		if(!teleport)
 			piece.HasMoved = true;
 		
-		if(captured is not null)
+		if(hasCaptured)
 			EmitSignal(SignalName.Capture, piece, captured);
 	}
 	
@@ -208,7 +209,7 @@ public partial class Chessboard : Node3D
 	
 	private void handleCellClicked(BoardCell cell) => EmitSignal(SignalName.CellClicked, cell);
 	
-	private void handleMovementFinished(BoardCell from, BoardCell to, ChessPiece piece)
+	private void handleMovementFinished(BoardCell from, BoardCell to, ChessPiece piece, bool capture)
 	{
 		//Is this piece the rook who was moved immediately after the king moved as a part of castling?
 		if(piece.Type == Piece.Rook && moveLog.MostRecentEntry.Piece == Piece.King && moveLog.MostRecentEntry.Team == piece.Team
@@ -218,10 +219,16 @@ public partial class Chessboard : Node3D
 		}
 		else
 		{
+			var piecesQuery = Pieces.Where(p => p != piece && p.Team == piece.Team && p.Type == piece.Type);
+			
 			//Workaround because from may be null if a piece is moved from a graveyard back onto the board (i.e. when starting a new game)
-			MoveLogEntry entry = new(from?.ToVector() ?? default, to.ToVector(), piece.Type, piece.Team);
-			//TODO: Evaluate if disambiguation is necessary and set entry.File and entry.Rank to true as needed
-			//TODO: Detect if a capture occurred and set entry.Capture to true as needed
+			MoveLogEntry entry = new(from?.ToVector() ?? default, to.ToVector(), piece.Type, piece.Team)
+			{
+				Capture = capture,
+				File = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.Rank == otherCell.Rank).Any(),
+				Rank = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.File == otherCell.File).Any()
+			};
+			
 			moveLog.AddEntry(entry);
 			EmitSignal(SignalName.PieceHasMoved);
 		}
