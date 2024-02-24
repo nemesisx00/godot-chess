@@ -26,12 +26,12 @@ public class MoveLogEntry(BoardVector from, BoardVector to, Piece piece, Teams t
 				moveIsCapture = "x";
 			
 			var disambiguation = string.Empty;
-			if(File && Rank)
+			if((File && Rank) || (Piece == Piece.Pawn && Capture))
 				disambiguation = From.ToString().ToLower();
-			else if(File)
-				disambiguation = ((File)From.File).ToString().ToLower();
-			else if(Rank)
+			else if(File && Piece != Piece.Pawn)
 				disambiguation = (From.Rank + 1).ToString();
+			else if(Rank && Piece != Piece.Pawn)
+				disambiguation = ((File)From.File).ToString().ToLower();
 			
 			notation = $"{disambiguation}{moveIsCapture}{To.ToString().ToLower()}";
 		}
