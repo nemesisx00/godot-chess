@@ -178,6 +178,7 @@ public partial class Chessboard : Node3D
 		MovePiece(File.H, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Rook && p.PieceNumber == 2).First());
 		
 		Pieces.ForEach(p => p.HasMoved = false);
+		moveLog.Clear();
 	}
 	
 	private void tryCastling(ChessPiece piece, BoardCell cell)
