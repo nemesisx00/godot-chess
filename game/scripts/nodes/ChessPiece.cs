@@ -18,7 +18,7 @@ public partial class ChessPiece : CharacterBody3D
 	public delegate void ClickedEventHandler(ChessPiece piece);
 	
 	[Signal]
-	public delegate void MovementFinishedEventHandler(BoardCell from, BoardCell to, ChessPiece piece);
+	public delegate void MovementFinishedEventHandler(BoardCell from, BoardCell to, ChessPiece piece, bool capture);
 	
 	[Export]
 	public Material OverrideMaterial { get; set; }
@@ -47,6 +47,12 @@ public partial class ChessPiece : CharacterBody3D
 		}
 	}
 	
+	public void SetDestination(BoardCell dest, bool capture = false)
+	{
+		willCapture = capture;
+		Destination = dest;
+	}
+	
 	public List<RayCast3D> Rays { get; private set; } = [];
 	
 	private BoardCell destination;
@@ -55,6 +61,7 @@ public partial class ChessPiece : CharacterBody3D
 	private bool listeningForClicks = true;
 	private Tween tween;
 	private MeshInstance3D selectionIndicator;
+	private bool willCapture;
 	
 	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
 	{
@@ -160,7 +167,7 @@ public partial class ChessPiece : CharacterBody3D
 			if(current is BoardCell bc)
 				from = bc;
 			
-			tween.Finished += () => EmitSignal(SignalName.MovementFinished, from, Destination, this);
+			tween.Finished += () => EmitSignal(SignalName.MovementFinished, from, Destination, this, willCapture);
 			tween.Finished += handleTweenFinished;
 		}
 	}
@@ -169,5 +176,6 @@ public partial class ChessPiece : CharacterBody3D
 	{
 		Destination = null;
 		isFalling = true;
+		willCapture = false;
 	}
 }
