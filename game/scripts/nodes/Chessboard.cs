@@ -225,8 +225,8 @@ public partial class Chessboard : Node3D
 			MoveLogEntry entry = new(from?.ToVector() ?? default, to.ToVector(), piece.Type, piece.Team)
 			{
 				Capture = capture,
-				File = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.Rank == otherCell.Rank).Any(),
-				Rank = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.File == otherCell.File).Any()
+				File = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.File == otherCell.File).Any(),
+				Rank = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.Rank == otherCell.Rank).Any()
 			};
 			
 			moveLog.AddEntry(entry);
