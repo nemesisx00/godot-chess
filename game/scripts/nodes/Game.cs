@@ -105,7 +105,9 @@ public partial class Game : Node3D
 	private void handleStartNewGame()
 	{
 		toggleMainMenu();
+		gameState.CurrentPlayer = Teams.White;
 		board.ResetPieces();
+		gameState.Status = GameStatus.Playing;
 	}
 	
 	private void handleStartNextTurn(Teams activePlayer)
@@ -363,6 +365,8 @@ public partial class Game : Node3D
 		{
 			mainMenu.Hide();
 			
+			gameState.Status = GameStatus.Paused;
+			
 			if(selectedPiece is null)
 				board.EnablePieceSelection(gameState.CurrentPlayer);
 			else
@@ -371,6 +375,7 @@ public partial class Game : Node3D
 		else
 		{
 			mainMenu.Show();
+			gameState.Status = GameStatus.Playing;
 			board.DisableAllCellSelection();
 			board.DisableAllPieceSelection();
 		}
