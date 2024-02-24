@@ -31,7 +31,7 @@ public class MoveLogEntry(BoardVector from, BoardVector to, Piece piece, Teams t
 			else if(File)
 				disambiguation = ((File)From.File).ToString().ToLower();
 			else if(Rank)
-				disambiguation = From.Rank.ToString();
+				disambiguation = (From.Rank + 1).ToString();
 			
 			notation = $"{disambiguation}{moveIsCapture}{To.ToString().ToLower()}";
 		}
