@@ -12,6 +12,16 @@ public enum File
 	H,
 }
 
+public enum GameStatus
+{
+	NotStarted,
+	Playing,
+	Paused,
+	Loss,
+	Stalemate,
+	Victory,
+}
+
 public enum Piece
 {
 	Bishop,

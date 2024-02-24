@@ -75,16 +75,6 @@ public static class ChessMaterials
 	public const string White = $"{ResourcePaths.Chess}material-piece-white-4k.tres";
 }
 
-public enum GameStatus
-{
-	NotStarted,
-	Playing,
-	Paused,
-	Loss,
-	Stalemate,
-	Victory,
-}
-
 public static class GlobalSettings
 {
 	public static readonly float Gravity = (float)ProjectSettings.GetSetting("physics/3d/default_gravity");
