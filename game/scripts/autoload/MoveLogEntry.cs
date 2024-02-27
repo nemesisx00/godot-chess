@@ -36,7 +36,8 @@ public class MoveLogEntry(BoardVector from, BoardVector to, Piece piece, Teams t
 			notation = $"{disambiguation}{moveIsCapture}{To.ToString().ToLower()}";
 		}
 		
-		var icon = UnicodePiece.ByTeamPiece(Team, Piece);
-		return $"{icon}{notation}";
+		//var icon = UnicodePiece.ByTeamPiece(Team, Piece);
+		//return $"{icon}{notation}";
+		return notation;
 	}
 }
