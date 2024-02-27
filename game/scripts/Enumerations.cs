@@ -20,6 +20,7 @@ public enum GameStatus
 	Loss,
 	Stalemate,
 	Victory,
+	Reseting,
 }
 
 public enum Piece
