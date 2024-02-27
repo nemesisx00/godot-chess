@@ -106,10 +106,9 @@ public partial class Game : Node3D
 	{
 		if(gameState.Status == GameStatus.Reseting)
 		{
-			if(moveLogView.EnableLogUpdates)
-				moveLogView.EnableLogUpdates = false;
-			
+			moveLogView.EnableLogUpdates = false;
 			piecesReset++;
+			
 			if(piecesReset >= 32)
 			{
 				moveLog.Clear();
