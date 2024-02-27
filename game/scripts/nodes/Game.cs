@@ -36,12 +36,12 @@ public partial class Game : Node3D
 	
 	public override void _UnhandledInput(InputEvent evt)
 	{
-		if(evt.IsActionPressed(Actions.DeselectPiece, false, true))
+		if(!mainMenu.Visible && evt.IsActionPressed(Actions.DeselectPiece, false, true))
 		{
 			deselectSelectedPiece();
 			board.EnablePieceSelection(gameState.CurrentPlayer);
 		}
-		else if(evt.IsActionPressed(Actions.ToggleMenu, false, true))
+		else if(!mainMenu.CreditsVisible && evt.IsActionPressed(Actions.ToggleMenu, false, true))
 			toggleMainMenu();
 	}
 	
