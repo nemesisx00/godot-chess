@@ -1,4 +1,5 @@
 using System.Linq;
+using Chess.Autoload;
 using Chess.Nodes;
 
 namespace Chess.Gameplay;
@@ -10,7 +11,7 @@ public static class CheckLogic
 	Detect if a king is in check.
 	</summary>
 	*/
-	public static bool IsInCheck(ChessPiece king, Chessboard board)
+	public static bool IsInCheck(ChessPiece king, Chessboard board, MoveLog moveLog)
 	{
 		var check = false;
 		var kingCell = king.GetParent<BoardCell>();
@@ -44,7 +45,7 @@ public static class CheckLogic
 				if(check)
 					break;
 				
-				check = MoveLogic.GetValidCells(knight, board).Contains(kingCell);
+				check = MoveLogic.GetValidCells(knight, board, moveLog).Contains(kingCell);
 			}
 		}
 		

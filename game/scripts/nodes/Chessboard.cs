@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Chess.Gameplay;
 using Chess.Autoload;
-using System;
 
 namespace Chess.Nodes;
 
@@ -83,7 +83,7 @@ public partial class Chessboard : Node3D
 		
 		Pieces.Where(p => p.Type == Piece.King)
 			.ToList()
-			.ForEach(k => k.GetParent<BoardCell>().InCheck = CheckLogic.IsInCheck(k, this));
+			.ForEach(k => k.GetParent<BoardCell>().InCheck = CheckLogic.IsInCheck(k, this, moveLog));
 	}
 	
 	public void DisableAllCellSelection() => EmitSignal(SignalName.ListenOnCells, false);
@@ -120,9 +120,6 @@ public partial class Chessboard : Node3D
 		}
 		
 		piece.Reparent(cell);
-		
-		if(!teleport)
-			piece.HasMoved = true;
 		
 		if(hasCaptured)
 			EmitSignal(SignalName.Capture, piece, captured);
@@ -221,15 +218,30 @@ public partial class Chessboard : Node3D
 		{
 			var piecesQuery = Pieces.Where(p => p != piece && p.Team == piece.Team && p.Type == piece.Type);
 			
+			//En Passant will not be detected by the normal means of capturing so check for it here when appropriate.
+			if(piece.Type == Piece.Pawn && !capture && from.File != to.File)
+			{
+				var previous = Cells.Where(c => c.File == to.File && c.Rank == to.Rank + (piece.Team == Teams.Black ? 1 : -1))
+					.FirstOrDefault();
+				
+				if(previous is not null && previous.GetChildren().Where(c => c is ChessPiece cp && cp.Type == Piece.Pawn && cp.Team != piece.Team).FirstOrDefault() is ChessPiece cp)
+				{
+					capture = true;
+					EmitSignal(SignalName.Capture, piece, cp);
+				}
+			}
+			
 			//Workaround because from may be null if a piece is moved from a graveyard back onto the board (i.e. when starting a new game)
 			MoveLogEntry entry = new(from?.ToVector() ?? default, to.ToVector(), piece.Type, piece.Team)
 			{
 				Capture = capture,
 				File = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.File == otherCell.File).Any(),
-				Rank = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.Rank == otherCell.Rank).Any()
+				Rank = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.Rank == otherCell.Rank).Any(),
+				FirstMove = !piece.HasMoved,
 			};
 			
 			moveLog.AddEntry(entry);
+			piece.HasMoved = true;
 			EmitSignal(SignalName.PieceHasMoved);
 		}
 		

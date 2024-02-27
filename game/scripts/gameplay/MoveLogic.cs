@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chess.Autoload;
 using Chess.Nodes;
 
 namespace Chess.Gameplay;
 
 public static class MoveLogic
 {
-	public static List<BoardCell> GetValidCells(ChessPiece piece, Chessboard board)
+	public static List<BoardCell> GetValidCells(ChessPiece piece, Chessboard board, MoveLog moveLog)
 	{
 		List<BoardCell> possibles = [];
 		
@@ -29,7 +30,7 @@ public static class MoveLogic
 				possibles = limitByRaycast(piece, possibles);
 			
 			possibles.Remove(currentCell);
-			possibles.AddRange(CaptureLogic.DetectCapturableCells(piece, board));
+			possibles.AddRange(CaptureLogic.DetectCapturableCells(piece, board, moveLog));
 			
 			var (castleWest, castleEast) = canCastle(piece);
 			if(castleWest)
@@ -56,9 +57,9 @@ public static class MoveLogic
 		return possibles;
 	}
 	
-	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination, Chessboard board)
+	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination, Chessboard board, MoveLog moveLog)
 	{
-		var validCells = GetValidCells(piece, board);
+		var validCells = GetValidCells(piece, board, moveLog);
 		return validCells.Contains(destination);
 	}
 	

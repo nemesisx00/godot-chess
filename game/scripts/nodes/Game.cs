@@ -87,7 +87,7 @@ public partial class Game : Node3D
 	
 	private void handleCellClicked(BoardCell cell)
 	{
-		if(selectedPiece is not null && MoveLogic.IsDestinationValid(selectedPiece, cell, board))
+		if(selectedPiece is not null && MoveLogic.IsDestinationValid(selectedPiece, cell, board, moveLog))
 			board.MovePiece(selectedPiece, cell);
 	}
 	
@@ -98,7 +98,7 @@ public partial class Game : Node3D
 		selectedPiece.ToggleSelected(true);
 		board.EnableCellSelection(gameState.CurrentPlayer);
 		
-		MoveLogic.GetValidCells(piece, board)
+		MoveLogic.GetValidCells(piece, board, moveLog)
 			.ForEach(c => c.ToggleIndicator(true));
 	}
 	
@@ -113,6 +113,7 @@ public partial class Game : Node3D
 			if(piecesReset >= 32)
 			{
 				moveLog.Clear();
+				board.Pieces.ForEach(p => p.HasMoved = false);
 				moveLogView.EnableLogUpdates = true;
 				gameState.Status = GameStatus.Playing;
 				piecesReset = 0;

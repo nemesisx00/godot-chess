@@ -8,6 +8,7 @@ public class MoveLogEntry(BoardVector from, BoardVector to, Piece piece, Teams t
 	public bool Capture { get; set; }
 	public bool Castle { get; set; }
 	public bool File { get; set; }
+	public bool FirstMove { get; set; }
 	public BoardVector From { get; set; } = from;
 	public Piece Piece { get; set; } = piece;
 	public bool Rank { get; set; }
