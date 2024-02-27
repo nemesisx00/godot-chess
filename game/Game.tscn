@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://cr2j6w7eq5dkw"]
+[gd_scene load_steps=11 format=3 uid="uid://cr2j6w7eq5dkw"]
 
 [ext_resource type="Script" path="res://scripts/nodes/Game.cs" id="1_icnb5"]
 [ext_resource type="PackedScene" uid="uid://ioton7c0qsk3" path="res://nodes/Chessboard.tscn" id="2_rhmi3"]
+[ext_resource type="PackedScene" uid="uid://cpcvugdqxddtv" path="res://nodes/MoveLogView.tscn" id="3_gf7bq"]
 [ext_resource type="Script" path="res://scripts/nodes/CameraController.cs" id="3_io3t7"]
 [ext_resource type="PackedScene" uid="uid://b8j0nr6nswtdn" path="res://nodes/Graveyard.tscn" id="4_a0fyx"]
 [ext_resource type="Material" uid="uid://dlf5ual5m5cx3" path="res://assets/chess/material-piece-white-4k.tres" id="5_t3ifu"]
@@ -20,6 +21,10 @@ sky = SubResource("Sky_jqvlb")
 script = ExtResource("1_icnb5")
 
 [node name="MainMenu" parent="." instance=ExtResource("6_exsfr")]
+unique_name_in_owner = true
+visible = false
+
+[node name="MoveLogView" parent="." instance=ExtResource("3_gf7bq")]
 unique_name_in_owner = true
 visible = false
 

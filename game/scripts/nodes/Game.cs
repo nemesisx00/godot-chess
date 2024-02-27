@@ -13,6 +13,7 @@ public partial class Game : Node3D
 		public static readonly NodePath Board = new("Chessboard");
 		public static readonly NodePath CameraMount = new("CameraMount");
 		public static readonly NodePath MainMenu = new("%MainMenu");
+		public static readonly NodePath MoveLogView = new("%MoveLogView");
 		public static readonly NodePath WhiteGraveyard = new("WhiteGraveyard");
 	}
 	
@@ -29,6 +30,9 @@ public partial class Game : Node3D
 	private Graveyard whiteGraveyard;
 	
 	private MainMenu mainMenu;
+	private MoveLog moveLog;
+	private MoveLogView moveLogView;
+	private int piecesReset;
 	
 	public override void _UnhandledInput(InputEvent evt)
 	{
@@ -48,6 +52,8 @@ public partial class Game : Node3D
 		cameraMount = GetNode<Node3D>(NodePaths.CameraMount);
 		gameState = GetNode<GameState>(GameState.NodePath);
 		mainMenu = GetNode<MainMenu>(NodePaths.MainMenu);
+		moveLog = GetNode<MoveLog>(MoveLog.NodePath);
+		moveLogView = GetNode<MoveLogView>(NodePaths.MoveLogView);
 		whiteGraveyard = GetNode<Graveyard>(NodePaths.WhiteGraveyard);
 		
 		board.Capture += handleCapture;
@@ -98,16 +104,33 @@ public partial class Game : Node3D
 	
 	private void handlePieceHasMoved()
 	{
-		deselectSelectedPiece();
-		gameState.EndTurn();
+		if(gameState.Status == GameStatus.Reseting)
+		{
+			if(moveLogView.EnableLogUpdates)
+				moveLogView.EnableLogUpdates = false;
+			
+			piecesReset++;
+			if(piecesReset >= 32)
+			{
+				moveLog.Clear();
+				moveLogView.EnableLogUpdates = true;
+				gameState.Status = GameStatus.Playing;
+				piecesReset = 0;
+			}
+		}
+		else
+		{
+			deselectSelectedPiece();
+			gameState.EndTurn();
+		}
 	}
 	
 	private void handleStartNewGame()
 	{
 		toggleMainMenu();
 		gameState.CurrentPlayer = Teams.White;
+		gameState.Status = GameStatus.Reseting;
 		board.ResetPieces();
-		gameState.Status = GameStatus.Playing;
 	}
 	
 	private void handleStartNextTurn(Teams activePlayer)
@@ -364,6 +387,7 @@ public partial class Game : Node3D
 		if(mainMenu.Visible)
 		{
 			mainMenu.Hide();
+			moveLogView.Show();
 			
 			gameState.Status = GameStatus.Paused;
 			
@@ -375,6 +399,7 @@ public partial class Game : Node3D
 		else
 		{
 			mainMenu.Show();
+			moveLogView.Hide();
 			gameState.Status = GameStatus.Playing;
 			board.DisableAllCellSelection();
 			board.DisableAllPieceSelection();
