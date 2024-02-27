@@ -1,0 +1,122 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2nf0xnj6i26i"]
+
+[ext_resource type="Theme" uid="uid://dq7vttw4dj745" path="res://assets/CreditsTheme.tres" id="1_5jen8"]
+[ext_resource type="Script" path="res://scripts/nodes/Credits.cs" id="2_4q0dv"]
+
+[node name="Credits" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_5jen8")
+alignment = 1
+script = ExtResource("2_4q0dv")
+
+[node name="Left" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Lead Developer"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LinkButton" type="LinkButton" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Peter Lunneberg"
+uri = "https://nemesisx00.github.io/"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Source Code"
+horizontal_alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LinkButton" type="LinkButton" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Github"
+uri = "https://github.com/nemesisx00/godot-chess"
+
+[node name="HSeparator2" type="HSeparator" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Third Party Assets"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LinkButton" type="LinkButton" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "3D Chess Set"
+uri = "https://polyhaven.com/a/chess_set"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="LinkButton" type="LinkButton" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "2D Icons"
+uri = "https://opengameart.org/content/2d-chess-pack"
+
+[node name="HSeparator3" type="HSeparator" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Third Party Licenses"
+horizontal_alignment = 1
+
+[node name="TabContainer" type="TabContainer" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+tab_alignment = 1
+
+[node name="Godot License" type="MarginContainer" parent="PanelContainer/ScrollContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 15
+
+[node name="GodotLicenseText" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/TabContainer/Godot License"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="Right" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
