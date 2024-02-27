@@ -9,9 +9,12 @@ public partial class MoveLog : Node
 	public static readonly NodePath NodePath = new("/root/MoveLog");
 	
 	[Signal]
+	public delegate void LogClearedEventHandler();
+	
+	[Signal]
 	public delegate void MoveLoggedEventHandler();
 	
-	List<MoveLogEntry> Entries { get; set; } = [];
+	public List<MoveLogEntry> Entries { get; set; } = [];
 	
 	public MoveLogEntry MostRecentEntry => Entries.LastOrDefault();
 	
@@ -24,5 +27,11 @@ public partial class MoveLog : Node
 		EmitSignal(SignalName.MoveLogged);
 	}
 	
-	public void Clear() => Entries.Clear();
+	public void Clear()
+	{
+		Entries.Clear();
+		EmitSignal(SignalName.LogCleared);
+	}
+	
+	public void ForceUpdate() => EmitSignal(SignalName.MoveLogged);
 }
