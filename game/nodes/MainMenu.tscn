@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dwguirat5hw1y"]
+[gd_scene load_steps=3 format=3 uid="uid://dwguirat5hw1y"]
 
 [ext_resource type="Script" path="res://scripts/nodes/MainMenu.cs" id="1_0potl"]
+[ext_resource type="PackedScene" uid="uid://d2nf0xnj6i26i" path="res://nodes/Credits.tscn" id="2_gawiv"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15
@@ -32,9 +33,21 @@ mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 36
 text = "New Game"
 
+[node name="CreditsButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 36
+text = "Credits"
+
 [node name="Quit" type="Button" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 36
 text = "Quit"
+
+[node name="Credits" parent="." instance=ExtResource("2_gawiv")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
