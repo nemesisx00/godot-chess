@@ -112,18 +112,18 @@ public static class UnicodePiece
 		};
 	}
 	
-	public static readonly char KingBlack = '\u2654';
-	public static readonly char QueenBlack = '\u2655';
-	public static readonly char RookBlack = '\u2656';
-	public static readonly char BishopBlack = '\u2657';
-	public static readonly char KnightBlack = '\u2658';
-	public static readonly char PawnBlack = '\u2659';
-	public static readonly char KingWhite = '\u265A';
-	public static readonly char QueenWhite = '\u265B';
-	public static readonly char RookWhite = '\u265C';
-	public static readonly char BishopWhite = '\u265D';
-	public static readonly char KnightWhite = '\u265E';
-	public static readonly char PawnWhite = '\u265F';
+	public static readonly char KingWhite = '\u2654';
+	public static readonly char QueenWhite = '\u2655';
+	public static readonly char RookWhite = '\u2656';
+	public static readonly char BishopWhite = '\u2657';
+	public static readonly char KnightWhite = '\u2658';
+	public static readonly char PawnWhite = '\u2659';
+	public static readonly char KingBlack = '\u265A';
+	public static readonly char QueenBlack = '\u265B';
+	public static readonly char RookBlack = '\u265C';
+	public static readonly char BishopBlack = '\u265D';
+	public static readonly char KnightBlack = '\u265E';
+	public static readonly char PawnBlack = '\u265F';
 }
 
 public static class ResourcePaths
@@ -131,4 +131,7 @@ public static class ResourcePaths
 	public const string Assets = "res://assets/";
 	public const string Chess = $"{Assets}chess/";
 	public const string Nodes = "res://nodes/";
+	public const string Icons = $"{Assets}icons/";
+	
+	public static string PieceIcon(Teams team, Piece piece) => $"{Icons}{piece}-{team}-marble-iso.png".ToLower();
 }
