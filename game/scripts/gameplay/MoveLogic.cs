@@ -32,26 +32,7 @@ public static class MoveLogic
 			possibles.Remove(currentCell);
 			possibles.AddRange(CaptureLogic.DetectCapturableCells(piece, board, moveLog));
 			
-			var (castleWest, castleEast) = canCastle(piece);
-			if(castleWest)
-			{
-				var dest = board.Cells
-					.Where(cell => cell.Rank == currentCell.Rank && cell.File == (currentCell.File - 2))
-					.FirstOrDefault();
-				
-				if(dest is not null)
-					possibles.Add(dest);
-			}
-			
-			if(castleEast)
-			{
-				var dest = board.Cells
-					.Where(cell => cell.Rank == currentCell.Rank && cell.File == (currentCell.File + 2))
-					.FirstOrDefault();
-				
-				if(dest is not null)
-					possibles.Add(dest);
-			}
+			processCastleLogic(piece, board, currentCell, ref possibles);
 		}
 		
 		return possibles;
@@ -200,6 +181,30 @@ public static class MoveLogic
 			team == Teams.White && (rankDiff == -1 || currentCell.Rank == Rank.Two && destination.Rank == Rank.Four)
 			|| team == Teams.Black && (rankDiff == 1 || (currentCell.Rank == Rank.Seven && destination.Rank == Rank.Five))
 		);
+	}
+	
+	private static void processCastleLogic(ChessPiece piece, Chessboard board, BoardCell currentCell, ref List<BoardCell> possibles)
+	{
+		var (castleWest, castleEast) = canCastle(piece);
+		if(castleWest)
+		{
+			var dest = board.Cells
+				.Where(cell => cell.Rank == currentCell.Rank && cell.File == (currentCell.File - 2))
+				.FirstOrDefault();
+			
+			if(dest is not null)
+				possibles.Add(dest);
+		}
+		
+		if(castleEast)
+		{
+			var dest = board.Cells
+				.Where(cell => cell.Rank == currentCell.Rank && cell.File == (currentCell.File + 2))
+				.FirstOrDefault();
+			
+			if(dest is not null)
+				possibles.Add(dest);
+		}
 	}
 	
 	private static bool queen(BoardCell currentCell, BoardCell destination)
