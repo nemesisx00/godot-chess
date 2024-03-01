@@ -92,17 +92,13 @@ public static class CheckLogic
 						ray.RemoveException(mover);
 						
 						var collider = ray.GetCollider();
-						if(collider is ChessPiece cp && cp.Team != king.Team)
+						if(collider is ChessPiece cp
+							&& cp.Team != king.Team
+							&& cp.GetParentOrNull<BoardCell>() is BoardCell pieceCell
+							//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
+							&& (kingCell - pieceCell) < diff)
 						{
-							var pieceCell = cp.GetParentOrNull<BoardCell>();
-							if(pieceCell is not null)
-							{
-								var diff2 = kingCell - pieceCell;
-								
-								//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
-								if(diff2 < diff)
-									check = canPieceCauseCheck(cp, cardinal, diff);
-							}
+							check = canPieceCauseCheck(cp, cardinal, diff);
 						}
 					}
 				}
