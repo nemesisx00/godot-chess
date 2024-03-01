@@ -83,6 +83,10 @@ public partial class Game : Node3D
 			whiteGraveyard.BuryPiece(defender);
 		else
 			blackGraveyard.BuryPiece(defender);
+		
+		//Ensure that the check status is removed if the king captures the piece that put it in check
+		if(attacker.Type == Piece.King)
+			board.DetectCheck();
 	}
 	
 	private void handleCellClicked(BoardCell cell)
@@ -98,8 +102,12 @@ public partial class Game : Node3D
 		selectedPiece.ToggleSelected(true);
 		board.EnableCellSelection(gameState.CurrentPlayer);
 		
-		MoveLogic.GetValidCells(piece, board, moveLog)
-			.ForEach(c => c.ToggleIndicator(true));
+		var moves = MoveLogic.GetValidCells(piece, board, moveLog);
+		
+		if(piece.Type == Piece.King)
+			CheckLogic.FilterKingMovesForCheck(piece, board, moveLog, ref moves);
+		
+		moves.ForEach(c => c.ToggleIndicator(true));
 	}
 	
 	private void handlePieceHasMoved()
