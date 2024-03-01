@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Chess.Autoload;
 using Chess.Nodes;
@@ -6,6 +7,28 @@ namespace Chess.Gameplay;
 
 public static class CheckLogic
 {
+	/**
+	<summary>
+	Filter out potential moves which would put the king into check.
+	</summary>
+	*/
+	public static void FilterKingMovesForCheck(ChessPiece king, Chessboard board, MoveLog moveLog, ref List<BoardCell> potentialMoves)
+	{
+		var pm = potentialMoves;
+		var opposingPieces = board.Pieces.Where(p => p.Team != king.Team).ToList();
+		
+		List<BoardCell> conflicts = [];
+		opposingPieces.ForEach(op => {
+			var moves = MoveLogic.GetValidCells(op, board, moveLog);
+			moves.Where(bc => pm.Contains(bc) && !conflicts.Contains(bc))
+				.ToList()
+				.ForEach(bc => conflicts.Add(bc));
+		});
+		
+		conflicts.ForEach(c => pm.Remove(c));
+		potentialMoves = pm;
+	}
+	
 	/**
 	<summary>
 	Detect if a king is in check.
