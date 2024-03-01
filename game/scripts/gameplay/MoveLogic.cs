@@ -13,9 +13,8 @@ public static class MoveLogic
 		List<BoardCell> possibles = [];
 		
 		//TODO: Make this more nuanced, allowing movement as long as the destination continues protecting the king.
-		if(!CheckLogic.PredictCheck(board, piece))
+		if(!CheckLogic.PredictCheck(board, piece) && piece.GetParentOrNull<BoardCell>() is BoardCell currentCell)
 		{
-			var currentCell = piece.GetParent<BoardCell>();
 			board.Cells.Where(cell => ValidateMovement(piece, cell))
 				.ToList()
 				.ForEach(possibles.Add);
@@ -41,6 +40,10 @@ public static class MoveLogic
 	public static bool IsDestinationValid(ChessPiece piece, BoardCell destination, Chessboard board, MoveLog moveLog)
 	{
 		var validCells = GetValidCells(piece, board, moveLog);
+		
+		if(piece.Type == Piece.King)
+			CheckLogic.FilterKingMovesForCheck(piece, board, moveLog, ref validCells);
+		
 		return validCells.Contains(destination);
 	}
 	
