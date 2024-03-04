@@ -106,6 +106,8 @@ public partial class Game : Node3D
 		
 		if(piece.Type == Piece.King)
 			CheckLogic.FilterKingMovesForCheck(piece, board, moveLog, ref moves);
+		else
+			CheckLogic.FilterMovesToProtectKing(piece, board, ref moves);
 		
 		moves.ForEach(c => c.ToggleIndicator(true));
 	}
