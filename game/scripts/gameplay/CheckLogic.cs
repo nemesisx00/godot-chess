@@ -31,6 +31,31 @@ public static class CheckLogic
 	
 	/**
 	<summary>
+	Filter out potential moves which would not protect the king when the king is in check.
+	</summary>
+	*/
+	public static void FilterMovesToProtectKing(ChessPiece piece, Chessboard board, ref List<BoardCell> potentialMoves)
+	{
+		var king = board.Pieces
+			.Where(p => p.Team == piece.Team && p.Type == Piece.King)
+			.FirstOrDefault();
+		
+		if(king is not null && king.GetParentOrNull<BoardCell>() is BoardCell kingCell && kingCell.InCheck)
+		{
+			List<BoardCell> moves = [];
+			moves.AddRange(potentialMoves);
+			
+			potentialMoves.ForEach(cell => {
+				if(!PredictCheckByCell(king, cell))
+					moves.Remove(cell);
+			});
+			
+			potentialMoves = moves;
+		}
+	}
+	
+	/**
+	<summary>
 	Detect if a king is in check.
 	</summary>
 	*/
@@ -118,6 +143,41 @@ public static class CheckLogic
 						&& cp.GetParentOrNull<BoardCell>() is BoardCell pieceCell
 						//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
 						&& (kingCell - pieceCell).Magnitude > diff.Magnitude)
+					{
+						check = canPieceCauseCheck(cp, cardinal, diff);
+					}
+				}
+			}
+		}
+		
+		return check;
+	}
+	
+	public static bool PredictCheckByCell(ChessPiece king, BoardCell destination)
+	{
+		var check = false;
+		
+		if(king.GetParentOrNull<BoardCell>() is BoardCell kingCell)
+		{
+			var diff = kingCell - destination;
+			var direction = DirectionNames.ByDifference(diff);
+			
+			if(!string.IsNullOrEmpty(direction))
+			{
+				var ray = king.Rays
+					.Where(r => r.Name.Equals(direction))
+					.FirstOrDefault();
+				
+				if(ray is not null)
+				{
+					var cardinal = DirectionNames.IsCardinal(direction);
+					ray.ForceRaycastUpdate();
+					
+					if(ray.GetCollider() is ChessPiece cp
+						&& cp.Team != king.Team
+						&& cp.GetParentOrNull<BoardCell>() is BoardCell pieceCell
+						//Equal magnitudes implies the destination would capture the piece causing check
+						&& (kingCell - pieceCell).Magnitude >= diff.Magnitude)
 					{
 						check = canPieceCauseCheck(cp, cardinal, diff);
 					}
