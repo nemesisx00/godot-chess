@@ -124,8 +124,11 @@ public partial class Game : Node3D
 				moveLog.Clear();
 				board.Pieces.ForEach(p => p.HasMoved = false);
 				moveLogView.EnableLogUpdates = true;
+				gameState.CurrentPlayer = Teams.Black;
 				gameState.Status = GameStatus.Playing;
 				piecesReset = 0;
+				deselectSelectedPiece();
+				gameState.EndTurn();
 			}
 		}
 		else
