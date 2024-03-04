@@ -12,7 +12,7 @@ public static class MoveLogic
 	{
 		List<BoardCell> possibles = [];
 		
-		if(piece.GetParentOrNull<BoardCell>() is BoardCell currentCell)
+		if(!CheckLogic.PredictCheck(board, piece) && piece.GetParentOrNull<BoardCell>() is BoardCell currentCell)
 		{
 			board.Cells.Where(cell => ValidateMovement(piece, cell))
 				.ToList()
