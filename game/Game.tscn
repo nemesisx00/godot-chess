@@ -16,6 +16,7 @@ sky_material = SubResource("ProceduralSkyMaterial_g0yjd")
 [sub_resource type="Environment" id="Environment_v2avy"]
 background_mode = 2
 sky = SubResource("Sky_jqvlb")
+sky_rotation = Vector3(3.14159, 0, 0)
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_icnb5")
