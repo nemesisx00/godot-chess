@@ -153,6 +153,11 @@ public static class CheckLogic
 		return check;
 	}
 	
+	/**
+	<summary>
+	Predict if a piece moving into a destination cell can protect the king from being in check.
+	</summary>
+	*/
 	public static bool PredictCheckByCell(ChessPiece king, BoardCell destination)
 	{
 		var check = false;
