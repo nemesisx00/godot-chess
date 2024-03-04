@@ -45,8 +45,8 @@ public static class CheckLogic
 				break;
 			
 			ray.ForceRaycastUpdate();
-			var collider = ray.GetCollider();
-			if(collider is ChessPiece cp)
+			
+			if(ray.GetCollider() is ChessPiece cp)
 			{
 				if(cp.Team != king.Team)
 				{
@@ -90,39 +90,36 @@ public static class CheckLogic
 	*/
 	public static bool PredictCheck(ChessPiece king, ChessPiece mover)
 	{
-		//Pre-emptive evaluation to see if moving the `mover` piece will put their own `king` in check
 		var check = false;
 		
-		//Sanity check
-		if(mover.Type != Piece.King && king.Team == mover.Team)
+		if(mover.Type != Piece.King && king.Team == mover.Team
+			&& king.GetParentOrNull<BoardCell>() is BoardCell kingCell
+			&& mover.GetParentOrNull<BoardCell>() is BoardCell moverCell)
 		{
-			var kingCell = king.GetParent<BoardCell>();
+			var diff = kingCell - moverCell;
+			string direction = DirectionNames.ByDifference(diff);
 			
-			if(mover.GetParent() is BoardCell moverCell)
+			if(!string.IsNullOrEmpty(direction))
 			{
-				var diff = kingCell - moverCell;
-				string direction = DirectionNames.ByDifference(diff);
+				var ray = king.Rays
+					.Where(r => r.Name.Equals(direction))
+					.FirstOrDefault();
 				
-				if(!string.IsNullOrEmpty(direction))
+				if(ray is not null)
 				{
-					var ray = king.Rays.Where(r => r.Name.Equals(direction)).FirstOrDefault();
-					if(ray is not null)
+					var cardinal = DirectionNames.IsCardinal(direction);
+					
+					ray.AddException(mover);
+					ray.ForceRaycastUpdate();
+					ray.RemoveException(mover);
+					
+					if(ray.GetCollider() is ChessPiece cp
+						&& cp.Team != king.Team
+						&& cp.GetParentOrNull<BoardCell>() is BoardCell pieceCell
+						//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
+						&& (kingCell - pieceCell).Magnitude > diff.Magnitude)
 					{
-						var cardinal = DirectionNames.IsCardinal(direction);
-						
-						ray.AddException(mover);
-						ray.ForceRaycastUpdate();
-						ray.RemoveException(mover);
-						
-						var collider = ray.GetCollider();
-						if(collider is ChessPiece cp
-							&& cp.Team != king.Team
-							&& cp.GetParentOrNull<BoardCell>() is BoardCell pieceCell
-							//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
-							&& (kingCell - pieceCell) < diff)
-						{
-							check = canPieceCauseCheck(cp, cardinal, diff);
-						}
+						check = canPieceCauseCheck(cp, cardinal, diff);
 					}
 				}
 			}
