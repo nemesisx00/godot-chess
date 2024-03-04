@@ -12,8 +12,7 @@ public static class MoveLogic
 	{
 		List<BoardCell> possibles = [];
 		
-		//TODO: Make this more nuanced, allowing movement as long as the destination continues protecting the king.
-		if(!CheckLogic.PredictCheck(board, piece) && piece.GetParentOrNull<BoardCell>() is BoardCell currentCell)
+		if(piece.GetParentOrNull<BoardCell>() is BoardCell currentCell)
 		{
 			board.Cells.Where(cell => ValidateMovement(piece, cell))
 				.ToList()
@@ -43,6 +42,8 @@ public static class MoveLogic
 		
 		if(piece.Type == Piece.King)
 			CheckLogic.FilterKingMovesForCheck(piece, board, moveLog, ref validCells);
+		else
+			CheckLogic.FilterMovesToProtectKing(piece, board, ref validCells);
 		
 		return validCells.Contains(destination);
 	}
