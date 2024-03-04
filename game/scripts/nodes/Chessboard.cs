@@ -219,7 +219,7 @@ public partial class Chessboard : Node3D
 			var piecesQuery = Pieces.Where(p => p != piece && p.Team == piece.Team && p.Type == piece.Type);
 			
 			//En Passant will not be detected by the normal means of capturing so check for it here when appropriate.
-			if(piece.Type == Piece.Pawn && !capture && from.File != to.File)
+			if(piece.Type == Piece.Pawn && !capture && from?.File != to.File)
 			{
 				var previous = Cells.Where(c => c.File == to.File && c.Rank == to.Rank + (piece.Team == Teams.Black ? 1 : -1))
 					.FirstOrDefault();
@@ -235,8 +235,8 @@ public partial class Chessboard : Node3D
 			MoveLogEntry entry = new(from?.ToVector() ?? default, to.ToVector(), piece.Type, piece.Team)
 			{
 				Capture = capture,
-				File = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.File == otherCell.File).Any(),
-				Rank = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from.Rank == otherCell.Rank).Any(),
+				File = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from?.File == otherCell.File).Any(),
+				Rank = piecesQuery.Where(p => p.GetParentOrNull<BoardCell>() is BoardCell otherCell && from?.Rank == otherCell.Rank).Any(),
 				FirstMove = !piece.HasMoved,
 			};
 			
