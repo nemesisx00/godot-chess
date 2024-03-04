@@ -8,7 +8,7 @@ public struct BoardVector(int file, int rank) : IEquatable<BoardVector>
 	public int File { get; set; } = file;
 	public int Rank { get; set; } = rank;
 	
-	public readonly int Magnitude => File + Rank;
+	public readonly int Magnitude => Math.Abs(File) + Math.Abs(Rank);
 	
 	public BoardVector(BoardCell cell) : this((int)cell.File, (int)cell.Rank) {}
 	
