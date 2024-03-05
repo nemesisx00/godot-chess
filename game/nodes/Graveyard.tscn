@@ -6,7 +6,7 @@
 [sub_resource type="BoxMesh" id="BoxMesh_ubndw"]
 size = Vector3(1, 0.1, 4)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h7qja"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_yquae"]
 data = PackedVector3Array(-0.5, 0.05, 2, 0.5, 0.05, 2, -0.5, -0.05, 2, 0.5, 0.05, 2, 0.5, -0.05, 2, -0.5, -0.05, 2, 0.5, 0.05, -2, -0.5, 0.05, -2, 0.5, -0.05, -2, -0.5, 0.05, -2, -0.5, -0.05, -2, 0.5, -0.05, -2, 0.5, 0.05, 2, 0.5, 0.05, -2, 0.5, -0.05, 2, 0.5, 0.05, -2, 0.5, -0.05, -2, 0.5, -0.05, 2, -0.5, 0.05, -2, -0.5, 0.05, 2, -0.5, -0.05, -2, -0.5, 0.05, 2, -0.5, -0.05, 2, -0.5, -0.05, -2, 0.5, 0.05, 2, -0.5, 0.05, 2, 0.5, 0.05, -2, -0.5, 0.05, 2, -0.5, 0.05, -2, 0.5, 0.05, -2, -0.5, -0.05, 2, 0.5, -0.05, 2, -0.5, -0.05, -2, 0.5, -0.05, 2, 0.5, -0.05, -2, -0.5, -0.05, -2)
 
 [node name="Graveyard" type="Node3D"]
@@ -19,4 +19,4 @@ mesh = SubResource("BoxMesh_ubndw")
 [node name="StaticBody3D" type="StaticBody3D" parent="Mesh"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mesh/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_h7qja")
+shape = SubResource("ConcavePolygonShape3D_yquae")
