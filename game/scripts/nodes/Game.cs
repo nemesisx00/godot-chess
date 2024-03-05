@@ -12,6 +12,7 @@ public partial class Game : Node3D
 		public static readonly NodePath BlackGraveyard = new("BlackGraveyard");
 		public static readonly NodePath Board = new("Chessboard");
 		public static readonly NodePath CameraMount = new("CameraMount");
+		public static readonly NodePath GameOver = new("%GameOver");
 		public static readonly NodePath MainMenu = new("%MainMenu");
 		public static readonly NodePath MoveLogView = new("%MoveLogView");
 		public static readonly NodePath WhiteGraveyard = new("WhiteGraveyard");
@@ -32,6 +33,7 @@ public partial class Game : Node3D
 	private MainMenu mainMenu;
 	private MoveLog moveLog;
 	private MoveLogView moveLogView;
+	private GameOver gameOver;
 	private int piecesReset;
 	
 	public override void _UnhandledInput(InputEvent evt)
@@ -50,6 +52,7 @@ public partial class Game : Node3D
 		blackGraveyard = GetNode<Graveyard>(NodePaths.BlackGraveyard);
 		board = GetNode<Chessboard>(NodePaths.Board);
 		cameraMount = GetNode<Node3D>(NodePaths.CameraMount);
+		gameOver = GetNode<GameOver>(NodePaths.GameOver);
 		gameState = GetNode<GameState>(GameState.NodePath);
 		mainMenu = GetNode<MainMenu>(NodePaths.MainMenu);
 		moveLog = GetNode<MoveLog>(MoveLog.NodePath);
@@ -60,6 +63,7 @@ public partial class Game : Node3D
 		board.CellClicked += handleCellClicked;
 		board.Checkmate += handleCheckmate;
 		board.PieceHasMoved += handlePieceHasMoved;
+		gameOver.StartNewGame += handleStartNewGame;
 		gameState.StartNextTurn += handleStartNextTurn;
 		mainMenu.StartNewGame += handleStartNewGame;
 		
@@ -98,10 +102,15 @@ public partial class Game : Node3D
 	
 	private void handleCheckmate(Teams winner)
 	{
-		GD.Print(winner, " Wins!");
-		
 		board.DisableAllCellSelection();
 		board.DisableAllPieceSelection();
+		
+		gameState.Status = winner == gameState.PlayerTeam
+			? GameStatus.Victory
+			: GameStatus.Loss;
+		
+		moveLogView.Hide();
+		gameOver.Show();
 	}
 	
 	private void handlePieceClicked(ChessPiece piece)
@@ -149,7 +158,10 @@ public partial class Game : Node3D
 	
 	private void handleStartNewGame()
 	{
-		toggleMainMenu();
+		mainMenu.Hide();
+		moveLogView.Show();
+		gameOver.Hide();
+		
 		gameState.CurrentPlayer = Teams.White;
 		gameState.Status = GameStatus.Reseting;
 		board.ResetPieces();
@@ -411,20 +423,31 @@ public partial class Game : Node3D
 			mainMenu.Hide();
 			moveLogView.Show();
 			
-			gameState.Status = GameStatus.Paused;
-			
-			if(selectedPiece is null)
-				board.EnablePieceSelection(gameState.CurrentPlayer);
+			if(gameState.Status == GameStatus.Loss || gameState.Status == GameStatus.Stalemate || gameState.Status == GameStatus.Victory)
+				gameOver.Show();
 			else
-				board.EnableCellSelection(gameState.CurrentPlayer);
+			{
+				gameState.Status = GameStatus.Playing;
+				
+				if(selectedPiece is null)
+					board.EnablePieceSelection(gameState.CurrentPlayer);
+				else
+					board.EnableCellSelection(gameState.CurrentPlayer);
+			}
 		}
 		else
 		{
 			mainMenu.Show();
 			moveLogView.Hide();
-			gameState.Status = GameStatus.Playing;
-			board.DisableAllCellSelection();
-			board.DisableAllPieceSelection();
+			
+			if(gameState.Status != GameStatus.Playing)
+				gameOver.Hide();
+			else
+			{
+				gameState.Status = GameStatus.Paused;
+				board.DisableAllCellSelection();
+				board.DisableAllPieceSelection();
+			}
 		}
 	}
 }
