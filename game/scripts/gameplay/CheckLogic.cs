@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 using Chess.Autoload;
 using Chess.Nodes;
 
@@ -7,6 +8,43 @@ namespace Chess.Gameplay;
 
 public static class CheckLogic
 {
+	public static Teams? DetectCheckmate(Chessboard board, MoveLog moveLog)
+	{
+		Teams? team = null;
+		if(DetectCheckmateForTeam(Teams.Black, board, moveLog))
+			team = Teams.Black;
+		else if(DetectCheckmateForTeam(Teams.White, board, moveLog))
+			team = Teams.White;
+		return team;
+	}
+	
+	public static bool DetectCheckmateForTeam(Teams team, Chessboard board, MoveLog moveLog)
+	{
+		List<BoardCell> allMoves = [];
+		foreach(var piece in board.Pieces.Where(p => p.Team == team))
+		{
+			if(piece.Type == Piece.King)
+			{
+				if(!IsInCheck(piece, board, moveLog))
+					return false;
+				else
+				{
+					var moves = MoveLogic.GetValidCells(piece, board, moveLog);
+					FilterKingMovesForCheck(piece, board, moveLog, ref moves);
+					allMoves.AddRange(moves);
+				}
+			}
+			else
+			{
+				var moves = MoveLogic.GetValidCells(piece, board, moveLog);
+				FilterMovesToProtectKing(piece, board, ref moves);
+				allMoves.AddRange(moves);
+			}
+		}
+		
+		return allMoves.Count == 0;
+	}
+	
 	/**
 	<summary>
 	Filter out potential moves which would put the king into check.
@@ -43,11 +81,10 @@ public static class CheckLogic
 		if(king is not null && king.GetParentOrNull<BoardCell>() is BoardCell kingCell && kingCell.InCheck)
 		{
 			List<BoardCell> moves = [];
-			moves.AddRange(potentialMoves);
 			
 			potentialMoves.ForEach(cell => {
-				if(!PredictCheckByCell(king, cell))
-					moves.Remove(cell);
+				if(PredictCheckByCell(king, cell))
+					moves.Add(cell);
 			});
 			
 			potentialMoves = moves;
@@ -142,7 +179,7 @@ public static class CheckLogic
 						&& cp.Team != king.Team
 						&& cp.GetParentOrNull<BoardCell>() is BoardCell pieceCell
 						//If the opposing piece is between the king and the mover, the mover cannot cause check by moving.
-						&& (kingCell - pieceCell).Magnitude > diff.Magnitude)
+						&& (kingCell - pieceCell) > diff)
 					{
 						check = canPieceCauseCheck(cp, cardinal, diff);
 					}
@@ -182,9 +219,22 @@ public static class CheckLogic
 						&& cp.Team != king.Team
 						&& cp.GetParentOrNull<BoardCell>() is BoardCell pieceCell
 						//Equal magnitudes implies the destination would capture the piece causing check
-						&& (kingCell - pieceCell).Magnitude >= diff.Magnitude)
+						&& (kingCell - pieceCell) >= diff)
 					{
-						check = canPieceCauseCheck(cp, cardinal, diff);
+						var inline = direction switch
+						{
+							DirectionNames.East => destination.ToVector().EastOf(kingCell.ToVector()),
+							DirectionNames.North => destination.ToVector().NorthOf(kingCell.ToVector()),
+							DirectionNames.NorthEast => destination.ToVector().NorthEastOf(kingCell.ToVector()),
+							DirectionNames.NorthWest => destination.ToVector().NorthWestOf(kingCell.ToVector()),
+							DirectionNames.South => destination.ToVector().SouthOf(kingCell.ToVector()),
+							DirectionNames.SouthEast => destination.ToVector().SouthEastOf(kingCell.ToVector()),
+							DirectionNames.SouthWest => destination.ToVector().SouthWestOf(kingCell.ToVector()),
+							DirectionNames.West => destination.ToVector().WestOf(kingCell.ToVector()),
+							_ => false,
+						};
+						
+						check = inline && canPieceCauseCheck(cp, cardinal, diff);
 					}
 				}
 			}
