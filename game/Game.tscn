@@ -34,6 +34,11 @@ visible = false
 [node name="GameOver" parent="." instance=ExtResource("3_lky5r")]
 unique_name_in_owner = true
 visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
 
 [node name="Chessboard" parent="." instance=ExtResource("2_rhmi3")]
 transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
