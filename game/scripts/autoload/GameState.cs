@@ -10,6 +10,7 @@ public partial class GameState : Node
 	public static readonly NodePath NodePath = new("/root/GameState");
 	
 	public Teams CurrentPlayer { get; set; } = Teams.White;
+	public Teams PlayerTeam { get; set; } = Teams.White;
 	public GameStatus Status { get; set; }
 	
 	public void EndTurn()
