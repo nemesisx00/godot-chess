@@ -3,30 +3,26 @@
 [ext_resource type="Theme" uid="uid://dq7vttw4dj745" path="res://assets/CreditsTheme.tres" id="1_20q08"]
 [ext_resource type="Script" path="res://scripts/nodes/GameOver.cs" id="2_y6hhm"]
 
-[node name="GameOver" type="PanelContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="GameOver" type="HBoxContainer"]
+offset_right = 1660.0
+offset_bottom = 900.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_y6hhm")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 2
 theme = ExtResource("1_20q08")
 alignment = 1
+script = ExtResource("2_y6hhm")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="Status" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Status" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 horizontal_alignment = 1
 
-[node name="NewGame" type="Button" parent="HBoxContainer/VBoxContainer"]
+[node name="NewGame" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
