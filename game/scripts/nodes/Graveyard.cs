@@ -16,14 +16,10 @@ public partial class Graveyard : Node3D
 	[Export]
 	public Material OverrideMaterial { get; set; }
 	
-	private MeshInstance3D mesh;
-	
 	public override void _Ready()
 	{
-		mesh = GetNode<MeshInstance3D>(NodePaths.Mesh);
-		
 		if(OverrideMaterial is not null)
-			mesh.MaterialOverride = OverrideMaterial;
+			GetNode<MeshInstance3D>(NodePaths.Mesh).MaterialOverride = OverrideMaterial;
 	}
 	
 	public void BuryPiece(ChessPiece deceased)
