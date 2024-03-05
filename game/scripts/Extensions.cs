@@ -20,4 +20,6 @@ public static class Extensions
 			&& self.Basis.Y.IsEqualApprox(other.Basis.Y, tolerance)
 			&& self.Basis.Z.IsEqualApprox(other.Basis.Z, tolerance);
 	}
+	
+	public static Teams NextTeam(this Teams self) => (Teams)(((int)self + 1) % 2);
 }
