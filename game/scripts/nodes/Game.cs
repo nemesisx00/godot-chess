@@ -58,6 +58,7 @@ public partial class Game : Node3D
 		
 		board.Capture += handleCapture;
 		board.CellClicked += handleCellClicked;
+		board.Checkmate += handleCheckmate;
 		board.PieceHasMoved += handlePieceHasMoved;
 		gameState.StartNextTurn += handleStartNextTurn;
 		mainMenu.StartNewGame += handleStartNewGame;
@@ -93,6 +94,14 @@ public partial class Game : Node3D
 	{
 		if(selectedPiece is not null && MoveLogic.IsDestinationValid(selectedPiece, cell, board, moveLog))
 			board.MovePiece(selectedPiece, cell);
+	}
+	
+	private void handleCheckmate(Teams winner)
+	{
+		GD.Print(winner, " Wins!");
+		
+		board.DisableAllCellSelection();
+		board.DisableAllPieceSelection();
 	}
 	
 	private void handlePieceClicked(ChessPiece piece)
