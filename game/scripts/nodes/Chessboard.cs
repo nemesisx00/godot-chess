@@ -16,6 +16,9 @@ public partial class Chessboard : Node3D
 	public delegate void CellClickedEventHandler(BoardCell cell);
 	
 	[Signal]
+	public delegate void CheckmateEventHandler(Teams winner);
+	
+	[Signal]
 	public delegate void ListenOnCellsEventHandler(bool active);
 	
 	[Signal]
@@ -84,6 +87,9 @@ public partial class Chessboard : Node3D
 		Pieces.Where(p => p.Type == Piece.King)
 			.ToList()
 			.ForEach(k => k.GetParent<BoardCell>().InCheck = CheckLogic.IsInCheck(k, this, moveLog));
+		
+		if(moveLog.MostRecentEntry is not null && CheckLogic.DetectCheckmateForTeam(moveLog.MostRecentEntry.Team.NextTeam(), this, moveLog))
+			EmitSignal(SignalName.Checkmate, (int)moveLog.MostRecentEntry.Team);
 	}
 	
 	public void DisableAllCellSelection() => EmitSignal(SignalName.ListenOnCells, false);
