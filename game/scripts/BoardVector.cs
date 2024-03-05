@@ -12,17 +12,17 @@ public struct BoardVector(int file, int rank) : IEquatable<BoardVector>
 	
 	public BoardVector(BoardCell cell) : this((int)cell.File, (int)cell.Rank) {}
 	
-	public readonly bool Equals(BoardVector other) => File == other.File && Rank == other.Rank;
+	public readonly bool Equals(BoardVector other) => Magnitude == other.Magnitude;
 	public readonly override bool Equals(object obj) => obj is BoardVector bv && Equals(bv);
 	public readonly override int GetHashCode() => HashCode.Combine(File, Rank);
 	public readonly override string ToString() => $"{(File)File}{Rank + 1}";
 	
 	public static BoardVector operator -(BoardVector a, BoardVector b) => new(a.File - b.File, a.Rank - b.Rank);
 	public static BoardVector operator +(BoardVector a, BoardVector b) => new(a.File + b.File, a.Rank + b.Rank);
-	public static bool operator <(BoardVector a, BoardVector b) => a.File + a.Rank < b.File + b.Rank;
-	public static bool operator <=(BoardVector a, BoardVector b) => a.File + a.Rank <= b.File + b.Rank;
-	public static bool operator >(BoardVector a, BoardVector b) => a.File + a.Rank > b.File + b.Rank;
-	public static bool operator >=(BoardVector a, BoardVector b) => a.File + a.Rank >= b.File + b.Rank;
+	public static bool operator <(BoardVector a, BoardVector b) => a.Magnitude < b.Magnitude;
+	public static bool operator <=(BoardVector a, BoardVector b) => a.Magnitude <= b.Magnitude;
+	public static bool operator >(BoardVector a, BoardVector b) => a.Magnitude > b.Magnitude;
+	public static bool operator >=(BoardVector a, BoardVector b) => a.Magnitude >= b.Magnitude;
 	public static bool operator ==(BoardVector a, BoardVector b) => a.Equals(b);
 	public static bool operator !=(BoardVector a, BoardVector b) => !a.Equals(b);
 	
