@@ -69,6 +69,24 @@ uri = "https://github.com/nemesisx00/godot-chess"
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
+[node name="Label5" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "License"
+horizontal_alignment = 1
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="GameLicense" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer5"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 16
+
+[node name="HSeparator3" type="HSeparator" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="Label2" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 text = "Third Party Assets"
@@ -92,7 +110,7 @@ layout_mode = 2
 text = "2D Icons"
 uri = "https://opengameart.org/content/2d-chess-pack"
 
-[node name="HSeparator3" type="HSeparator" parent="PanelContainer/ScrollContainer/VBoxContainer"]
+[node name="HSeparator4" type="HSeparator" parent="PanelContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label3" type="Label" parent="PanelContainer/ScrollContainer/VBoxContainer"]
