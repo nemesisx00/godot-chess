@@ -12,6 +12,7 @@ jobs:
     name: Export Game
     steps:
     
+    # Required to update the Windows EXE details/icon
     - name: Install Wine
       id: wine
       run: |
