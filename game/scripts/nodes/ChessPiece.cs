@@ -65,7 +65,7 @@ public partial class ChessPiece : CharacterBody3D
 	
 	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
 	{
-		if(evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
+		if(evt is InputEventMouseButton iemb && iemb.IsActionPressed(Actions.Interact))
 		{
 			if(listeningForClicks)
 				EmitSignal(SignalName.Clicked, this);

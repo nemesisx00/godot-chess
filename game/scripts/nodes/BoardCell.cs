@@ -54,7 +54,7 @@ public partial class BoardCell : Area3D
 	
 	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
 	{
-		if(listeningForClicks && evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
+		if(listeningForClicks && evt is InputEventMouseButton iemb  && iemb.IsActionPressed(Actions.Interact))
 			EmitSignal(SignalName.Clicked, this);
 	}
 	
