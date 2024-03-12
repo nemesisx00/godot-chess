@@ -66,10 +66,10 @@ public partial class Chessboard : Node3D
 		piece.MovementFinished += handleMovementFinished;
 	}
 	
-	public void EnableCellSelection(Teams team)
+	public void EnableCellSelection(Teams team, bool listenOnPieces = false)
 	{
 		EmitSignal(SignalName.ListenOnCells, true);
-		EmitSignal(SignalName.ListenOnPieces, false, (int)team);
+		EmitSignal(SignalName.ListenOnPieces, listenOnPieces, (int)team);
 	}
 	
 	public void EnablePieceSelection(Teams team)
