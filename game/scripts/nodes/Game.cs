@@ -129,6 +129,12 @@ public partial class Game : Node3D
 			CheckLogic.FilterMovesToProtectKing(piece, board, ref moves);
 		
 		moves.ForEach(c => c.ToggleIndicator(true));
+		
+		if(board.Pieces.Where(p => p.Type == Piece.King && p.Team == piece.Team).FirstOrDefault() is ChessPiece king
+			&& king.GetParentOrNull<BoardCell>() is BoardCell cell && cell.InCheck)
+		{
+			cell.Hoverable = false;
+		}
 	}
 	
 	private void handlePieceHasMoved()
