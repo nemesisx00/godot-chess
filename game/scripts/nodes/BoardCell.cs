@@ -40,6 +40,8 @@ public partial class BoardCell : Area3D
 		}
 	}
 	
+	public bool Hoverable { get; set; }
+	
 	[Export]
 	private Material indicatorMaterial;
 	
@@ -58,7 +60,12 @@ public partial class BoardCell : Area3D
 			EmitSignal(SignalName.Clicked, this);
 	}
 	
-	public override void _MouseEnter() => Indicator.MaterialOverride = indicatorHighlight;
+	public override void _MouseEnter()
+	{
+		if(Hoverable)
+			Indicator.MaterialOverride = indicatorHighlight;
+	}
+	
 	public override void _MouseExit() => Indicator.MaterialOverride = InCheck ? checkMaterial : indicatorMaterial;
 	
 	public override void _Ready()
@@ -67,7 +74,11 @@ public partial class BoardCell : Area3D
 		Indicator.MaterialOverride = InCheck ? checkMaterial : indicatorMaterial;
 	}
 	
-	public void ListenForClicks(bool active) => listeningForClicks = active;
+	public void ListenForClicks(bool active)
+	{
+		Hoverable = active;
+		listeningForClicks = active;
+	}
 	
 	public BoardVector ToVector() => new((int)File, (int)Rank);
 	
