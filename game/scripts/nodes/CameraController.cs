@@ -27,7 +27,7 @@ public partial class CameraController : Node3D
 				rotating = iemb.Pressed;
 				
 				if(rotating)
-					Input.MouseMode = Input.MouseModeEnum.Captured;
+					Input.MouseMode = Input.MouseModeEnum.ConfinedHidden;
 				else
 					Input.MouseMode = Input.MouseModeEnum.Visible;
 			}
@@ -39,7 +39,7 @@ public partial class CameraController : Node3D
 			rotation.Y -= iemm.Relative.X * Sensitivity.Y;
 		}
 	}
-
+	
 	public override void _PhysicsProcess(double delta)
 	{
 		rotation.X = Mathf.Clamp(
