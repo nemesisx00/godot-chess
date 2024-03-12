@@ -102,6 +102,7 @@ public partial class Game : Node3D
 	
 	private void handleCheckmate(Teams winner)
 	{
+		deselectSelectedPiece();
 		board.DisableAllCellSelection();
 		board.DisableAllPieceSelection();
 		
@@ -118,7 +119,7 @@ public partial class Game : Node3D
 		deselectSelectedPiece();
 		selectedPiece = piece;
 		selectedPiece.ToggleSelected(true);
-		board.EnableCellSelection(gameState.CurrentPlayer);
+		board.EnableCellSelection(gameState.CurrentPlayer, true);
 		
 		var moves = MoveLogic.GetValidCells(piece, board, moveLog);
 		
