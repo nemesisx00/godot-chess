@@ -76,13 +76,13 @@ public partial class ChessPiece : CharacterBody3D
 	
 	public override void _MouseEnter()
 	{
-		if(GetParentOrNull<BoardCell>() is BoardCell cell)
+		if(!listeningForClicks && GetParentOrNull<BoardCell>() is BoardCell cell)
 			cell._MouseEnter();
 	}
 	
 	public override void _MouseExit()
 	{
-		if(GetParentOrNull<BoardCell>() is BoardCell cell)
+		if(!listeningForClicks && GetParentOrNull<BoardCell>() is BoardCell cell)
 			cell._MouseExit();
 	}
 	
