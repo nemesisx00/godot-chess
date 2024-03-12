@@ -65,8 +65,25 @@ public partial class ChessPiece : CharacterBody3D
 	
 	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
 	{
-		if(listeningForClicks && evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
-			EmitSignal(SignalName.Clicked, this);
+		if(evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
+		{
+			if(listeningForClicks)
+				EmitSignal(SignalName.Clicked, this);
+			else if(GetParentOrNull<BoardCell>() is BoardCell cell)
+				cell.EmitSignal(BoardCell.SignalName.Clicked, cell);
+		}
+	}
+	
+	public override void _MouseEnter()
+	{
+		if(GetParentOrNull<BoardCell>() is BoardCell cell)
+			cell._MouseEnter();
+	}
+	
+	public override void _MouseExit()
+	{
+		if(GetParentOrNull<BoardCell>() is BoardCell cell)
+			cell._MouseExit();
 	}
 	
 	public override void _PhysicsProcess(double delta)
