@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://ioton7c0qsk3"]
+[gd_scene load_steps=9 format=3 uid="uid://ioton7c0qsk3"]
 
 [ext_resource type="Script" path="res://scripts/nodes/Chessboard.cs" id="2_01dys"]
+[ext_resource type="PackedScene" uid="uid://dm2d75gt4qa03" path="res://nodes/PieceProxy.tscn" id="3_g2qcu"]
 [ext_resource type="Material" uid="uid://dbnttm1r6dh2o" path="res://assets/chess/material-board-4k.tres" id="3_ydsp2"]
 [ext_resource type="PackedScene" uid="uid://dsdndcusyjbbn" path="res://nodes/BoardCell.tscn" id="4_ljmdp"]
 
@@ -54,6 +55,10 @@ surface_material_override/0 = ExtResource("3_ydsp2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 shape = SubResource("ConcavePolygonShape3D_mugxn")
+
+[node name="PieceProxy" parent="." instance=ExtResource("3_g2qcu")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -0.1, 0.3)
 
 [node name="A" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203, 0.02, 0)
