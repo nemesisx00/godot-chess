@@ -261,6 +261,7 @@ public static class CheckLogic
 	private static bool canPieceCauseCheck(ChessPiece piece, bool cardinal, BoardVector diff)
 	{
 		bool check;
+		
 		if (cardinal)
 			check = piece.Type == Piece.Queen || piece.Type == Piece.Rook;
 		else
@@ -285,6 +286,7 @@ public static class CheckLogic
 					);
 			}
 		}
+		
 		return check;
 	}
 	
