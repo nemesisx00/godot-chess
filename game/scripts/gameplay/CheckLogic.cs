@@ -3,6 +3,7 @@ using System.Linq;
 using Godot;
 using Chess.Autoload;
 using Chess.Nodes;
+using System;
 
 namespace Chess.Gameplay;
 
@@ -64,8 +65,8 @@ public static class CheckLogic
 		});
 		
 		conflicts.ForEach(c => pm.Remove(c));
-		
 		conflicts.Clear();
+		
 		pm.ForEach(dest => {
 			if(detectKingMoveIntoCheck(king, dest, board))
 				conflicts.Add(dest);
@@ -265,6 +266,7 @@ public static class CheckLogic
 		else
 		{
 			check = piece.Type == Piece.Bishop || piece.Type == Piece.Queen;
+			
 			if(!check)
 			{
 				check = piece.Type == Piece.Pawn && diff.File == 1
@@ -273,10 +275,24 @@ public static class CheckLogic
 						|| (piece.Team == Teams.Black && diff.Rank == -1)
 					);
 			}
+			
+			if(!check)
+			{
+				check = piece.Type == Piece.Knight
+					&& (
+						(Math.Abs(diff.File) == 1 && Math.Abs(diff.Rank) == 2)
+						|| (Math.Abs(diff.File) == 2 && Math.Abs(diff.Rank) == 1)
+					);
+			}
 		}
 		return check;
 	}
 	
+	/**
+	<summary>
+	
+	</summary>
+	*/
 	private static bool detectKingMoveIntoCheck(ChessPiece king, BoardCell destination, Chessboard board)
 	{
 		var check = false;
@@ -307,6 +323,21 @@ public static class CheckLogic
 				
 				if(check)
 					break;
+			}
+			
+			//Knights can't be detected via raycast
+			if(!check)
+			{
+				foreach(var knight in board.Pieces
+					.Where(cp => cp.Team != king.Team
+						&& cp.Type == Piece.Knight
+						&& cp.GetParentOrNull<BoardCell>() is not null))
+				{
+					check = canPieceCauseCheck(knight, false, knight.GetParent<BoardCell>() - destination);
+					
+					if(check)
+						break;
+				}
 			}
 		}
 		
