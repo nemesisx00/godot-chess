@@ -290,7 +290,8 @@ public static class CheckLogic
 	
 	/**
 	<summary>
-	
+	Detect if the king would be in check after moving to the destination cell
+	without actually moving the king.
 	</summary>
 	*/
 	private static bool detectKingMoveIntoCheck(ChessPiece king, BoardCell destination, Chessboard board)
