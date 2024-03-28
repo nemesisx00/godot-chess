@@ -52,7 +52,7 @@ public partial class Chessboard : Node3D
 		var children = GetChildren();
 		foreach(var child in children)
 		{
-			if(child is not PieceProxy pp && child is Node3D file)
+			if(child as PieceProxy is null && child is Node3D file)
 			{
 				foreach(var cell in file.GetChildren().Cast<BoardCell>())
 				{
