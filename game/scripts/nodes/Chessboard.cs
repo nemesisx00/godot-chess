@@ -9,6 +9,11 @@ namespace Chess.Nodes;
 
 public partial class Chessboard : Node3D
 {
+	private static class NodePaths
+	{
+		public static readonly NodePath PieceProxy = new("%PieceProxy");
+	}
+	
 	[Signal]
 	public delegate void CaptureEventHandler(ChessPiece attacker, ChessPiece defender);
 	
@@ -32,6 +37,7 @@ public partial class Chessboard : Node3D
 	
 	public List<BoardCell> Cells { get; private set; } = [];
 	public List<ChessPiece> Pieces { get; private set; } = [];
+	public PieceProxy PieceProxy { get; private set; }
 	
 	private MoveLog moveLog;
 	private Node3D piece;
@@ -39,13 +45,14 @@ public partial class Chessboard : Node3D
 	public override void _Ready()
 	{
 		moveLog = GetNode<MoveLog>(MoveLog.NodePath);
+		PieceProxy = GetNode<PieceProxy>(NodePaths.PieceProxy);
 		
 		ReloadTextures();
 		
 		var children = GetChildren();
 		foreach(var child in children)
 		{
-			if(child is Node3D file)
+			if(child is not PieceProxy pp && child is Node3D file)
 			{
 				foreach(var cell in file.GetChildren().Cast<BoardCell>())
 				{

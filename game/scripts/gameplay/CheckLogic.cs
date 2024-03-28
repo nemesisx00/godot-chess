@@ -64,6 +64,15 @@ public static class CheckLogic
 		});
 		
 		conflicts.ForEach(c => pm.Remove(c));
+		
+		conflicts.Clear();
+		pm.ForEach(dest => {
+			if(detectKingMoveIntoCheck(king, dest, board))
+				conflicts.Add(dest);
+		});
+		
+		conflicts.ForEach(c => pm.Remove(c));
+		
 		potentialMoves = pm;
 	}
 	
@@ -265,6 +274,42 @@ public static class CheckLogic
 					);
 			}
 		}
+		return check;
+	}
+	
+	private static bool detectKingMoveIntoCheck(ChessPiece king, BoardCell destination, Chessboard board)
+	{
+		var check = false;
+		
+		if(king.GetParentOrNull<BoardCell>() is BoardCell kingCell)
+		{
+			var diff = kingCell - destination;
+			var pieceToCapture = destination.GetChildren().Where(c => c is ChessPiece).FirstOrDefault() as ChessPiece;
+			
+			board.PieceProxy.GlobalPosition = destination.GlobalPosition;
+			
+			foreach(var ray in board.PieceProxy.Rays)
+			{
+				if(pieceToCapture is not null)
+					ray.AddException(pieceToCapture);
+				
+				ray.ForceRaycastUpdate();
+				
+				if(pieceToCapture is not null)
+					ray.RemoveException(pieceToCapture);
+				
+				if(ray.GetCollider() is ChessPiece cp
+					&& cp.Team != king.Team
+					&& cp.GetParentOrNull<BoardCell>() is BoardCell pieceCell)
+				{
+					check = canPieceCauseCheck(cp, DirectionNames.IsCardinal(ray.Name), diff);
+				}
+				
+				if(check)
+					break;
+			}
+		}
+		
 		return check;
 	}
 }
