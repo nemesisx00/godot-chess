@@ -268,12 +268,14 @@ public static class CheckLogic
 		{
 			check = piece.Type == Piece.Bishop
 				|| piece.Type == Piece.Queen
+				
 				|| (piece.Type == Piece.Pawn
 					&& diff.File == 1
 					&& (
 						(piece.Team == Teams.White && diff.Rank == 1)
 						|| (piece.Team == Teams.Black && diff.Rank == -1)
 					))
+				
 				|| (piece.Type == Piece.Knight
 					&& (
 						(Math.Abs(diff.File) == 1 && Math.Abs(diff.Rank) == 2)
