@@ -135,12 +135,12 @@ public static class CheckLogic
 		
 		if(!check)
 		{
-			foreach(var knight in board.Pieces.Where(p => p.Team != king.Team && p.Type == Piece.Knight && p.GetParent() is BoardCell))
+			foreach(var knight in board.Pieces.Where(p => p.Team != king.Team && p.Type == Piece.Knight && p.GetParentOrNull<BoardCell>() is not null))
 			{
+				check = canPieceCauseCheck(knight, false, knight.GetParent<BoardCell>() - kingCell);
+				
 				if(check)
 					break;
-				
-				check = MoveLogic.GetValidCells(knight, board, moveLog).Contains(kingCell);
 			}
 		}
 		
@@ -266,25 +266,19 @@ public static class CheckLogic
 			check = piece.Type == Piece.Queen || piece.Type == Piece.Rook;
 		else
 		{
-			check = piece.Type == Piece.Bishop || piece.Type == Piece.Queen;
-			
-			if(!check)
-			{
-				check = piece.Type == Piece.Pawn && diff.File == 1
+			check = piece.Type == Piece.Bishop
+				|| piece.Type == Piece.Queen
+				|| (piece.Type == Piece.Pawn
+					&& diff.File == 1
 					&& (
 						(piece.Team == Teams.White && diff.Rank == 1)
 						|| (piece.Team == Teams.Black && diff.Rank == -1)
-					);
-			}
-			
-			if(!check)
-			{
-				check = piece.Type == Piece.Knight
+					))
+				|| (piece.Type == Piece.Knight
 					&& (
 						(Math.Abs(diff.File) == 1 && Math.Abs(diff.Rank) == 2)
 						|| (Math.Abs(diff.File) == 2 && Math.Abs(diff.Rank) == 1)
-					);
-			}
+					));
 		}
 		
 		return check;
