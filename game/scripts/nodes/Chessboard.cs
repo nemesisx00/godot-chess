@@ -49,12 +49,11 @@ public partial class Chessboard : Node3D
 		
 		ReloadTextures();
 		
-		var children = GetChildren();
-		foreach(var child in children)
+		foreach(var child in GetChildren())
 		{
-			if(child is not PieceProxy pp && child is Node3D file)
+			foreach(var n in child.GetChildren())
 			{
-				foreach(var cell in file.GetChildren().Cast<BoardCell>())
+				if(n is BoardCell cell)
 				{
 					cell.Clicked += handleCellClicked;
 					ListenOnCells += cell.ListenForClicks;
