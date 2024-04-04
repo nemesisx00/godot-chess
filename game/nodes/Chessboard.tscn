@@ -387,3 +387,181 @@ Rank = 6
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.203)
 File = 7
 Rank = 7
+
+[node name="Labels1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.017, 0)
+
+[node name="Files" type="Node3D" parent="Labels1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25)
+
+[node name="A" type="Label3D" parent="Labels1/Files"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.203, 0, 0)
+pixel_size = 0.0005
+text = "A"
+
+[node name="B" type="Label3D" parent="Labels1/Files"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.145, 0, 0)
+pixel_size = 0.0005
+text = "B"
+
+[node name="C" type="Label3D" parent="Labels1/Files"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.087, 0, 0)
+pixel_size = 0.0005
+text = "C"
+
+[node name="D" type="Label3D" parent="Labels1/Files"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.029, 0, 0)
+pixel_size = 0.0005
+text = "D"
+
+[node name="E" type="Label3D" parent="Labels1/Files"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.029, 0, 0)
+pixel_size = 0.0005
+text = "E"
+
+[node name="F" type="Label3D" parent="Labels1/Files"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.087, 0, 0)
+pixel_size = 0.0005
+text = "F"
+
+[node name="G" type="Label3D" parent="Labels1/Files"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.145, 0, 0)
+pixel_size = 0.0005
+text = "G"
+
+[node name="H" type="Label3D" parent="Labels1/Files"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.203, 0, 0)
+pixel_size = 0.0005
+text = "H"
+
+[node name="Ranks" type="Node3D" parent="Labels1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, 0)
+
+[node name="1" type="Label3D" parent="Labels1/Ranks"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.203)
+pixel_size = 0.0005
+text = "1"
+
+[node name="2" type="Label3D" parent="Labels1/Ranks"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.145)
+pixel_size = 0.0005
+text = "2"
+
+[node name="3" type="Label3D" parent="Labels1/Ranks"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.087)
+pixel_size = 0.0005
+text = "3"
+
+[node name="4" type="Label3D" parent="Labels1/Ranks"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.029)
+pixel_size = 0.0005
+text = "4"
+
+[node name="5" type="Label3D" parent="Labels1/Ranks"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.029)
+pixel_size = 0.0005
+text = "5"
+
+[node name="6" type="Label3D" parent="Labels1/Ranks"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.087)
+pixel_size = 0.0005
+text = "6"
+
+[node name="7" type="Label3D" parent="Labels1/Ranks"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.145)
+pixel_size = 0.0005
+text = "7"
+
+[node name="8" type="Label3D" parent="Labels1/Ranks"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.203)
+pixel_size = 0.0005
+text = "8"
+
+[node name="Labels2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.017, 0)
+
+[node name="Files" type="Node3D" parent="Labels2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.25)
+
+[node name="A" type="Label3D" parent="Labels2/Files"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, -0.203, 0, 0)
+pixel_size = 0.0005
+text = "A"
+
+[node name="B" type="Label3D" parent="Labels2/Files"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, -0.145, 0, 0)
+pixel_size = 0.0005
+text = "B"
+
+[node name="C" type="Label3D" parent="Labels2/Files"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, -0.087, 0, 0)
+pixel_size = 0.0005
+text = "C"
+
+[node name="D" type="Label3D" parent="Labels2/Files"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, -0.029, 0, 0)
+pixel_size = 0.0005
+text = "D"
+
+[node name="E" type="Label3D" parent="Labels2/Files"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0.029, 0, 0)
+pixel_size = 0.0005
+text = "E"
+
+[node name="F" type="Label3D" parent="Labels2/Files"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0.087, 0, 0)
+pixel_size = 0.0005
+text = "F"
+
+[node name="G" type="Label3D" parent="Labels2/Files"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0.145, 0, 0)
+pixel_size = 0.0005
+text = "G"
+
+[node name="H" type="Label3D" parent="Labels2/Files"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0.203, 0, 0)
+pixel_size = 0.0005
+text = "H"
+
+[node name="Ranks" type="Node3D" parent="Labels2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0)
+
+[node name="1" type="Label3D" parent="Labels2/Ranks"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, 0.203)
+pixel_size = 0.0005
+text = "1"
+
+[node name="2" type="Label3D" parent="Labels2/Ranks"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, 0.145)
+pixel_size = 0.0005
+text = "2"
+
+[node name="3" type="Label3D" parent="Labels2/Ranks"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, 0.087)
+pixel_size = 0.0005
+text = "3"
+
+[node name="4" type="Label3D" parent="Labels2/Ranks"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, 0.029)
+pixel_size = 0.0005
+text = "4"
+
+[node name="5" type="Label3D" parent="Labels2/Ranks"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, -0.029)
+pixel_size = 0.0005
+text = "5"
+
+[node name="6" type="Label3D" parent="Labels2/Ranks"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, -0.087)
+pixel_size = 0.0005
+text = "6"
+
+[node name="7" type="Label3D" parent="Labels2/Ranks"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, -0.145)
+pixel_size = 0.0005
+text = "7"
+
+[node name="8" type="Label3D" parent="Labels2/Ranks"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0, -0.203)
+pixel_size = 0.0005
+text = "8"
