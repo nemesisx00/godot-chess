@@ -84,7 +84,7 @@ public partial class Game : Node3D
 	
 	private void handleCapture(ChessPiece attacker, ChessPiece defender)
 	{
-		if(defender.Team == Team.Black)
+		if(defender.Team == Teams.Black)
 			whiteGraveyard.BuryPiece(defender);
 		else
 			blackGraveyard.BuryPiece(defender);
@@ -100,7 +100,7 @@ public partial class Game : Node3D
 			board.MovePiece(selectedPiece, cell);
 	}
 	
-	private void handleCheckmate(Team winner)
+	private void handleCheckmate(Teams winner)
 	{
 		deselectSelectedPiece();
 		board.DisableAllCellSelection();
@@ -149,7 +149,7 @@ public partial class Game : Node3D
 				moveLog.Clear();
 				board.Pieces.ForEach(p => p.HasMoved = false);
 				moveLogView.EnableLogUpdates = true;
-				gameState.CurrentPlayer = Team.Black;
+				gameState.CurrentPlayer = Teams.Black;
 				gameState.Status = GameStatus.Playing;
 				piecesReset = 0;
 				deselectSelectedPiece();
@@ -169,12 +169,12 @@ public partial class Game : Node3D
 		moveLogView.Show();
 		gameOver.Hide();
 		
-		gameState.CurrentPlayer = Team.White;
+		gameState.CurrentPlayer = Teams.White;
 		gameState.Status = GameStatus.Reseting;
 		board.ResetPieces();
 	}
 	
-	private void handleStartNextTurn(Team activePlayer)
+	private void handleStartNextTurn(Teams activePlayer)
 	{
 		board.DisableAllPieceSelection();
 		board.EnablePieceSelection(activePlayer);
@@ -191,14 +191,14 @@ public partial class Game : Node3D
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.C, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.F, Rank.One, piece, true);
@@ -221,7 +221,7 @@ public partial class Game : Node3D
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.E, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -237,14 +237,14 @@ public partial class Game : Node3D
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.B, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.G, Rank.One, piece, true);
@@ -267,14 +267,14 @@ public partial class Game : Node3D
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.A, Rank.Two, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.B, Rank.Two, piece, true);
@@ -282,7 +282,7 @@ public partial class Game : Node3D
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 3;
 			board.AddPiece(piece);
 			board.MovePiece(File.C, Rank.Two, piece, true);
@@ -290,7 +290,7 @@ public partial class Game : Node3D
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 4;
 			board.AddPiece(piece);
 			board.MovePiece(File.D, Rank.Two, piece, true);
@@ -298,7 +298,7 @@ public partial class Game : Node3D
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 5;
 			board.AddPiece(piece);
 			board.MovePiece(File.E, Rank.Two, piece, true);
@@ -306,7 +306,7 @@ public partial class Game : Node3D
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 6;
 			board.AddPiece(piece);
 			board.MovePiece(File.F, Rank.Two, piece, true);
@@ -314,7 +314,7 @@ public partial class Game : Node3D
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 7;
 			board.AddPiece(piece);
 			board.MovePiece(File.G, Rank.Two, piece, true);
@@ -322,7 +322,7 @@ public partial class Game : Node3D
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 8;
 			board.AddPiece(piece);
 			board.MovePiece(File.H, Rank.Two, piece, true);
@@ -381,7 +381,7 @@ public partial class Game : Node3D
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.D, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
@@ -397,14 +397,14 @@ public partial class Game : Node3D
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			board.AddPiece(piece);
 			board.MovePiece(File.A, Rank.One, piece, true);
 			piece.Clicked += handlePieceClicked;
 			
 			piece = packedScene.Instantiate<ChessPiece>();
 			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
+			piece.Team = Teams.White;
 			piece.PieceNumber = 2;
 			board.AddPiece(piece);
 			board.MovePiece(File.H, Rank.One, piece, true);

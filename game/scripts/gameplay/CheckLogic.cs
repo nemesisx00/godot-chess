@@ -9,17 +9,17 @@ namespace Chess.Gameplay;
 
 public static class CheckLogic
 {
-	public static Team? DetectCheckmate(Chessboard board, MoveLog moveLog)
+	public static Teams? DetectCheckmate(Chessboard board, MoveLog moveLog)
 	{
-		Team? team = null;
-		if(DetectCheckmateForTeam(Team.Black, board, moveLog))
-			team = Team.Black;
-		else if(DetectCheckmateForTeam(Team.White, board, moveLog))
-			team = Team.White;
+		Teams? team = null;
+		if(DetectCheckmateForTeam(Teams.Black, board, moveLog))
+			team = Teams.Black;
+		else if(DetectCheckmateForTeam(Teams.White, board, moveLog))
+			team = Teams.White;
 		return team;
 	}
 	
-	public static bool DetectCheckmateForTeam(Team team, Chessboard board, MoveLog moveLog)
+	public static bool DetectCheckmateForTeam(Teams team, Chessboard board, MoveLog moveLog)
 	{
 		List<BoardCell> allMoves = [];
 		foreach(var piece in board.Pieces.Where(p => p.Team == team))
@@ -272,8 +272,8 @@ public static class CheckLogic
 				|| (piece.Type == Piece.Pawn
 					&& diff.File == 1
 					&& (
-						(piece.Team == Team.White && diff.Rank == 1)
-						|| (piece.Team == Team.Black && diff.Rank == -1)
+						(piece.Team == Teams.White && diff.Rank == 1)
+						|| (piece.Team == Teams.Black && diff.Rank == -1)
 					))
 				
 				|| (piece.Type == Piece.Knight

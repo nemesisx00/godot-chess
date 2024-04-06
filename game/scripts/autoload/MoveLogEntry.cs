@@ -1,6 +1,6 @@
 namespace Chess.Autoload;
 
-public class MoveLogEntry(BoardVector from, BoardVector to, Piece piece, Team team)
+public class MoveLogEntry(BoardVector from, BoardVector to, Piece piece, Teams team)
 {
 	private const string CastleKingside = "0-0";
 	private const string CastleQueenside = "0-0-0";
@@ -12,7 +12,7 @@ public class MoveLogEntry(BoardVector from, BoardVector to, Piece piece, Team te
 	public BoardVector From { get; set; } = from;
 	public Piece Piece { get; set; } = piece;
 	public bool Rank { get; set; }
-	public Team Team { get; set; } = team;
+	public Teams Team { get; set; } = team;
 	public BoardVector To { get; set; } = to;
 
 	public override string ToString()

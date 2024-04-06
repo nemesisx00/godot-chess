@@ -86,11 +86,11 @@ public static class UnicodePiece
 {
 	public static char? ByPiece(ChessPiece piece) => ByTeamPiece(piece.Team, piece.Type);
 	
-	public static char? ByTeamPiece(Team team, Piece piece)
+	public static char? ByTeamPiece(Teams team, Piece piece)
 	{
 		return team switch
 		{
-			Team.Black => piece switch
+			Teams.Black => piece switch
 			{
 				Piece.Bishop => BishopBlack,
 				Piece.King => KingBlack,
@@ -100,7 +100,7 @@ public static class UnicodePiece
 				Piece.Rook => RookBlack,
 				_ => null,
 			},
-			Team.White => piece switch
+			Teams.White => piece switch
 			{
 				Piece.Bishop => BishopWhite,
 				Piece.King => KingWhite,
@@ -135,5 +135,5 @@ public static class ResourcePaths
 	public const string Nodes = "res://nodes/";
 	public const string Icons = $"{Assets}icons/";
 	
-	public static string PieceIcon(Team team, Piece piece) => $"{Icons}{piece}-{team}-marble-iso.png".ToLower();
+	public static string PieceIcon(Teams team, Piece piece) => $"{Icons}{piece}-{team}-marble-iso.png".ToLower();
 }
