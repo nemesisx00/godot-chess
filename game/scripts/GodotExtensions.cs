@@ -2,7 +2,7 @@ using Godot;
 
 namespace Chess;
 
-public static class Extensions
+public static class GodotExtensions
 {
 	public static bool IsEqualApprox(this Vector3 self, Vector3 other, float tolerance) => self.IsEqualApprox(other, (double)tolerance);
 	public static bool IsEqualApprox(this Vector3 self, Vector3 other, double tolerance)
@@ -20,6 +20,4 @@ public static class Extensions
 			&& self.Basis.Y.IsEqualApprox(other.Basis.Y, tolerance)
 			&& self.Basis.Z.IsEqualApprox(other.Basis.Z, tolerance);
 	}
-	
-	public static Teams NextTeam(this Teams self) => (Teams)(((int)self + 1) % 2);
 }
