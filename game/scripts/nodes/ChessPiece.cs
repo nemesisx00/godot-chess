@@ -32,7 +32,7 @@ public partial class ChessPiece : CharacterBody3D
 	[Export]
 	public Piece Type { get; set; }
 	
-	public Teams Team { get; set; }
+	public Team Team { get; set; }
 	public bool HasMoved { get; set; }
 	public int PieceNumber { get; set; } = 1;
 	
@@ -111,7 +111,7 @@ public partial class ChessPiece : CharacterBody3D
 		if(PieceNumber > 1)
 			Name = $"{Name}{PieceNumber}";
 		
-		if(Team == Teams.White)
+		if(Team == Team.White)
 		{
 			var angle = Mathf.Tau / 2;
 			GetChild<MeshInstance3D>(0).RotateObjectLocal(Vector3.Up, angle);
@@ -138,7 +138,7 @@ public partial class ChessPiece : CharacterBody3D
 		}
 	}
 	
-	public void ListenForClicks(bool active, Teams team)
+	public void ListenForClicks(bool active, Team team)
 	{
 		if(team == Team)
 			listeningForClicks = active;

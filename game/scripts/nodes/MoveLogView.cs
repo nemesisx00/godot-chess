@@ -56,7 +56,7 @@ public partial class MoveLogView : ScrollContainer
 			for(var i = 0; i < moveLog.Entries.Count; i++)
 			{
 				var entry = moveLog.Entries[i];
-				if(entry.Team == Teams.White)
+				if(entry.Team == Team.White)
 				{
 					var label = new LogEntryLabel
 					{
