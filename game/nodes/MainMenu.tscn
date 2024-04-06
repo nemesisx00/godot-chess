@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwguirat5hw1y"]
+[gd_scene load_steps=4 format=3 uid="uid://dwguirat5hw1y"]
 
 [ext_resource type="Script" path="res://scripts/nodes/MainMenu.cs" id="1_0potl"]
 [ext_resource type="PackedScene" uid="uid://d2nf0xnj6i26i" path="res://nodes/Credits.tscn" id="2_gawiv"]
+[ext_resource type="Theme" uid="uid://bdxlo2qdsahfa" path="res://assets/ButtonTheme.tres" id="2_rhky8"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15
@@ -22,6 +23,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(225, 0)
 layout_mode = 2
 theme_override_constants/separation = 15
 alignment = 1
@@ -30,21 +32,28 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 36
+theme = ExtResource("2_rhky8")
 text = "New Game"
+
+[node name="OptionsButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("2_rhky8")
+text = "Options"
 
 [node name="CreditsButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 36
+theme = ExtResource("2_rhky8")
 text = "Credits"
 
 [node name="Quit" type="Button" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 36
+theme = ExtResource("2_rhky8")
 text = "Quit"
 
 [node name="Credits" parent="." instance=ExtResource("2_gawiv")]
