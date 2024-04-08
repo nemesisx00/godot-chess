@@ -30,7 +30,8 @@ theme_override_font_sizes/font_size = 48
 text = "Controls"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="ControlsList" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -38,37 +39,55 @@ theme_override_constants/h_separation = 25
 theme_override_constants/v_separation = 15
 columns = 4
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
 layout_mode = 2
 text = "Open/Close Main Menu"
 horizontal_alignment = 2
 
-[node name="ActionMapper" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource("2_mv3bq")]
+[node name="ActionMapper" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
 layout_mode = 2
 action = 3
 
-[node name="Label2" type="Label" parent="ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label2" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
 layout_mode = 2
 text = "Rotate Camera"
 horizontal_alignment = 2
 
-[node name="ActionMapper2" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource("2_mv3bq")]
+[node name="ActionMapper2" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
 layout_mode = 2
 action = 2
 
-[node name="Label3" type="Label" parent="ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label3" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
 layout_mode = 2
 text = "Interact"
 horizontal_alignment = 2
 
-[node name="ActionMapper3" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource("2_mv3bq")]
+[node name="ActionMapper3" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
 layout_mode = 2
 action = 1
 
-[node name="Label4" type="Label" parent="ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label4" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
 layout_mode = 2
 text = "Deselect Piece"
 horizontal_alignment = 2
 
-[node name="ActionMapper4" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource("2_mv3bq")]
+[node name="ActionMapper4" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
 layout_mode = 2
+
+[node name="Popup" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Popup"]
+custom_minimum_size = Vector2(225, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Popup/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Press Any Key"
+horizontal_alignment = 1
+vertical_alignment = 1
