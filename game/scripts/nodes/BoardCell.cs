@@ -41,6 +41,7 @@ public partial class BoardCell : Area3D
 	}
 	
 	public bool Hoverable { get; set; }
+	public bool ListeningForClicks => listeningForClicks;
 	
 	[Export]
 	private Material indicatorMaterial;
@@ -53,20 +54,27 @@ public partial class BoardCell : Area3D
 	
 	private bool inCheck;
 	private bool listeningForClicks;
-	
-	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
-	{
-		if(listeningForClicks && evt is InputEventMouseButton iemb  && iemb.IsActionPressed(Actions.Interact))
-			EmitSignal(SignalName.Clicked, this);
-	}
+	private bool mouseHovering;
 	
 	public override void _MouseEnter()
 	{
 		if(Hoverable)
 			Indicator.MaterialOverride = indicatorHighlight;
+		
+		mouseHovering = true;
 	}
 	
-	public override void _MouseExit() => Indicator.MaterialOverride = InCheck ? checkMaterial : indicatorMaterial;
+	public override void _MouseExit()
+	{
+		Indicator.MaterialOverride = InCheck ? checkMaterial : indicatorMaterial;
+		mouseHovering = false;
+	}
+	
+	public override void _Process(double delta)
+	{
+		if(listeningForClicks && mouseHovering && Input.IsActionJustPressed(Actions.Interact))
+			EmitSignal(SignalName.Clicked, this);
+	}
 	
 	public override void _Ready()
 	{
