@@ -23,12 +23,6 @@ public partial class MainMenu : MarginContainer
 	private Credits credits;
 	private OptionsMenu optionsMenu;
 	
-	public override void _UnhandledInput(InputEvent evt)
-	{
-		if(credits.Visible && evt is InputEventKey iek && iek.IsReleased())
-			showMainMenu();
-	}
-	
 	public override void _ExitTree()
 	{
 		optionsMenu.RequestHide -= showMainMenu;
@@ -48,6 +42,12 @@ public partial class MainMenu : MarginContainer
 		GetNode<Button>(NodePaths.Quit).Pressed += pressedQuit;
 		
 		optionsMenu.RequestHide += showMainMenu;
+	}
+	
+	public override void _UnhandledInput(InputEvent evt)
+	{
+		if(credits.Visible && evt is InputEventKey iek && iek.IsReleased())
+			showMainMenu();
 	}
 	
 	private void pressedCredits()
