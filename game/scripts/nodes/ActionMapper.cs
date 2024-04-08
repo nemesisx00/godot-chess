@@ -1,28 +1,38 @@
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 namespace Chess.Nodes;
 
 public partial class ActionMapper : GridContainer
 {
+	[Signal]
+	public delegate void ListeningForInputEventHandler(ActionMapper node, bool listening);
+	
 	[Export]
 	private Action action;
 	
 	private readonly List<InputEvent> inputEvents = [];
+	private InputEvent eventToRemove;
+	private bool listening;
+	
+	public override void _Input(InputEvent evt)
+	{
+		if(listening && (evt is InputEventKey || evt is InputEventMouseButton))
+		{
+			replaceEvent(evt);
+			refreshEvents();
+			refreshUi();
+			
+			eventToRemove = null;
+			listening = false;
+			EmitSignal(SignalName.ListeningForInput, this, listening);
+		}
+	}
 	
 	public override void _Ready()
 	{
-		var actionName = Actions.From(action);
-		if(actionName is not null)
-		{
-			foreach(var inputEvent in InputMap.ActionGetEvents(actionName))
-			{
-				inputEvents.Add(inputEvent);
-			}
-		}
-		
-		refreshMappings();
+		refreshEvents();
+		refreshUi();
 	}
 	
 	private void handlePress(Button node)
@@ -34,12 +44,27 @@ public partial class ActionMapper : GridContainer
 		//Sanity check
 		if(InputMap.ActionHasEvent(actionName, inputEvent))
 		{
-			GD.Print($"Clicked button for {actionName} currently mapped to {inputEvent.AsText()}");
-			//Set up listening for a new input to replace the existing event
+			eventToRemove = inputEvent;
+			listening = true;
+			EmitSignal(SignalName.ListeningForInput, this, listening);
 		}
 	}
 	
-	private void refreshMappings()
+	private void refreshEvents()
+	{
+		var actionName = Actions.From(action);
+		if(actionName is not null)
+		{
+			inputEvents.Clear();
+			
+			foreach(var inputEvent in InputMap.ActionGetEvents(actionName))
+			{
+				inputEvents.Add(inputEvent);
+			}
+		}
+	}
+	
+	private void refreshUi()
 	{
 		foreach(var node in GetChildren())
 		{
@@ -59,5 +84,12 @@ public partial class ActionMapper : GridContainer
 			
 			node.Pressed += () => handlePress(node);
 		}
+	}
+	
+	private void replaceEvent(InputEvent newEvent)
+	{
+		var actionName = Actions.From(action);
+		InputMap.ActionEraseEvent(actionName, eventToRemove);
+		InputMap.ActionAddEvent(actionName, newEvent);
 	}
 }
