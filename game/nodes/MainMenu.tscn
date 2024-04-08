@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dwguirat5hw1y"]
+[gd_scene load_steps=5 format=3 uid="uid://dwguirat5hw1y"]
 
 [ext_resource type="Script" path="res://scripts/nodes/MainMenu.cs" id="1_0potl"]
 [ext_resource type="PackedScene" uid="uid://d2nf0xnj6i26i" path="res://nodes/Credits.tscn" id="2_gawiv"]
 [ext_resource type="Theme" uid="uid://bdxlo2qdsahfa" path="res://assets/ButtonTheme.tres" id="2_rhky8"]
+[ext_resource type="PackedScene" uid="uid://dk25uvxpee63r" path="res://nodes/OptionsMenu.tscn" id="3_gwge8"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15
@@ -55,6 +56,11 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme = ExtResource("2_rhky8")
 text = "Quit"
+
+[node name="OptionsMenu" parent="." instance=ExtResource("3_gwge8")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
 
 [node name="Credits" parent="." instance=ExtResource("2_gawiv")]
 unique_name_in_owner = true
