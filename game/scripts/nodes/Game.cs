@@ -70,7 +70,14 @@ public partial class Game : Node3D
 		generatePieces();
 		
 		handleStartNextTurn(gameState.CurrentPlayer);
-		toggleMainMenu();
+		
+		//Set up the initial game and ui state manually, since toggleMainMenu is
+		//configured more to handle opening and closing the menu during play.
+		mainMenu.Show();
+		moveLogView.Hide();
+		gameState.Status = GameStatus.NotStarted;
+		board.DisableAllCellSelection();
+		board.DisableAllPieceSelection();
 	}
 	
 	private void deselectSelectedPiece()
