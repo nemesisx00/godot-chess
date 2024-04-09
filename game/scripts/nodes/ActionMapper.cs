@@ -38,16 +38,20 @@ public partial class ActionMapper : GridContainer
 	private void handlePress(Button node)
 	{
 		var actionName = Actions.From(action);
-		//Node index must match the index of the corresponding input event
-		var inputEvent = inputEvents[node.GetIndex()];
+		var index = node.GetIndex();
 		
-		//Sanity check
-		if(InputMap.ActionHasEvent(actionName, inputEvent))
+		if(index < inputEvents.Count)
 		{
-			eventToRemove = inputEvent;
-			listening = true;
-			EmitSignal(SignalName.ListeningForInput, this, listening);
+			//Node index must match the index of the corresponding input event
+			var inputEvent = inputEvents[index];
+			
+			//Sanity check
+			if(InputMap.ActionHasEvent(actionName, inputEvent))
+				eventToRemove = inputEvent;
 		}
+		
+		listening = true;
+		EmitSignal(SignalName.ListeningForInput, this, listening);
 	}
 	
 	private void refreshEvents()
@@ -71,25 +75,35 @@ public partial class ActionMapper : GridContainer
 			node.QueueFree();
 		}
 		
-		List<Button> mappingNodes = [];
 		foreach(var ie in inputEvents)
 		{
-			Button node = new()
-			{
-				MouseDefaultCursorShape = CursorShape.PointingHand,
-				Text = ie.AsText(),
-			};
-			
-			AddChild(node);
-			
-			node.Pressed += () => handlePress(node);
+			createButton(ie.AsText());
 		}
+		
+		createButton("+");
 	}
 	
 	private void replaceEvent(InputEvent newEvent)
 	{
 		var actionName = Actions.From(action);
-		InputMap.ActionEraseEvent(actionName, eventToRemove);
+		
+		if(eventToRemove is not null)
+			InputMap.ActionEraseEvent(actionName, eventToRemove);
+		
 		InputMap.ActionAddEvent(actionName, newEvent);
+	}
+	
+	private void createButton(string text)
+	{
+		Button node = new()
+		{
+			MouseDefaultCursorShape = CursorShape.PointingHand,
+			SizeFlagsHorizontal = SizeFlags.ExpandFill,
+			Text = text,
+		};
+		
+		AddChild(node);
+		
+		node.Pressed += () => handlePress(node);
 	}
 }
