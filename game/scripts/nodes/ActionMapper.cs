@@ -42,7 +42,6 @@ public partial class ActionMapper : GridContainer
 		
 		if(index < inputEvents.Count)
 		{
-			//Node index must match the index of the corresponding input event
 			var inputEvent = inputEvents[index];
 			
 			//Sanity check
