@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace Chess.Nodes;
@@ -35,6 +36,57 @@ public partial class ActionMapper : GridContainer
 		refreshUi();
 	}
 	
+	private void createAddRemove()
+	{
+		HBoxContainer row = new()
+		{
+			SizeFlagsHorizontal = SizeFlags.Fill,
+		};
+		
+		row.AddThemeConstantOverride(GodotPaths.OverrideSeparation, 15);
+		
+		Button add = new()
+		{
+			MouseDefaultCursorShape = CursorShape.PointingHand,
+			SizeFlagsHorizontal = SizeFlags.ExpandFill,
+			Text = "+",
+		};
+		
+		Button remove = new()
+		{
+			MouseDefaultCursorShape = CursorShape.PointingHand,
+			SizeFlagsHorizontal = SizeFlags.ExpandFill,
+			Text = "-",
+		};
+		
+		row.AddChild(remove);
+		row.AddChild(add);
+		AddChild(row);
+		
+		add.Pressed += handleAddPrsesed;
+		remove.Pressed += handleRemovePressed;
+	}
+	
+	private void createButton(string text)
+	{
+		Button node = new()
+		{
+			MouseDefaultCursorShape = CursorShape.PointingHand,
+			SizeFlagsHorizontal = SizeFlags.ExpandFill,
+			Text = text,
+		};
+		
+		AddChild(node);
+		
+		node.Pressed += () => handlePress(node);
+	}
+	
+	private void handleAddPrsesed()
+	{
+		listening = true;
+		EmitSignal(SignalName.ListeningForInput, this, listening);
+	}
+	
 	private void handlePress(Button node)
 	{
 		var actionName = Actions.From(action);
@@ -47,10 +99,23 @@ public partial class ActionMapper : GridContainer
 			//Sanity check
 			if(InputMap.ActionHasEvent(actionName, inputEvent))
 				eventToRemove = inputEvent;
+			
+			listening = true;
+			EmitSignal(SignalName.ListeningForInput, this, listening);
 		}
-		
-		listening = true;
-		EmitSignal(SignalName.ListeningForInput, this, listening);
+	}
+	
+	private void handleRemovePressed()
+	{
+		var last = inputEvents.LastOrDefault();
+		if(last is not null)
+		{
+			var actionName = Actions.From(action);
+			InputMap.ActionEraseEvent(actionName, last);
+			
+			refreshEvents();
+			refreshUi();
+		}
 	}
 	
 	private void refreshEvents()
@@ -79,7 +144,7 @@ public partial class ActionMapper : GridContainer
 			createButton(ie.AsText());
 		}
 		
-		createButton("+");
+		createAddRemove();
 	}
 	
 	private void replaceEvent(InputEvent newEvent)
@@ -90,19 +155,5 @@ public partial class ActionMapper : GridContainer
 			InputMap.ActionEraseEvent(actionName, eventToRemove);
 		
 		InputMap.ActionAddEvent(actionName, newEvent);
-	}
-	
-	private void createButton(string text)
-	{
-		Button node = new()
-		{
-			MouseDefaultCursorShape = CursorShape.PointingHand,
-			SizeFlagsHorizontal = SizeFlags.ExpandFill,
-			Text = text,
-		};
-		
-		AddChild(node);
-		
-		node.Pressed += () => handlePress(node);
 	}
 }
