@@ -193,7 +193,7 @@ public partial class Game : Node3D
 		
 		var materialWhite = GD.Load<StandardMaterial3D>(ChessMaterials.White);
 		
-		var packedScene = GD.Load<PackedScene>($"{ResourcePaths.Nodes}/Bishop.tscn");
+		var packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Bishop.tscn");
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
@@ -223,7 +223,7 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 		}
 		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Nodes}/King.tscn");
+		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/King.tscn");
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
@@ -239,7 +239,7 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 		}
 		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Nodes}/Knight.tscn");
+		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Knight.tscn");
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
@@ -269,7 +269,7 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 		}
 		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Nodes}/Pawn.tscn");
+		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Pawn.tscn");
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
@@ -383,7 +383,7 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 		}
 		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Nodes}/Queen.tscn");
+		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Queen.tscn");
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();
@@ -399,7 +399,7 @@ public partial class Game : Node3D
 			piece.Clicked += handlePieceClicked;
 		}
 		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Nodes}/Rook.tscn");
+		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Rook.tscn");
 		if(packedScene.CanInstantiate())
 		{
 			piece = packedScene.Instantiate<ChessPiece>();

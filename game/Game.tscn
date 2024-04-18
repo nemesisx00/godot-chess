@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://scripts/nodes/Game.cs" id="1_icnb5"]
 [ext_resource type="PackedScene" uid="uid://ioton7c0qsk3" path="res://nodes/Chessboard.tscn" id="2_rhmi3"]
-[ext_resource type="PackedScene" uid="uid://cpcvugdqxddtv" path="res://nodes/MoveLogView.tscn" id="3_gf7bq"]
+[ext_resource type="PackedScene" uid="uid://cpcvugdqxddtv" path="res://nodes/ui/MoveLogView.tscn" id="3_gf7bq"]
 [ext_resource type="Script" path="res://scripts/nodes/CameraController.cs" id="3_io3t7"]
-[ext_resource type="PackedScene" uid="uid://dhrhhlwogy2fm" path="res://nodes/GameOver.tscn" id="3_lky5r"]
+[ext_resource type="PackedScene" uid="uid://dhrhhlwogy2fm" path="res://nodes/ui/GameOver.tscn" id="3_lky5r"]
 [ext_resource type="PackedScene" uid="uid://b8j0nr6nswtdn" path="res://nodes/Graveyard.tscn" id="4_a0fyx"]
-[ext_resource type="PackedScene" uid="uid://dwguirat5hw1y" path="res://nodes/MainMenu.tscn" id="6_exsfr"]
+[ext_resource type="PackedScene" uid="uid://dwguirat5hw1y" path="res://nodes/ui/MainMenu.tscn" id="6_exsfr"]
 [ext_resource type="Material" uid="uid://dmiu2fw5w0hmj" path="res://assets/GraveyardWhite.tres" id="7_mswys"]
 [ext_resource type="Material" uid="uid://bqdr41e71hbto" path="res://assets/GraveyardBlack.tres" id="8_bffrn"]
 

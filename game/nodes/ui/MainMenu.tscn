@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dwguirat5hw1y"]
 
 [ext_resource type="Script" path="res://scripts/nodes/MainMenu.cs" id="1_0potl"]
-[ext_resource type="PackedScene" uid="uid://d2nf0xnj6i26i" path="res://nodes/Credits.tscn" id="2_gawiv"]
+[ext_resource type="PackedScene" uid="uid://d2nf0xnj6i26i" path="res://nodes/ui/Credits.tscn" id="2_gawiv"]
 [ext_resource type="Theme" uid="uid://bdxlo2qdsahfa" path="res://assets/ButtonTheme.tres" id="2_rhky8"]
-[ext_resource type="PackedScene" uid="uid://dk25uvxpee63r" path="res://nodes/OptionsMenu.tscn" id="3_gwge8"]
+[ext_resource type="PackedScene" uid="uid://dk25uvxpee63r" path="res://nodes/ui/OptionsMenu.tscn" id="3_gwge8"]
 
 [node name="MainMenu" type="MarginContainer"]
 anchors_preset = 15

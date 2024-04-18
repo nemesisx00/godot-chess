@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://bdxlo2qdsahfa" path="res://assets/ButtonTheme.tres" id="1_cucdi"]
 [ext_resource type="Script" path="res://scripts/nodes/OptionsMenu.cs" id="1_jrap0"]
-[ext_resource type="PackedScene" uid="uid://bxi3j7ennehlk" path="res://nodes/AudioOptions.tscn" id="2_21804"]
+[ext_resource type="PackedScene" uid="uid://bxi3j7ennehlk" path="res://nodes/ui/AudioOptions.tscn" id="2_21804"]
 [ext_resource type="PackedScene" uid="uid://d3wyfyugit7py" path="res://nodes/ControlOptions.tscn" id="3_doboc"]
 
 [node name="OptionsMenu" type="HBoxContainer"]
