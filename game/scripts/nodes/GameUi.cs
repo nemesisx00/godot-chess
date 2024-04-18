@@ -50,7 +50,10 @@ public partial class GameUi : MarginContainer
 		{
 			if(text.Length > 0)
 				text.Append(" or ");
-			text.Append(formatActionText(inputEvent));
+			
+			var label = formatActionText(inputEvent);
+			if(!string.IsNullOrEmpty(label))
+				text.Append(label);
 		}
 		
 		return text.ToString();
