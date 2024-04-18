@@ -25,7 +25,7 @@ public partial class CameraController : Node3D
 			rotating = iemb.Pressed;
 			
 			Input.MouseMode = rotating
-				? Input.MouseModeEnum.ConfinedHidden
+				? Input.MouseModeEnum.Captured
 				: Input.MouseModeEnum.Visible;
 		}
 		
