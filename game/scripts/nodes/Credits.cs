@@ -10,10 +10,11 @@ public partial class Credits : Control
 {
 	private static class NodePaths
 	{
+		public static readonly NodePath BackButton = new("%BackButton");
+		public static readonly NodePath ENetLicense = new("%EnetLicense");
+		public static readonly NodePath FreeTypeLicense = new("%FreeTypeLicense");
 		public static readonly NodePath GameLicense = new("%GameLicense");
 		public static readonly NodePath GodotLicense = new("%GodotLicenseText");
-		public static readonly NodePath FreeTypeLicense = new("%FreeTypeLicense");
-		public static readonly NodePath ENetLicense = new("%EnetLicense");
 	}
 	
 	private static class CopyrightKeys
@@ -36,6 +37,9 @@ public partial class Credits : Control
 		public const string FreeType = "The FreeType Project";
 	}
 	
+	[Signal]
+	public delegate void BackPressedEventHandler();
+	
 	private const string DatesReplace = "{dates}";
 	private const string RegexReplace = "$1";
 	
@@ -44,6 +48,8 @@ public partial class Credits : Control
 	
 	public override void _Ready()
 	{
+		GetNode<Button>(NodePaths.BackButton).Pressed += () => EmitSignal(SignalName.BackPressed);
+		
 		GetNode<Label>(NodePaths.GameLicense).Text = LicenseTexts.Game;
 		GetNode<Label>(NodePaths.GodotLicense).Text = Engine.GetLicenseText();
 		

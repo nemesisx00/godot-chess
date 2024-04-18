@@ -25,6 +25,7 @@ public partial class MainMenu : MarginContainer
 	
 	public override void _ExitTree()
 	{
+		credits.BackPressed -= showMainMenu;
 		optionsMenu.RequestHide -= showMainMenu;
 		
 		base._ExitTree();
@@ -41,6 +42,7 @@ public partial class MainMenu : MarginContainer
 		GetNode<Button>(NodePaths.OptionsButton).Pressed += pressedOptions;
 		GetNode<Button>(NodePaths.Quit).Pressed += pressedQuit;
 		
+		credits.BackPressed += showMainMenu;
 		optionsMenu.RequestHide += showMainMenu;
 	}
 	
