@@ -12,11 +12,12 @@ public partial class ActionMapper : GridContainer
 	[Export]
 	private Action action;
 	
-	private static readonly Vector2 MinimumButtonSize = new(100, 0);
+	private static readonly Vector2 MinimumButtonSize = new(100, 40);
 	
 	private readonly List<InputEvent> inputEvents = [];
 	private InputEvent eventToRemove;
 	private bool listening;
+	private StyleBox buttonStyle;
 	
 	public override void _Input(InputEvent evt)
 	{
@@ -34,6 +35,8 @@ public partial class ActionMapper : GridContainer
 	
 	public override void _Ready()
 	{
+		buttonStyle = GD.Load<StyleBox>($"{ResourcePaths.Assets}/ButtonStyle.tres");
+		
 		refreshEvents();
 		refreshUi();
 	}
@@ -55,6 +58,8 @@ public partial class ActionMapper : GridContainer
 			Text = "+",
 		};
 		
+		Utility.ApplyButtonStyleOverrides(add, buttonStyle);
+		
 		Button remove = new()
 		{
 			CustomMinimumSize = MinimumButtonSize,
@@ -62,6 +67,8 @@ public partial class ActionMapper : GridContainer
 			SizeFlagsHorizontal = SizeFlags.ExpandFill,
 			Text = "-",
 		};
+		
+		Utility.ApplyButtonStyleOverrides(remove, buttonStyle);
 		
 		row.AddChild(remove);
 		row.AddChild(add);
@@ -75,10 +82,13 @@ public partial class ActionMapper : GridContainer
 	{
 		Button node = new()
 		{
+			CustomMinimumSize = MinimumButtonSize,
 			MouseDefaultCursorShape = CursorShape.PointingHand,
 			SizeFlagsHorizontal = SizeFlags.ExpandFill,
 			Text = text,
 		};
+		
+		Utility.ApplyButtonStyleOverrides(node, buttonStyle);
 		
 		AddChild(node);
 		
