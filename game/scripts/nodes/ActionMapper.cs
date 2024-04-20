@@ -12,6 +12,8 @@ public partial class ActionMapper : GridContainer
 	[Export]
 	private Action action;
 	
+	private static readonly Vector2 MinimumButtonSize = new(100, 0);
+	
 	private readonly List<InputEvent> inputEvents = [];
 	private InputEvent eventToRemove;
 	private bool listening;
@@ -47,6 +49,7 @@ public partial class ActionMapper : GridContainer
 		
 		Button add = new()
 		{
+			CustomMinimumSize = MinimumButtonSize,
 			MouseDefaultCursorShape = CursorShape.PointingHand,
 			SizeFlagsHorizontal = SizeFlags.ExpandFill,
 			Text = "+",
@@ -54,6 +57,7 @@ public partial class ActionMapper : GridContainer
 		
 		Button remove = new()
 		{
+			CustomMinimumSize = MinimumButtonSize,
 			MouseDefaultCursorShape = CursorShape.PointingHand,
 			SizeFlagsHorizontal = SizeFlags.ExpandFill,
 			Text = "-",
