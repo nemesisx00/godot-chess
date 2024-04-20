@@ -7,6 +7,16 @@ namespace Chess;
 
 public static class Utility
 {
+	public static void ApplyButtonStyleOverrides<T>(T node, StyleBox style)
+		where T: Button
+	{
+		node.AddThemeStyleboxOverride(GodotPaths.OverrideButtonDisabled, style);
+		node.AddThemeStyleboxOverride(GodotPaths.OverrideButtonFocus, style);
+		node.AddThemeStyleboxOverride(GodotPaths.OverrideButtonHover, style);
+		node.AddThemeStyleboxOverride(GodotPaths.OverrideButtonNormal, style);
+		node.AddThemeStyleboxOverride(GodotPaths.OverrideButtonPressed, style);
+	}
+	
 	public static void PrintMoveList(List<BoardCell> moves)
 	{
 		StringBuilder sb = new('[');
