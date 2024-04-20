@@ -74,6 +74,15 @@ horizontal_alignment = 2
 [node name="ActionMapper4" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
 layout_mode = 2
 
+[node name="Label5" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
+layout_mode = 2
+text = "Toggle UI"
+horizontal_alignment = 2
+
+[node name="ActionMapper5" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
+layout_mode = 2
+action = 4
+
 [node name="Popup" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
