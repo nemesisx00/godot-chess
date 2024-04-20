@@ -37,15 +37,30 @@ public partial class Game : Node3D
 	private GameOver gameOver;
 	private GameUi gameUi;
 	private int piecesReset;
+	private bool showGameUi = true;
 	
 	public override void _UnhandledInput(InputEvent evt)
 	{
-		if(!mainMenu.Visible && evt.IsActionPressed(Actions.DeselectPiece, false, true))
+		if(!mainMenu.Visible)
 		{
-			deselectSelectedPiece();
-			board.EnablePieceSelection(gameState.CurrentPlayer);
+			if(evt.IsActionPressed(Actions.DeselectPiece))
+			{
+				deselectSelectedPiece();
+				board.EnablePieceSelection(gameState.CurrentPlayer);
+			}
+			
+			if(evt.IsActionPressed(Actions.ToggleUi))
+			{
+				if(gameUi.Visible)
+					gameUi.Hide();
+				else
+					gameUi.Show();
+				
+				showGameUi = gameUi.Visible;
+			}
 		}
-		else if(!mainMenu.CreditsVisible && evt.IsActionPressed(Actions.ToggleMenu, false, true))
+		
+		if(!mainMenu.CreditsVisible && evt.IsActionPressed(Actions.ToggleMenu))
 			toggleMainMenu();
 	}
 	
@@ -195,7 +210,9 @@ public partial class Game : Node3D
 		mainMenu.Hide();
 		moveLogView.Show();
 		gameOver.Hide();
-		gameUi.Show();
+		
+		if(showGameUi)
+			gameUi.Show();
 		
 		gameState.CurrentPlayer = Team.White;
 		gameState.Status = GameStatus.Reseting;
@@ -457,7 +474,9 @@ public partial class Game : Node3D
 		{
 			mainMenu.Hide();
 			moveLogView.Show();
-			gameUi.Show();
+			
+			if(showGameUi)
+				gameUi.Show();
 			
 			if(gameState.Status == GameStatus.Loss || gameState.Status == GameStatus.Stalemate || gameState.Status == GameStatus.Victory)
 				gameOver.Show();

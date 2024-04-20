@@ -66,3 +66,27 @@ text = "Deselect"
 [node name="DeselectInput" type="Label" parent="VBoxContainer/Controls/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Controls"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ToggleMenu" type="Label" parent="VBoxContainer/Controls/HBoxContainer4"]
+layout_mode = 2
+text = "Toggle Menu"
+
+[node name="ToggleMenuInput" type="Label" parent="VBoxContainer/Controls/HBoxContainer4"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/Controls"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ToggleUi" type="Label" parent="VBoxContainer/Controls/HBoxContainer5"]
+layout_mode = 2
+text = "Toggle UI"
+
+[node name="ToggleUiInput" type="Label" parent="VBoxContainer/Controls/HBoxContainer5"]
+unique_name_in_owner = true
+layout_mode = 2

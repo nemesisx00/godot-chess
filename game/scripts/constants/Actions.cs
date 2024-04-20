@@ -8,6 +8,7 @@ public static class Actions
 	public static readonly StringName Interact = "Interact";
 	public static readonly StringName RotateCamera = "RotateCamera";
 	public static readonly StringName ToggleMenu = "ToggleMenu";
+	public static readonly StringName ToggleUi = "ToggleUi";
 	
 	public static StringName From(Action action)
 	{
@@ -17,6 +18,7 @@ public static class Actions
 			Action.Interact => Interact,
 			Action.RotateCamera => RotateCamera,
 			Action.ToggleMenu => ToggleMenu,
+			Action.ToggleUi => ToggleUi,
 			_ => null,
 		};
 	}

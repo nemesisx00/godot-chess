@@ -12,6 +12,8 @@ public partial class GameUi : MarginContainer
 		public static readonly NodePath Deselect = new("%Deselect");
 		public static readonly NodePath DeselectInput = new("%DeselectInput");
 		public static readonly NodePath InteractInput = new("%InteractInput");
+		public static readonly NodePath ToggleMenuInput = new("%ToggleMenuInput");
+		public static readonly NodePath ToggleUiInput = new("%ToggleUiInput");
 	}
 	
 	[Signal]
@@ -63,12 +65,16 @@ public partial class GameUi : MarginContainer
 	private Button deselect;
 	private Label deselectInput;
 	private Label interactInput;
+	private Label toggleMenuInput;
+	private Label toggleUiInput;
 	
 	public override void _Ready()
 	{
 		cameraInput = GetNode<Label>(NodePaths.CameraInput);
 		deselectInput = GetNode<Label>(NodePaths.DeselectInput);
 		interactInput = GetNode<Label>(NodePaths.InteractInput);
+		toggleMenuInput = GetNode<Label>(NodePaths.ToggleMenuInput);
+		toggleUiInput = GetNode<Label>(NodePaths.ToggleUiInput);
 		
 		GetNode<Button>(NodePaths.Deselect).Pressed += () => EmitSignal(SignalName.DeselectPressed);
 		
@@ -86,5 +92,7 @@ public partial class GameUi : MarginContainer
 		cameraInput.Text = refreshInputLabel(Actions.RotateCamera);
 		deselectInput.Text = refreshInputLabel(Actions.DeselectPiece);
 		interactInput.Text = refreshInputLabel(Actions.Interact);
+		toggleMenuInput.Text = refreshInputLabel(Actions.ToggleMenu);
+		toggleUiInput.Text = refreshInputLabel(Actions.ToggleUi);
 	}
 }
