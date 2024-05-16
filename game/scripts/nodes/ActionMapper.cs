@@ -121,8 +121,7 @@ public partial class ActionMapper : GridContainer
 	
 	private void handleRemovePressed()
 	{
-		var last = inputEvents.LastOrDefault();
-		if(last is not null)
+		if(inputEvents.Count > 1 && inputEvents.LastOrDefault() is InputEvent last)
 		{
 			var actionName = Actions.From(action);
 			InputMap.ActionEraseEvent(actionName, last);
