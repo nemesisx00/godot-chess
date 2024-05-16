@@ -21,13 +21,13 @@ public partial class Chessboard : Node3D
 	public delegate void CellClickedEventHandler(BoardCell cell);
 	
 	[Signal]
-	public delegate void CheckmateEventHandler(Teams winner);
+	public delegate void CheckmateEventHandler(Team winner);
 	
 	[Signal]
 	public delegate void ListenOnCellsEventHandler(bool active);
 	
 	[Signal]
-	public delegate void ListenOnPiecesEventHandler(bool active, Teams team);
+	public delegate void ListenOnPiecesEventHandler(bool active, Team team);
 	
 	[Signal]
 	public delegate void PieceHasMovedEventHandler();
@@ -72,13 +72,13 @@ public partial class Chessboard : Node3D
 		piece.MovementFinished += handleMovementFinished;
 	}
 	
-	public void EnableCellSelection(Teams team)
+	public void EnableCellSelection(Team team, bool listenOnPieces = false)
 	{
 		EmitSignal(SignalName.ListenOnCells, true);
-		EmitSignal(SignalName.ListenOnPieces, false, (int)team);
+		EmitSignal(SignalName.ListenOnPieces, listenOnPieces, (int)team);
 	}
 	
-	public void EnablePieceSelection(Teams team)
+	public void EnablePieceSelection(Team team)
 	{
 		EmitSignal(SignalName.ListenOnCells, false);
 		EmitSignal(SignalName.ListenOnPieces, true, (int)team);
@@ -102,8 +102,8 @@ public partial class Chessboard : Node3D
 	
 	public void DisableAllPieceSelection()
 	{
-		EmitSignal(SignalName.ListenOnPieces, false, (int)Teams.Black);
-		EmitSignal(SignalName.ListenOnPieces, false, (int)Teams.White);
+		EmitSignal(SignalName.ListenOnPieces, false, (int)Team.Black);
+		EmitSignal(SignalName.ListenOnPieces, false, (int)Team.White);
 	}
 	
 	public void ReloadTextures()
@@ -147,45 +147,45 @@ public partial class Chessboard : Node3D
 	
 	public void ResetPieces()
 	{
-		MovePiece(File.C, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Bishop && p.PieceNumber == 1).First());
-		MovePiece(File.F, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Bishop && p.PieceNumber == 2).First());
-		MovePiece(File.C, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Bishop && p.PieceNumber == 1).First());
-		MovePiece(File.F, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Bishop && p.PieceNumber == 2).First());
+		MovePiece(File.C, Rank.One, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Bishop && p.PieceNumber == 1).First());
+		MovePiece(File.F, Rank.One, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Bishop && p.PieceNumber == 2).First());
+		MovePiece(File.C, Rank.Eight, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Bishop && p.PieceNumber == 1).First());
+		MovePiece(File.F, Rank.Eight, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Bishop && p.PieceNumber == 2).First());
 		
-		MovePiece(File.E, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.King).First());
-		MovePiece(File.E, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.King).First());
+		MovePiece(File.E, Rank.One, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.King).First());
+		MovePiece(File.E, Rank.Eight, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.King).First());
 		
-		MovePiece(File.B, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Knight && p.PieceNumber == 1).First());
-		MovePiece(File.G, Rank.One,  Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Knight && p.PieceNumber == 2).First());
-		MovePiece(File.B, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Knight && p.PieceNumber == 1).First());
-		MovePiece(File.G, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Knight && p.PieceNumber == 2).First());
+		MovePiece(File.B, Rank.One, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Knight && p.PieceNumber == 1).First());
+		MovePiece(File.G, Rank.One,  Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Knight && p.PieceNumber == 2).First());
+		MovePiece(File.B, Rank.Eight, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Knight && p.PieceNumber == 1).First());
+		MovePiece(File.G, Rank.Eight, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Knight && p.PieceNumber == 2).First());
 		
-		MovePiece(File.A, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 1).First());
-		MovePiece(File.B, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 2).First());
-		MovePiece(File.C, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 3).First());
-		MovePiece(File.D, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 4).First());
-		MovePiece(File.E, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 5).First());
-		MovePiece(File.F, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 6).First());
-		MovePiece(File.G, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 7).First());
-		MovePiece(File.H, Rank.Two, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Pawn && p.PieceNumber == 8).First());
+		MovePiece(File.A, Rank.Two, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Pawn && p.PieceNumber == 1).First());
+		MovePiece(File.B, Rank.Two, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Pawn && p.PieceNumber == 2).First());
+		MovePiece(File.C, Rank.Two, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Pawn && p.PieceNumber == 3).First());
+		MovePiece(File.D, Rank.Two, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Pawn && p.PieceNumber == 4).First());
+		MovePiece(File.E, Rank.Two, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Pawn && p.PieceNumber == 5).First());
+		MovePiece(File.F, Rank.Two, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Pawn && p.PieceNumber == 6).First());
+		MovePiece(File.G, Rank.Two, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Pawn && p.PieceNumber == 7).First());
+		MovePiece(File.H, Rank.Two, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Pawn && p.PieceNumber == 8).First());
 			
-		MovePiece(File.A, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 1).First());
-		MovePiece(File.B, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 2).First());
-		MovePiece(File.C, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 3).First());
-		MovePiece(File.D, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 4).First());
-		MovePiece(File.E, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 5).First());
-		MovePiece(File.F, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 6).First());
-		MovePiece(File.G, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 7).First());
-		MovePiece(File.H, Rank.Seven, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Pawn && p.PieceNumber == 8).First());
+		MovePiece(File.A, Rank.Seven, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Pawn && p.PieceNumber == 1).First());
+		MovePiece(File.B, Rank.Seven, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Pawn && p.PieceNumber == 2).First());
+		MovePiece(File.C, Rank.Seven, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Pawn && p.PieceNumber == 3).First());
+		MovePiece(File.D, Rank.Seven, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Pawn && p.PieceNumber == 4).First());
+		MovePiece(File.E, Rank.Seven, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Pawn && p.PieceNumber == 5).First());
+		MovePiece(File.F, Rank.Seven, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Pawn && p.PieceNumber == 6).First());
+		MovePiece(File.G, Rank.Seven, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Pawn && p.PieceNumber == 7).First());
+		MovePiece(File.H, Rank.Seven, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Pawn && p.PieceNumber == 8).First());
 		
-		MovePiece(File.D, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Queen).First());
-		MovePiece(File.D, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Queen).First());
+		MovePiece(File.D, Rank.One, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Queen).First());
+		MovePiece(File.D, Rank.Eight, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Queen).First());
 		
-		MovePiece(File.A, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Rook && p.PieceNumber == 1).First());
-		MovePiece(File.H, Rank.One, Pieces.Where(p => p.Team == Teams.White && p.Type == Piece.Rook && p.PieceNumber == 2).First());
+		MovePiece(File.A, Rank.One, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Rook && p.PieceNumber == 1).First());
+		MovePiece(File.H, Rank.One, Pieces.Where(p => p.Team == Team.White && p.Type == Piece.Rook && p.PieceNumber == 2).First());
 		
-		MovePiece(File.A, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Rook && p.PieceNumber == 1).First());
-		MovePiece(File.H, Rank.Eight, Pieces.Where(p => p.Team == Teams.Black && p.Type == Piece.Rook && p.PieceNumber == 2).First());
+		MovePiece(File.A, Rank.Eight, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Rook && p.PieceNumber == 1).First());
+		MovePiece(File.H, Rank.Eight, Pieces.Where(p => p.Team == Team.Black && p.Type == Piece.Rook && p.PieceNumber == 2).First());
 		
 		Pieces.ForEach(p => p.HasMoved = false);
 	}
@@ -233,7 +233,7 @@ public partial class Chessboard : Node3D
 			//En Passant will not be detected by the normal means of capturing so check for it here when appropriate.
 			if(piece.Type == Piece.Pawn && !capture && from?.File != to.File)
 			{
-				var previous = Cells.Where(c => c.File == to.File && c.Rank == to.Rank + (piece.Team == Teams.Black ? 1 : -1))
+				var previous = Cells.Where(c => c.File == to.File && c.Rank == to.Rank + (piece.Team == Team.Black ? 1 : -1))
 					.FirstOrDefault();
 				
 				if(previous is not null && previous.GetChildren().Where(c => c is ChessPiece cp && cp.Type == Piece.Pawn && cp.Team != piece.Team).FirstOrDefault() is ChessPiece cp)

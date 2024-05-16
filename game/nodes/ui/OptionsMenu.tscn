@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://dk25uvxpee63r"]
+
+[ext_resource type="Theme" uid="uid://bdxlo2qdsahfa" path="res://assets/ButtonTheme.tres" id="1_cucdi"]
+[ext_resource type="Script" path="res://scripts/nodes/OptionsMenu.cs" id="1_jrap0"]
+[ext_resource type="PackedScene" uid="uid://bxi3j7ennehlk" path="res://nodes/ui/AudioOptions.tscn" id="2_21804"]
+[ext_resource type="PackedScene" uid="uid://d3wyfyugit7py" path="res://nodes/ControlOptions.tscn" id="3_doboc"]
+
+[node name="OptionsMenu" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jrap0")
+
+[node name="Left" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 5.0
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="BackToMainMenu" type="Button" parent="HBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("1_cucdi")
+text = "Back"
+
+[node name="AudioTab" type="Button" parent="HBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("1_cucdi")
+text = "Audio"
+
+[node name="ControlsTab" type="Button" parent="HBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("1_cucdi")
+text = "Controls"
+
+[node name="MenuContainer" type="PanelContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="AudioOptions" parent="HBoxContainer/MenuContainer" instance=ExtResource("2_21804")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ControlOptions" parent="HBoxContainer/MenuContainer" instance=ExtResource("3_doboc")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Right" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3

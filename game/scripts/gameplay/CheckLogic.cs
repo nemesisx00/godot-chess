@@ -3,22 +3,23 @@ using System.Linq;
 using Godot;
 using Chess.Autoload;
 using Chess.Nodes;
+using System;
 
 namespace Chess.Gameplay;
 
 public static class CheckLogic
 {
-	public static Teams? DetectCheckmate(Chessboard board, MoveLog moveLog)
+	public static Team? DetectCheckmate(Chessboard board, MoveLog moveLog)
 	{
-		Teams? team = null;
-		if(DetectCheckmateForTeam(Teams.Black, board, moveLog))
-			team = Teams.Black;
-		else if(DetectCheckmateForTeam(Teams.White, board, moveLog))
-			team = Teams.White;
+		Team? team = null;
+		if(DetectCheckmateForTeam(Team.Black, board, moveLog))
+			team = Team.Black;
+		else if(DetectCheckmateForTeam(Team.White, board, moveLog))
+			team = Team.White;
 		return team;
 	}
 	
-	public static bool DetectCheckmateForTeam(Teams team, Chessboard board, MoveLog moveLog)
+	public static bool DetectCheckmateForTeam(Team team, Chessboard board, MoveLog moveLog)
 	{
 		List<BoardCell> allMoves = [];
 		foreach(var piece in board.Pieces.Where(p => p.Team == team))
@@ -64,8 +65,8 @@ public static class CheckLogic
 		});
 		
 		conflicts.ForEach(c => pm.Remove(c));
-		
 		conflicts.Clear();
+		
 		pm.ForEach(dest => {
 			if(detectKingMoveIntoCheck(king, dest, board))
 				conflicts.Add(dest);
@@ -134,12 +135,12 @@ public static class CheckLogic
 		
 		if(!check)
 		{
-			foreach(var knight in board.Pieces.Where(p => p.Team != king.Team && p.Type == Piece.Knight && p.GetParent() is BoardCell))
+			foreach(var knight in board.Pieces.Where(p => p.Team != king.Team && p.Type == Piece.Knight && p.GetParentOrNull<BoardCell>() is not null))
 			{
+				check = canPieceCauseCheck(knight, false, knight.GetParent<BoardCell>() - kingCell);
+				
 				if(check)
 					break;
-				
-				check = MoveLogic.GetValidCells(knight, board, moveLog).Contains(kingCell);
 			}
 		}
 		
@@ -260,23 +261,37 @@ public static class CheckLogic
 	private static bool canPieceCauseCheck(ChessPiece piece, bool cardinal, BoardVector diff)
 	{
 		bool check;
+		
 		if (cardinal)
 			check = piece.Type == Piece.Queen || piece.Type == Piece.Rook;
 		else
 		{
-			check = piece.Type == Piece.Bishop || piece.Type == Piece.Queen;
-			if(!check)
-			{
-				check = piece.Type == Piece.Pawn && diff.File == 1
+			check = piece.Type == Piece.Bishop
+				|| piece.Type == Piece.Queen
+				
+				|| (piece.Type == Piece.Pawn
+					&& diff.File == 1
 					&& (
-						(piece.Team == Teams.White && diff.Rank == 1)
-						|| (piece.Team == Teams.Black && diff.Rank == -1)
-					);
-			}
+						(piece.Team == Team.White && diff.Rank == 1)
+						|| (piece.Team == Team.Black && diff.Rank == -1)
+					))
+				
+				|| (piece.Type == Piece.Knight
+					&& (
+						(Math.Abs(diff.File) == 1 && Math.Abs(diff.Rank) == 2)
+						|| (Math.Abs(diff.File) == 2 && Math.Abs(diff.Rank) == 1)
+					));
 		}
+		
 		return check;
 	}
 	
+	/**
+	<summary>
+	Detect if the king would be in check after moving to the destination cell
+	without actually moving the king.
+	</summary>
+	*/
 	private static bool detectKingMoveIntoCheck(ChessPiece king, BoardCell destination, Chessboard board)
 	{
 		var check = false;
@@ -307,6 +322,21 @@ public static class CheckLogic
 				
 				if(check)
 					break;
+			}
+			
+			//Knights can't be detected via raycast
+			if(!check)
+			{
+				foreach(var knight in board.Pieces
+					.Where(cp => cp.Team != king.Team
+						&& cp.Type == Piece.Knight
+						&& cp.GetParentOrNull<BoardCell>() is not null))
+				{
+					check = canPieceCauseCheck(knight, false, knight.GetParent<BoardCell>() - destination);
+					
+					if(check)
+						break;
+				}
 			}
 		}
 		

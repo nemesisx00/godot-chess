@@ -32,7 +32,7 @@ public partial class ChessPiece : CharacterBody3D
 	[Export]
 	public Piece Type { get; set; }
 	
-	public Teams Team { get; set; }
+	public Team Team { get; set; }
 	public bool HasMoved { get; set; }
 	public int PieceNumber { get; set; } = 1;
 	
@@ -59,14 +59,25 @@ public partial class ChessPiece : CharacterBody3D
 	
 	private bool isFalling = true;
 	private bool listeningForClicks = true;
+	private bool mouseHovering;
 	private Tween tween;
 	private MeshInstance3D selectionIndicator;
 	private bool willCapture;
 	
-	public override void _InputEvent(Camera3D camera, InputEvent evt, Vector3 position, Vector3 normal, int shapeIdx)
+	public override void _MouseEnter()
 	{
-		if(listeningForClicks && evt is InputEventMouseButton iemb && iemb.ButtonIndex == MouseButton.Left && iemb.Pressed)
-			EmitSignal(SignalName.Clicked, this);
+		if(!listeningForClicks && GetParentOrNull<BoardCell>() is BoardCell cell)
+			cell._MouseEnter();
+		
+		mouseHovering = true;
+	}
+	
+	public override void _MouseExit()
+	{
+		if(!listeningForClicks && GetParentOrNull<BoardCell>() is BoardCell cell)
+			cell._MouseExit();
+		
+		mouseHovering = false;
 	}
 	
 	public override void _PhysicsProcess(double delta)
@@ -87,6 +98,17 @@ public partial class ChessPiece : CharacterBody3D
 			MoveAndSlide();
 	}
 	
+	public override void _Process(double delta)
+	{
+		if(mouseHovering && Input.IsActionJustPressed(Actions.Interact))
+		{
+			if(listeningForClicks)
+				EmitSignal(SignalName.Clicked, this);
+			else if(GetParentOrNull<BoardCell>() is BoardCell cell && cell.ListeningForClicks)
+				cell.EmitSignal(BoardCell.SignalName.Clicked, cell);
+		}
+	}
+	
 	public override void _Ready()
 	{
 		Name = $"{Team}{Type}";
@@ -94,7 +116,7 @@ public partial class ChessPiece : CharacterBody3D
 		if(PieceNumber > 1)
 			Name = $"{Name}{PieceNumber}";
 		
-		if(Team == Teams.White)
+		if(Team == Team.White)
 		{
 			var angle = Mathf.Tau / 2;
 			GetChild<MeshInstance3D>(0).RotateObjectLocal(Vector3.Up, angle);
@@ -121,7 +143,7 @@ public partial class ChessPiece : CharacterBody3D
 		}
 	}
 	
-	public void ListenForClicks(bool active, Teams team)
+	public void ListenForClicks(bool active, Team team)
 	{
 		if(team == Team)
 			listeningForClicks = active;

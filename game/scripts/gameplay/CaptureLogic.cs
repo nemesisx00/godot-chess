@@ -55,13 +55,13 @@ public static class CaptureLogic
 		
 		var directionName = piece.Team switch
 		{
-			Teams.Black => DirectionNames.South,
+			Team.Black => DirectionNames.South,
 			_ => DirectionNames.North,
 		};
 		
 		var expectedRank = piece.Team switch
 		{
-			Teams.Black => 1,
+			Team.Black => 1,
 			_ => -1,
 		};
 		

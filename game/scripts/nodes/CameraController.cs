@@ -20,17 +20,13 @@ public partial class CameraController : Node3D
 	
 	public override void _Input(InputEvent evt)
 	{
-		if(evt is InputEventMouseButton iemb)
+		if(evt is InputEventMouseButton iemb && iemb.IsAction(Actions.RotateCamera))
 		{
-			if(iemb.ButtonIndex == MouseButton.Right)
-			{
-				rotating = iemb.Pressed;
-				
-				if(rotating)
-					Input.MouseMode = Input.MouseModeEnum.Captured;
-				else
-					Input.MouseMode = Input.MouseModeEnum.Visible;
-			}
+			rotating = iemb.Pressed;
+			
+			Input.MouseMode = rotating
+				? Input.MouseModeEnum.Captured
+				: Input.MouseModeEnum.Visible;
 		}
 		
 		if(rotating && evt is InputEventMouseMotion iemm)
@@ -39,30 +35,33 @@ public partial class CameraController : Node3D
 			rotation.Y -= iemm.Relative.X * Sensitivity.Y;
 		}
 	}
-
+	
 	public override void _PhysicsProcess(double delta)
 	{
-		rotation.X = Mathf.Clamp(
-			rotation.X,
-			VerticalLimit.X,
-			VerticalLimit.Y
-		);
-		
-		var degrees = RotationDegrees;
-		
-		degrees.X = Mathf.Lerp(
-			degrees.X,
-			rotation.X,
-			(float)delta * Acceleration.X
-		);
-		
-		degrees.Y = Mathf.Lerp(
-			degrees.Y,
-			rotation.Y,
-			(float)delta * Acceleration.Y
-		);
-		
-		RotationDegrees = degrees;
+		if(rotating)
+		{
+			rotation.X = Mathf.Clamp(
+				rotation.X,
+				VerticalLimit.X,
+				VerticalLimit.Y
+			);
+			
+			var degrees = RotationDegrees;
+			
+			degrees.X = Mathf.Lerp(
+				degrees.X,
+				rotation.X,
+				(float)delta * Acceleration.X
+			);
+			
+			degrees.Y = Mathf.Lerp(
+				degrees.Y,
+				rotation.Y,
+				(float)delta * Acceleration.Y
+			);
+			
+			RotationDegrees = degrees;
+		}
 	}
 	
 	public override void _Ready() => camera = GetChild<Camera3D>(0);
