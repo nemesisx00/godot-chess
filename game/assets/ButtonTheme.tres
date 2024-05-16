@@ -1,0 +1,10 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bdxlo2qdsahfa"]
+
+[ext_resource type="StyleBox" uid="uid://br0b3xqy5770x" path="res://assets/ButtonStyle.tres" id="1_ak4n6"]
+
+[resource]
+Button/font_sizes/font_size = 36
+Button/styles/focus = ExtResource("1_ak4n6")
+Button/styles/hover = ExtResource("1_ak4n6")
+Button/styles/normal = ExtResource("1_ak4n6")
+Button/styles/pressed = ExtResource("1_ak4n6")

@@ -176,14 +176,14 @@ public static class MoveLogic
 		return result;
 	}
 	
-	private static bool pawn(BoardCell currentCell, BoardCell destination, Teams team)
+	private static bool pawn(BoardCell currentCell, BoardCell destination, Team team)
 	{
 		var fileDiff = Math.Abs((int)currentCell.File - (int)destination.File);
 		var rankDiff = (int)currentCell.Rank - (int)destination.Rank;
 		
 		return fileDiff == 0 && (
-			team == Teams.White && (rankDiff == -1 || currentCell.Rank == Rank.Two && destination.Rank == Rank.Four)
-			|| team == Teams.Black && (rankDiff == 1 || (currentCell.Rank == Rank.Seven && destination.Rank == Rank.Five))
+			team == Team.White && (rankDiff == -1 || currentCell.Rank == Rank.Two && destination.Rank == Rank.Four)
+			|| team == Team.Black && (rankDiff == 1 || (currentCell.Rank == Rank.Seven && destination.Rank == Rank.Five))
 		);
 	}
 	

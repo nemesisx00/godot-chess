@@ -1,0 +1,102 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3wyfyugit7py"]
+
+[ext_resource type="Script" path="res://scripts/nodes/ControlOptions.cs" id="1_a1gob"]
+[ext_resource type="PackedScene" uid="uid://bqgv8cxghabgl" path="res://nodes/ActionMapper.tscn" id="2_mv3bq"]
+
+[node name="ControlOptions" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+script = ExtResource("1_a1gob")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 25
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Controls"
+horizontal_alignment = 1
+
+[node name="ControlsList" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 25
+theme_override_constants/v_separation = 15
+columns = 4
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
+layout_mode = 2
+text = "Open/Close Main Menu"
+horizontal_alignment = 2
+
+[node name="ActionMapper" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
+layout_mode = 2
+action = 3
+
+[node name="Label2" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
+layout_mode = 2
+text = "Toggle UI"
+horizontal_alignment = 2
+
+[node name="ActionMapper2" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
+layout_mode = 2
+action = 4
+
+[node name="Label3" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
+layout_mode = 2
+text = "Interact"
+horizontal_alignment = 2
+
+[node name="ActionMapper3" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
+layout_mode = 2
+action = 1
+
+[node name="Label4" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
+layout_mode = 2
+text = "Deselect Piece"
+horizontal_alignment = 2
+
+[node name="ActionMapper4" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="ScrollContainer/VBoxContainer/ControlsList"]
+layout_mode = 2
+text = "Rotate Camera"
+horizontal_alignment = 2
+
+[node name="ActionMapper5" parent="ScrollContainer/VBoxContainer/ControlsList" instance=ExtResource("2_mv3bq")]
+layout_mode = 2
+action = 2
+
+[node name="Popup" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Popup"]
+custom_minimum_size = Vector2(225, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Popup/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Press Any Key"
+horizontal_alignment = 1
+vertical_alignment = 1

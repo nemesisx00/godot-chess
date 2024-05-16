@@ -38,12 +38,25 @@ layout_mode = 2
 text = "Lead Developer"
 horizontal_alignment = 1
 
+[node name="BackButton" type="Button" parent="PanelContainer/ScrollContainer/VBoxContainer/Label"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 1
+offset_left = 50.0
+offset_top = 15.0
+offset_right = 150.0
+offset_bottom = 68.0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 32
+text = "Back"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
 [node name="LinkButton" type="LinkButton" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+tooltip_text = "https://nemesisx00.github.io/"
 text = "Peter Lunneberg"
 uri = "https://nemesisx00.github.io/"
 
@@ -62,6 +75,7 @@ alignment = 1
 
 [node name="LinkButton" type="LinkButton" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
+tooltip_text = "https://github.com/nemesisx00/godot-chess"
 text = "Github"
 uri = "https://github.com/nemesisx00/godot-chess"
 
@@ -98,6 +112,7 @@ alignment = 1
 
 [node name="LinkButton" type="LinkButton" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
+tooltip_text = "https://polyhaven.com/a/chess_set"
 text = "3D Chess Set"
 uri = "https://polyhaven.com/a/chess_set"
 
@@ -107,7 +122,8 @@ alignment = 1
 
 [node name="LinkButton" type="LinkButton" parent="PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
-text = "2D Icons"
+tooltip_text = "https://opengameart.org/content/2d-chess-pack"
+text = "2D Chess Icons"
 uri = "https://opengameart.org/content/2d-chess-pack"
 
 [node name="HSeparator4" type="HSeparator" parent="PanelContainer/ScrollContainer/VBoxContainer"]

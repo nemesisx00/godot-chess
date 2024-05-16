@@ -11,7 +11,7 @@ public partial class Graveyard : Node3D
 	}
 	
 	[Export]
-	public Teams Team { get; set; }
+	public Team Team { get; set; }
 	
 	[Export]
 	public Material OverrideMaterial { get; set; }
