@@ -39,18 +39,18 @@ public partial class MoveLog : Node
 	
 	public MoveLogEntry StepBack()
 	{
-		if(CurrentIndex >= 0)
+		if(CurrentIndex > 0)
 			CurrentIndex--;
 		return Entries[CurrentIndex];
 	}
 	
 	public MoveLogEntry StepForward()
 	{
-		var count = Entries.Count - 1;
-		if(CurrentIndex < count)
+		var max = Entries.Count - 1;
+		if(CurrentIndex < max)
 			CurrentIndex++;
 		else
-			CurrentIndex = count;
+			CurrentIndex = max;
 		
 		return Entries[CurrentIndex];
 	}
