@@ -42,6 +42,14 @@ public partial class Chessboard : Node3D
 	private MoveLog moveLog;
 	private Node3D piece;
 	
+	public override void _ExitTree()
+	{
+		Pieces.ForEach(cp => cp.Clicked -= GameBoardLogic.HandlePieceClicked);
+		RemoveEventHandlers();
+		
+		base._ExitTree();
+	}
+	
 	public override void _Ready()
 	{
 		moveLog = GetNode<MoveLog>(MoveLog.NodePath);
@@ -62,6 +70,21 @@ public partial class Chessboard : Node3D
 				}
 			}
 		}
+	}
+	
+	public void AddEventHandlers()
+	{
+		if(GameBoardLogic.HandleCapture is not null)
+			Capture += GameBoardLogic.HandleCapture;
+		
+		if(GameBoardLogic.HandleCellClicked is not null)
+			CellClicked += GameBoardLogic.HandleCellClicked;
+		
+		if(GameBoardLogic.HandleCheckmate is not null)
+			Checkmate += GameBoardLogic.HandleCheckmate;
+		
+		if(GameBoardLogic.HandlePieceHasMoved is not null)
+			PieceHasMoved += GameBoardLogic.HandlePieceHasMoved;
 	}
 	
 	public void AddPiece(ChessPiece piece)
@@ -113,6 +136,21 @@ public partial class Chessboard : Node3D
 			var mesh = GetChild<MeshInstance3D>(0);
 			mesh.MaterialOverride = OverrideMaterial;
 		}
+	}
+	
+	public void RemoveEventHandlers()
+	{
+		if(GameBoardLogic.HandleCapture is not null)
+			Capture -= GameBoardLogic.HandleCapture;
+		
+		if(GameBoardLogic.HandleCellClicked is not null)
+			CellClicked -= GameBoardLogic.HandleCellClicked;
+		
+		if(GameBoardLogic.HandleCheckmate is not null)
+			Checkmate -= GameBoardLogic.HandleCheckmate;
+		
+		if(GameBoardLogic.HandlePieceHasMoved is not null)
+			PieceHasMoved -= GameBoardLogic.HandlePieceHasMoved;
 	}
 	
 	public void MovePiece(ChessPiece piece, BoardCell cell, bool teleport = false)

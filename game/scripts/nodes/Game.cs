@@ -66,13 +66,9 @@ public partial class Game : Node3D
 	
 	public override void _ExitTree()
 	{
-		board.Capture -= handleCapture;
-		board.CellClicked -= handleCellClicked;
-		board.Checkmate -= handleCheckmate;
-		board.PieceHasMoved -= handlePieceHasMoved;
 		gameOver.StartNewGame -= handleStartNewGame;
 		gameState.StartNextTurn -= handleStartNextTurn;
-		gameUi.DeselectPressed -= handleDeselectPressed;
+		gameUi.DeselectPressed -= deselectSelectedPiece;
 		mainMenu.StartNewGame -= handleStartNewGame;
 		
 		base._ExitTree();
@@ -91,16 +87,19 @@ public partial class Game : Node3D
 		moveLogView = GetNode<MoveLogView>(NodePaths.MoveLogView);
 		whiteGraveyard = GetNode<Graveyard>(NodePaths.WhiteGraveyard);
 		
-		board.Capture += handleCapture;
-		board.CellClicked += handleCellClicked;
-		board.Checkmate += handleCheckmate;
-		board.PieceHasMoved += handlePieceHasMoved;
 		gameOver.StartNewGame += handleStartNewGame;
 		gameState.StartNextTurn += handleStartNextTurn;
-		gameUi.DeselectPressed += handleDeselectPressed;
+		gameUi.DeselectPressed += deselectSelectedPiece;
 		mainMenu.StartNewGame += handleStartNewGame;
 		
-		generatePieces();
+		GameBoardLogic.HandleCapture = handleCapture;
+		GameBoardLogic.HandleCellClicked = handleCellClicked;
+		GameBoardLogic.HandleCheckmate = handleCheckmate;
+		GameBoardLogic.HandlePieceHasMoved = handlePieceHasMoved;
+		GameBoardLogic.HandlePieceClicked = handlePieceClicked;
+		
+		GameBoardLogic.GeneratePieces(board);
+		board.AddEventHandlers();
 		
 		handleStartNextTurn(gameState.CurrentPlayer);
 		
@@ -154,8 +153,6 @@ public partial class Game : Node3D
 		gameOver.Show();
 	}
 	
-	private void handleDeselectPressed() => deselectSelectedPiece();
-	
 	private void handlePieceClicked(ChessPiece piece)
 	{
 		deselectSelectedPiece();
@@ -181,27 +178,32 @@ public partial class Game : Node3D
 	
 	private void handlePieceHasMoved()
 	{
-		if(gameState.Status == GameStatus.Reseting)
+		switch(gameState.Status)
 		{
-			moveLogView.EnableLogUpdates = false;
-			piecesReset++;
+			case GameStatus.Reseting:
+				moveLogView.EnableLogUpdates = false;
+				piecesReset++;
+				
+				if(piecesReset >= 32)
+				{
+					moveLog.Clear();
+					board.Pieces.ForEach(p => p.HasMoved = false);
+					moveLogView.EnableLogUpdates = true;
+					gameState.CurrentPlayer = Team.Black;
+					gameState.Status = GameStatus.Playing;
+					piecesReset = 0;
+					deselectSelectedPiece();
+					gameState.EndTurn();
+				}
+				break;
 			
-			if(piecesReset >= 32)
-			{
-				moveLog.Clear();
-				board.Pieces.ForEach(p => p.HasMoved = false);
-				moveLogView.EnableLogUpdates = true;
-				gameState.CurrentPlayer = Team.Black;
-				gameState.Status = GameStatus.Playing;
-				piecesReset = 0;
+			case GameStatus.ReplayingLog:
+				break;
+			
+			default:
 				deselectSelectedPiece();
 				gameState.EndTurn();
-			}
-		}
-		else
-		{
-			deselectSelectedPiece();
-			gameState.EndTurn();
+				break;
 		}
 	}
 	
@@ -223,249 +225,6 @@ public partial class Game : Node3D
 	{
 		board.DisableAllPieceSelection();
 		board.EnablePieceSelection(activePlayer);
-	}
-	
-	private void generatePieces()
-	{
-		ChessPiece piece;
-		
-		var materialWhite = GD.Load<StandardMaterial3D>(ChessMaterials.White);
-		
-		var packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Bishop.tscn");
-		if(packedScene.CanInstantiate())
-		{
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			board.AddPiece(piece);
-			board.MovePiece(File.C, Rank.One, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 2;
-			board.AddPiece(piece);
-			board.MovePiece(File.F, Rank.One, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			board.AddPiece(piece);
-			board.MovePiece(File.C, Rank.Eight, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 2;
-			board.AddPiece(piece);
-			board.MovePiece(File.F, Rank.Eight, piece, true);
-			piece.Clicked += handlePieceClicked;
-		}
-		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/King.tscn");
-		if(packedScene.CanInstantiate())
-		{
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			board.AddPiece(piece);
-			board.MovePiece(File.E, Rank.One, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			board.AddPiece(piece);
-			board.MovePiece(File.E, Rank.Eight, piece, true);
-			piece.Clicked += handlePieceClicked;
-		}
-		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Knight.tscn");
-		if(packedScene.CanInstantiate())
-		{
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			board.AddPiece(piece);
-			board.MovePiece(File.B, Rank.One, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 2;
-			board.AddPiece(piece);
-			board.MovePiece(File.G, Rank.One, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			board.AddPiece(piece);
-			board.MovePiece(File.B, Rank.Eight, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 2;
-			board.AddPiece(piece);
-			board.MovePiece(File.G, Rank.Eight, piece, true);
-			piece.Clicked += handlePieceClicked;
-		}
-		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Pawn.tscn");
-		if(packedScene.CanInstantiate())
-		{
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			board.AddPiece(piece);
-			board.MovePiece(File.A, Rank.Two, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 2;
-			board.AddPiece(piece);
-			board.MovePiece(File.B, Rank.Two, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 3;
-			board.AddPiece(piece);
-			board.MovePiece(File.C, Rank.Two, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 4;
-			board.AddPiece(piece);
-			board.MovePiece(File.D, Rank.Two, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 5;
-			board.AddPiece(piece);
-			board.MovePiece(File.E, Rank.Two, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 6;
-			board.AddPiece(piece);
-			board.MovePiece(File.F, Rank.Two, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 7;
-			board.AddPiece(piece);
-			board.MovePiece(File.G, Rank.Two, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 8;
-			board.AddPiece(piece);
-			board.MovePiece(File.H, Rank.Two, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			board.AddPiece(piece);
-			board.MovePiece(File.A, Rank.Seven, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 2;
-			board.AddPiece(piece);
-			board.MovePiece(File.B, Rank.Seven, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 3;
-			board.AddPiece(piece);
-			board.MovePiece(File.C, Rank.Seven, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 4;
-			board.AddPiece(piece);
-			board.MovePiece(File.D, Rank.Seven, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 5;
-			board.AddPiece(piece);
-			board.MovePiece(File.E, Rank.Seven, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 6;
-			board.AddPiece(piece);
-			board.MovePiece(File.F, Rank.Seven, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 7;
-			board.AddPiece(piece);
-			board.MovePiece(File.G, Rank.Seven, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 8;
-			board.AddPiece(piece);
-			board.MovePiece(File.H, Rank.Seven, piece, true);
-			piece.Clicked += handlePieceClicked;
-		}
-		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Queen.tscn");
-		if(packedScene.CanInstantiate())
-		{
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			board.AddPiece(piece);
-			board.MovePiece(File.D, Rank.One, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			board.AddPiece(piece);
-			board.MovePiece(File.D, Rank.Eight, piece, true);
-			piece.Clicked += handlePieceClicked;
-		}
-		
-		packedScene = GD.Load<PackedScene>($"{ResourcePaths.Pieces}/Rook.tscn");
-		if(packedScene.CanInstantiate())
-		{
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			board.AddPiece(piece);
-			board.MovePiece(File.A, Rank.One, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.OverrideMaterial = materialWhite;
-			piece.Team = Team.White;
-			piece.PieceNumber = 2;
-			board.AddPiece(piece);
-			board.MovePiece(File.H, Rank.One, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			board.AddPiece(piece);
-			board.MovePiece(File.A, Rank.Eight, piece, true);
-			piece.Clicked += handlePieceClicked;
-			
-			piece = packedScene.Instantiate<ChessPiece>();
-			piece.PieceNumber = 2;
-			board.AddPiece(piece);
-			board.MovePiece(File.H, Rank.Eight, piece, true);
-			piece.Clicked += handlePieceClicked;
-		}
 	}
 	
 	private void toggleMainMenu()
